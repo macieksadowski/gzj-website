@@ -1,0 +1,156 @@
+body
+{
+	background-image: url("../img/bg-mobile.jpg");
+}
+
+.content
+{
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	justify-content: space-around;
+	/*margin: 25px 0;*/
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.content h2
+{
+	align-self: flex-start;
+}
+
+#logoBig
+{
+	align-self: flex-start;
+	margin: 3% 0;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	
+	
+}
+
+#logoBig img
+{
+	max-width: 100%;
+    max-height: 15vh;
+}
+
+
+
+.socials
+{
+	align-self: flex-end;
+	margin-top:20vh;
+	padding-top: 3px;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.socials  i
+{
+	font-size: 50px;
+	
+}
+
+
+
+
+/* Small devices (portrait tablets and large phones, 425px and up) */
+@media only screen and (min-width: 425px) 
+{
+	
+	.socialdiv
+	{
+	width: 33.33%;
+	
+	}
+	
+	
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) 
+{
+	
+	h2::before, h2::after 
+	{
+	  background-color: white;
+	  content: " ";
+	  display: inline-block;
+	  height: 2px;
+	  position: relative;
+	  vertical-align: middle;
+	  width: 40px;
+	  margin: 0 15px;
+	  border-radius: 75px;
+	}
+
+	
+}
+
+@media only screen and (max-width: 992px)
+{
+	body
+{
+	background-image: url("../img/bg-mobile.jpg");
+	
+    animation-name: backgroundScroll;
+	background-color: black;
+	
+}
+}
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) 
+{
+	body
+	{
+		background-image: url("../img/bg.jpg");
+	}
+
+	h2
+	{
+		margin-bottom:0;
+	}
+	#logoBig
+	{
+		margin-top:0;
+		margin-bottom:5%;
+	}
+	.content
+	{
+	
+	width: 80%;
+	}
+	.socialdiv
+	{
+	width: 20%;
+	
+	}
+
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) 
+{
+	h2
+	{
+		margin-bottom: 2vh;
+	}
+	#logoBig
+	{
+		margin: 3% 0;
+		margin-bottom:3%;
+	}
+	
+}
+
+

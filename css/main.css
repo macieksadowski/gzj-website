@@ -1,0 +1,291 @@
+/*
+	font-family: 'Cinzel Decorative', cursive;
+	font-family: 'Cinzel', serif;
+	font-family: 'Petit Formal Script', cursive;
+	font-family: 'Raleway', sans-serif;
+*/
+
+@keyframes backgroundScroll {
+    from {background-position: 0 0;}
+    to {background-position: 100% 0px;}
+	
+}
+
+@-webkit-keyframes backgroundScroll {
+    from {background-position: 0 0;}
+    to {background-position: 100% 0px;}
+	
+}
+
+html
+{
+	scroll-behavior: smooth;
+	overflow-y: scroll;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+
+body
+{	
+	color:#fffff5;
+	font-family: 'Raleway', sans-serif;
+	margin: 0 !important;
+	background-image: url("../img/bg-mobile-blurred.jpg");
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	background-attachment: fixed;
+		
+    animation-name: backgroundScroll;
+	animation-duration: 20s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+    animation-timing-function: linear;
+	animation-fill-mode: both;
+}
+
+.page-container {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.wrapper {
+	align-self:flex-start;
+	order:2;
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.footer 
+{
+  align-self:flex-end;
+  /*padding: 1rem;*/
+  order:3;
+  text-align: center;
+  background-color: #292929;
+ 
+}
+
+
+
+
+p
+{
+	font-family: 'Raleway', sans-serif;
+	font-weight: 200;
+
+}
+
+h1
+{
+	font-family: 'Cinzel', italic;
+	font-weight: 400;
+	padding: 0.5em 0em;
+	margin:0;
+	width:100%;
+	background-color:  #292929;
+	text-align:center;
+}
+
+.title h1
+{
+	background-color:  #181818;
+	
+}
+
+
+h2
+{
+  font-family: 'Cinzel',italic;
+  color: white;
+  font-size: 20px;
+  letter-spacing: 10px;
+  margin-bottom: 2vh;
+}
+
+
+h3
+{
+  font-family: 'Petit Formal Script', cursive;
+  color: white;
+  font-size: 25px;
+  
+}
+
+
+a
+{
+	color: #fffff5;
+	text-decoration: none;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+
+ .button, .socialdiv, .socialsHeader div, .logo, #contact a, .nav-toggler, .about-socials div
+{
+	transition: all 0.2s ease-in-out;
+}
+
+ .button:hover, .socialdiv:hover, .socialsHeader div:hover, .logo:hover, #contact a:hover, .nav-toggler:hover,  .about-socials div:hover
+{
+	-webkit-transform: translate(0,3px);
+	-ms-transform: translate(0,3px);
+	transform: translate(0,3px);
+}
+
+
+.socialdiv
+{
+	width: 50%;
+	padding-bottom: 20px;
+	float:left;
+
+}
+
+.socialdiv:hover
+{
+
+	text-decoration: underline;
+}
+
+.fb, .ig, .yt, .tw, .sc, .sp
+{	
+	cursor:pointer;
+}
+
+.fb:hover, .socialdiv:hover > .fb
+{
+	color: #4668b3;
+}
+
+.ig:hover, .socialdiv:hover > .ig
+{
+	color: #c13584;
+}
+
+.yt:hover, .socialdiv:hover > .yt
+{
+	color: #d94348;
+}
+
+.tw:hover, .socialdiv:hover > .tw
+{
+	color: #3095d3;
+}
+
+.sc:hover, .socialdiv:hover > .sc
+{
+	color: #ff7700;
+}
+
+.sp:hover, .socialdiv:hover > .sp
+{
+	color: #81b71a;
+}
+
+.button,.button-disabled
+{
+	width: 250px;
+	font-size: 18px;
+	font-family: 'Cinzel', serif;
+	font-weight: 700;
+	color: #fffff5;
+	padding: 10px 0;
+	margin: 20px 0;
+	border: 1px solid #fffff5;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+	outline: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.button a
+{
+	color: #fffff5;
+	text-decoration: none;
+	display: block;
+
+}
+
+.button:hover
+{
+	-webkit-transform: translate(0,3px);
+	-ms-transform: translate(0,3px);
+	transform: translate(0,3px);
+}
+
+
+
+
+
+/* Small devices (portrait tablets and large phones, 425px and up) */
+@media only screen and (min-width: 425px) 
+{
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) 
+{
+	body
+	{
+		animation-duration: 10s;
+	}
+	
+	li
+	{
+		transition: all 0.2s ease-in-out;
+	}
+
+	li:hover
+	{
+		-webkit-transform: translate(0,3px);
+		-ms-transform: translate(0,3px);
+		transform: translate(0,3px);
+	}
+
+}
+
+@media only screen and (max-width: 992px)
+{
+	body
+{
+	background-image: unset;
+	background-color: black;
+	animation-name:  unset;
+}
+}
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) 
+{
+	
+
+
+	body
+	{
+		background-image: url("../img/bg-blurred.jpg");
+		animation: none;
+		background-size: cover;
+	}
+
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) 
+{
+	
+	
+}
