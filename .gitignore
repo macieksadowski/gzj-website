@@ -1,6 +1,11 @@
-google*
-font
-config.json
-sitemap.xml
-.vscode
+*.pdf
+
 wbudowie
+
+.vscode
+
+generatory/contracts/documents
+
+generatory/zaiks/documents
+
+generatory/connectvars.php
