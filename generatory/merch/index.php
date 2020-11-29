@@ -3,6 +3,9 @@
 	/**
 	* This is a module for users to manage merchandise sales and inventory
 	*/
+	
+	//Add DB credentials and methods
+	require_once "../database.php";
 	session_start();
 	//If user isn't logged redirect to login page 
 	if(!isset($_SESSION['logged']))
@@ -10,13 +13,28 @@
 		header('location: ../index.php');
 		exit();
 	}
-
+	
 	//Add application specific variables
 	require_once "../appvars.php";
+	//Add application functions
+	require_once "../functions.php";
+	
+
+	/*VARIABLES
+	* **********************************************
+	*/
+
 
 	//Define page name for menu file
 	$PAGE_NAME = 'Sprzedaż gadżetów';
 	$MERCH  = '';
+
+
+
+	/************************************************/
+
+
+
 
 ?>
 

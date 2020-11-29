@@ -1,7 +1,11 @@
 ["Błąd połączenia z bazą danych",
     "Błąd zapytania bazy danych",
+    "Wprowadź login",
+    "Wprowadź hasło",
     "Nieprawidłowe hasło",
     "Nieprawidłowy login lub hasło",
     "Nie wybrano żadnego utworu",
     "Błąd otwarcia szablonu",
-    "Błąd zapisu do pliku"]
+    "Błąd zapisu do pliku",
+    "Musisz podać nazwę pliku"
+]

@@ -1,15 +1,28 @@
 <?php
 	session_start();
-
 	//Add application specific variables
 	require_once "appvars.php";
+	//Add application functions
+	require_once "functions.php";
 
 	//If user is logged redirect to client panel
-	if((isset($_SESSION['logged'])) && ($_SESSION['logged'] ==true))
+	if(@$_SESSION['logged'] == TRUE)
 	{
 		header('location: '.HOME_SITE);
 		exit();
 	}
+	
+
+	/*VARIABLES
+	* **********************************************
+	*/
+	$_SESSION['logged'] = FALSE;
+	if(isset($_SESSION['errors']))
+		$errors = $_SESSION['errors'];
+
+	/************************************************/
+
+	
 ?>
   
 
@@ -24,6 +37,7 @@
 	<meta name="robots" content="noindex">
 	<!-- Add CSS properties specific for this subpage. Main CSS file is included in file head.php!-->
 	<link href="./style.css" rel="stylesheet" type="text/css" />
+	<link href="./modal.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -49,12 +63,6 @@
 			<input name="login" type="text" placeholder="Login" onfocus="this.placeholder=''" onblur="this.placeholder='Login'">
 			<input name="password" type="password"placeholder="Hasło" onfocus="this.placeholder=''" onblur="this.placeholder='Hasło'">
 			<input name="loginBtn" type="submit"value="Zaloguj się">
-			<!-- If login procees returned an error then show information.-->
-			<div class="error">
-			<?php
-				if(isset($_SESSION['error']))
-				echo $_SESSION['error'];
-			?>
 			</div>
 		</form>
 
@@ -67,6 +75,7 @@
 	
 	<?php
 	require_once "../footer.php";
+	require_once('./modal.php');	 
 	?>
 
 	

@@ -1,32 +1,15 @@
 <script type="text/javascript">
 
-	$('#kod_pocztowy').on('keypress change', function() {
-  $(this).val(function(index, value) {
-    return value.replace(/\W/gi, '').replace(/(.{2})/, '$1-');
-  });
-});
-
-$('#kod_pocztowy').on('paste', function() {
-  $(this).val(function(index, value) {
-    return value.replace(/\W/gi, '').replace(/(.{2})/, '$1-');
-  });
-  setTimeout(function() {
-    $('#kod_pocztowy').trigger("change");
-  });
-});
-
-
-
 function copyFcn() {
   /* Prepare text with data */
-  var copyText = <?='\'Imię i nazwisko: '.$osoba['imie'].' '.$osoba['nazwisko'].
-					'\r\nUlica i nr domu: '.$osoba['ulica'].' '.$osoba['nr_domu'].
-					'\r\nKod pocztowy: '.$osoba['kod_pocztowy'].
-					'\r\nMiasto: '.$osoba['miasto'].
-					'\r\nPESEL: '.$osoba['PESEL'].
-					'\r\nMiejsce urodzenia: '.$osoba['miejsce_urodzenia'].
-					'\r\nNr konta: '.$osoba['nr_konta'].
-					'\r\nUrząd skarbowy: '.$osoba['urzad_skarbowy'].'\'';?>;
+  var copyText = <?='\'Imię i nazwisko: '.$person['imie'].' '.$person['nazwisko'].
+					'\r\nUlica i nr domu: '.$person['ulica'].' '.$person['nr_domu'].
+					'\r\nKod pocztowy: '.$person['kod_pocztowy'].
+					'\r\nMiasto: '.$person['miasto'].
+					'\r\nPESEL: '.$person['PESEL'].
+					'\r\nMiejsce urodzenia: '.$person['miejsce_urodzenia'].
+					'\r\nNr konta: '.$person['nr_konta'].
+					'\r\nUrząd skarbowy: '.$person['urzad_skarbowy'].'\'';?>;
   
   /*Create object for select fcn*/
   const el = document.createElement('textarea');
@@ -35,18 +18,23 @@ function copyFcn() {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
+
+	//Show communicate
   
-  /* Alert the copied text */
-  alert("Skopiowano dane!");
+  var modal = document.getElementsByClassName('modal')[0];
+  modal.id = "success";
+  document.getElementById("modal-text").innerHTML = "Dane skopiowano do schowka!";
+  modal.style.display = "block";
+  
 }
 
 function editdataFcn() {
-	var btn = document.getElementsByName("zmien");
+	var btn = document.getElementsByName("edit");
 	btn = btn[0];
 	if(btn.value == "Aktualizuj")
 	{
 		btn.type = "submit";
-		btn.formAction = "aktualizuj-dane.php";
+		btn.formAction = "update-data.php";
 	}
 	btn.value = "Aktualizuj";
 	var form = document.getElementById("personal-data").querySelectorAll("input"); 

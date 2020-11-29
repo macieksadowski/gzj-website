@@ -46,16 +46,28 @@
 #items
 {
 	border-collapse:collapse;
+	border:none;
+	margin-left: auto;
+	margin-right: auto;
+	
+    order: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-direction: column;
+	font-size: 20px;
+	padding: 30px;
 }
 
-#items th, td
+
+#items th, #items td
 {
 	font-size: 18px;
 	color: #fffff5;
-	padding: 5px;
+	padding: 5px 10px;
 	margin: 20px 0;
-	border: 1px solid #fffff5;
-	border:none;
+	border-bottom: 1px solid #fffff5;
+	
 	text-align: center;
 	outline: none;
 }
@@ -65,15 +77,6 @@
 	background-color: #181818;
 }
 
-#items tr td:last-child, #items tr th:last-child
-{
-	border: none;
-}
-
-td input[type=text]
-{
-	width:45px;
-}
 
 .formtitle
 {
