@@ -65,7 +65,7 @@ class Database
         else
         {
             //Send data from Database
-            if($results = @$DBconnection->query($query))
+            if($results = $DBconnection->query($query))
             {
                 
             }

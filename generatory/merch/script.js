@@ -1,36 +1,20 @@
-<script type="text/javascript">
-
-
-
-function editFcn() {
-	var btn = document.getElementsByName("edytuj");
-	btn = btn[0];
-	if(btn.value == "Zapisz")
+function disableSell(numInput) 
+{
+	val = numInput.value;	
+	max = numInput.max;
+	var btn = document.getElementById('sellBtn');
+	if(max < 1 || val < 1 || val == null)
 	{
-		btn.type = "submit";
-	}
-	btn.value = "Zapisz";
-	var form = document.getElementById("items").querySelectorAll("input"); 
-	var i;
-	for (i = 0; i < form.length; i++) {
-	  form[i].removeAttribute("disabled");
+		btn.disabled = true;
+
+	}	
+	else
+	{
+		btn.disabled = false;
 	}
 }
 
-
-function blockFcn() {
-	var x = document.getElementsByName("id");
-	var form = document.getElementById("new-sale");
-	form.submit();
-	for (const element of x)
-	{
-	  //  element.disabled = true;
-	}
-	
+function setMaxAmount(dropdown)
+{
+	dropdown.value.substr(-5,1) 
 }
-
-
-
-
-
-</script>

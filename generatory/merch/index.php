@@ -23,6 +23,8 @@
 	/*VARIABLES
 	* **********************************************
 	*/
+	$errors = $_SESSION['errors'];
+	$DBconnection = $_SESSION['DBConnection'];
 
 
 	//Define page name for menu file
@@ -51,26 +53,68 @@
 <meta name="robots" content="noindex">
 
 <link href="../style.css" rel="stylesheet" type="text/css" />
+<link href="../modal.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
-	<?php require_once('../menu.php'); ?>
-	<main>	
-	<div class="generator">
-	
-		<label><div class="button"><a href="./new-sale-session.php">Nowa sprzedaż</a></div></label>
-		<label><div class="button"><a href="./inventory.php">Przegląd zapasów</a></div></label>
-	
-				
-	
-
-	</main>
-	<footer>
-	<div class="footer">
-			<a href="#">Główny Zawór Jazzu</a> &copy;&nbsp;2020&nbsp;Maciej&nbsp;Sadowski
+	<?php require_once('../menu.php'); 
+	?>
+	<main>
+	<div class="wrapper">	
+	<div class="generator" style="flex-direction:column;">
+	<div>
+		<label><button class="button"><a href="./setSaleSession.php">Nowa sprzedaż</a></button></label>
+		<label><button class="button"><a href="./inventory.php">Przegląd zapasów</a></button></label>
 	</div>
-	</footer>
-</div>	
+	<?php
+		$query = 'SELECT * FROM sales_session ';
+		$list = $DBconnection->getFromDB($query);
+		if(is_array($list))
+		{
+	?>
+		<table id="items">
+		<tr>
+			<th>Id</th>
+			<th>Data</th>
+			<th>Kwota</th>
+			<th> </th>
+			<th> </th>
+			<th> </th>
+		
+		</tr>	
+		<?php
+		
+		foreach($list as $key=>$entry) 
+		{
+				echo '<tr>';
+				echo '<td>'.$entry['id'].'</td>';
+				echo '<td>'.$entry['date'].'</td>';
+				echo '<td>'.$entry['income'].'zł </td>';
+				echo '<td><a href="./modifySaleSession.php?id='.$entry['id'].'&mode=view">Przeglądaj</a></td>';
+				echo '<td><a href="./modifySaleSession.php?id='.$entry['id'].'&mode=activate">Uaktywnij</a></td>';
+				echo '<td><a style="color:red;" href="./modifySaleSession.php?id='.$entry['id'].'&mode=delete">Usuń</a></td>';
+				echo '</tr>';
+		}
+
+		?>
+		</table>
+	<?php
+		}
+		else
+		{
+	?>
+	<p>Brak historii sprzedaży</p>
+	<?php		
+		}
+	?>
+</div>
+
+
+<?php require_once('../../footer.php');
+	showModal();	 
+
+	?>
+
 </body>
 </html>
