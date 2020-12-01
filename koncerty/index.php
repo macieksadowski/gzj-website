@@ -1,21 +1,21 @@
 <!DOCTYPE HTML>
 <?php
-
+	require_once './fbCredentials.php';
 	require_once __DIR__ . '/vendor/autoload.php';   
 	
 	
 	
 	$fb = new \Facebook\Facebook([
-	  'app_id' => "633970044075262",           //Replace {your-app-id} with your app ID
-	  'app_secret' => "375df9564e37d0abfa77ea04926d7cc1",   //Replace {your-app-secret} with your app secret
-	  'graph_api_version' => 'v6.0',
+	  'app_id' => app_id,           //Replace {your-app-id} with your app ID
+	  'app_secret' => app_secret,   //Replace {your-app-secret} with your app secret
+	  'graph_api_version' => graph_api_version,
 	]);
 
 
 	try {
 	   
 	// Get your UserNode object, replace {access-token} with your token
-	  $response = $fb->get('glownyzaworjazzu?fields=events{cover,id,name,start_time,place,ticket_uri,description}', "EAAJAl6dGfP4BAJJZCkFVKZAxNfYEBtNrsS7COmi4I6W5Ivk2Xrm7DE256ZA8UuyoVaWqvihSqbIv5ZAOlPtsonH8TSRld3OrD0AdoeFL5HVSg9c83ZBYXaadjYCoaqY0VtKiAeHPIgb0bwZCUP32yUciuo9LhhhbgdpV9vgy3cOQZDZD");
+	  $response = $fb->get('glownyzaworjazzu?fields=events{cover,id,name,start_time,place,ticket_uri,description}', access_token);
 	  
 
 	} catch(\Facebook\Exceptions\FacebookResponseException $e) {
@@ -75,7 +75,7 @@
 		{
 			echo '<div class="event">
 	
-				<div class="event-cover">
+				<div class="event-cover" >
 				
 						<img src="'.$event['cover']['source'].'">
 				</div>

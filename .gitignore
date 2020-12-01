@@ -9,3 +9,7 @@ generatory/contracts/documents
 generatory/zaiks/documents
 
 generatory/connectvars.php
+
+koncerty/vendor
+
+koncerty/fbCredentials.php
