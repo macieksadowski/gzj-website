@@ -5,7 +5,7 @@
 	*/
 	
 	//Add database access credentials
-	require_once "connectvars-local.php";
+	require_once "connectvars.php";
 	require_once "database.php";
 	session_start();
 	

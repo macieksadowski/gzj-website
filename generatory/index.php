@@ -55,7 +55,8 @@
 	</header>
 	
 	<main>
-	<div class="wrapper">
+	<div class="wrapper">  
+	<div class="generator">
 	<section>
 	<div class="loginform">
 	

@@ -12,7 +12,7 @@
 	}
 
 	//Add database access credentials
-	require_once "../connectvars-local.php";
+	require_once "../connectvars.php";
 	//Add application specific variables
 	require_once "../appvars.php";
 	//Add application functions
