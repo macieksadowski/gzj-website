@@ -13,7 +13,7 @@
 	/*background-color:  #292929;*/
 	margin: 20px;
 	min-width: 300px;
-	max-width: 700px;
+	max-width: 730px;
 	
 	text-align: justify;
 	
@@ -26,8 +26,7 @@
 	margin-left:auto;
 	margin-right:auto;
 	width:90%;
-	margin: 5%;
-	
+
 }
 
 .event-name
@@ -44,6 +43,7 @@
 .event-name h1
 {
 	font-size:1.5em;
+	background-color:unset;
 	
 }
 
@@ -116,11 +116,11 @@
 
 .event-cover img
 {
-		margin-left:auto;
+	margin-left:auto;
 	margin-right:auto;
-	max-width:100%;
-	max-height:100%;
-
+	width:100%;
+	max-height:330px;
+	object-fit: cover;
 }
 
 .event-tickets

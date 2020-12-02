@@ -15,7 +15,7 @@
 	try {
 	   
 	// Get your UserNode object, replace {access-token} with your token
-	  $response = $fb->get('glownyzaworjazzu?fields=events{cover,id,name,start_time,place,ticket_uri,description}', access_token);
+	  $response = $fb->get('glownyzaworjazzu?fields=events{cover,id,name,start_time,place,ticket_uri,description,is_online}', access_token);
 	  
 
 	} catch(\Facebook\Exceptions\FacebookResponseException $e) {
@@ -94,8 +94,8 @@
 					$re = '/wstęp wolny/miu';
 					preg_match_all($re, $event['description'], $matches, PREG_SET_ORDER, 0);
 					
-					
-					if(isset($event['ticket_uri'])) echo '
+					if($event['is_online'] ==true) echo '<div class="ticketInfo">Wydarzenie online</div>';
+					else if(isset($event['ticket_uri'])) echo '
 					<label><div class="button"><a href="'.$event['ticket_uri'].'" target="_blank">Kup Bilet</a></div></label>';
 					else if(!empty($matches)) echo '<div class="ticketInfo">Wstęp wolny</div>';
 					else echo '<div class="ticketInfo">Bilety do nabycia u&nbsp;organizatora</div>';
