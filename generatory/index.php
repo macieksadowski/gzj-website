@@ -41,45 +41,38 @@
 </head>
 
 <body>
+<!-- This div is used as container for whole page-->
+<div class="page-container">
 
-	<div class="page-container">
 	<header>
-		<div class="header">
-			<a href="#">
+	<div class="header">
+		<a href="/">
 			<div class="logo">
 				<img src="/img/logo-square.png">
 			</div>
-			</a>
+		</a>
 			
-		</div>
+	</div>
 	</header>
 	
 	<main>
-	<div class="wrapper">  
-	<div class="generator">
-	<section>
-	<div class="loginform">
-	
-		<form action="login.php" method="post">
-			<input name="login" type="text" placeholder="Login" onfocus="this.placeholder=''" onblur="this.placeholder='Login'">
-			<input name="password" type="password"placeholder="Hasło" onfocus="this.placeholder=''" onblur="this.placeholder='Hasło'">
-			<input name="loginBtn" type="submit"value="Zaloguj się">
+	<div class="content">  
+		<section>
+			<div class="loginform">
+				<form action="login.php" method="post">
+					<input name="login" type="text" placeholder="Login" onfocus="this.placeholder=''" onblur="this.placeholder='Login'">
+					<input name="password" type="password"placeholder="Hasło" onfocus="this.placeholder=''" onblur="this.placeholder='Hasło'">
+					<input name="loginBtn" type="submit"value="Zaloguj się">
+				</form>
 			</div>
-		</form>
-
-	
-	</div>	
-	</section>
-	
-	
-	
-	
-	<?php
+		</section>
+	</div>
+	</main>
+	<?php 
 	require_once "../footer.php";
 	require_once('./modal.php');	 
 	?>
-
-	
+</div>
 </body>
 </html>
 

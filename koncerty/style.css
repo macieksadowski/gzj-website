@@ -9,16 +9,10 @@
 .event
 {
 	flex: 1 1 40%; 
-	background: rgba(0, 0, 0, 0.8);
-	/*background-color:  #292929;*/
 	margin: 20px;
 	min-width: 300px;
 	max-width: 730px;
-	
-	text-align: justify;
-	
-	
-	
+	text-align: justify;	
 }
 
 .event-text
@@ -26,12 +20,10 @@
 	margin-left:auto;
 	margin-right:auto;
 	width:90%;
-
 }
 
 .event-name
-{
-	
+{	
 	text-align:left;
 	margin-left:auto;
 	margin-right:auto;
@@ -43,8 +35,6 @@
 .event-name h1
 {
 	font-size:1.5em;
-	background-color:unset;
-	
 }
 
 .event-date
@@ -65,26 +55,17 @@
 .ticketInfo
 {
 	width: 30%;
-	float: left;
-	
+	float: left;	
 	padding: 10px 0;
 	margin: 0;
-	text-align: center;
-	
-	
+	text-align: center;	
 }
 
-.button
+button
 {
 	width: 30%;
-	float: left;
-	
-	padding: 10px 0;
+	float: left;	
 	margin: 0;
-	text-align: center;
-	outline: none;
-	box-sizing: border-box;
-	
 }
 
 .event-social
@@ -104,14 +85,12 @@
 }
 
 .event-cover
-{
-	
+{	
 	margin-left:auto;
 	margin-right:auto;
 	width:90%;
 	margin:5%;
-	margin-bottom: 0;
-	
+	margin-bottom: 0;	
 }
 
 .event-cover img
@@ -122,12 +101,6 @@
 	max-height:330px;
 	object-fit: cover;
 }
-
-.event-tickets
-{
-	
-}
-
 
 
 

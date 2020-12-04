@@ -28,18 +28,135 @@ html
   box-sizing: border-box;
 }
 
-
-
-body
+/******COLORS & FONTS******/
+body,a
 {	
 	color:#fffff5;
+}
+.menu-button,
+.menu-button::before,
+.menu-button::after,
+h2::before, h2::after 
+{
+	background-color: #fffff5;
+}
+#menu-toggle:checked + .menu-button-container .menu-button 
+{
+	background: rgba(255, 255, 255, 0);
+}
+
+
+.footer,.header,.menu > li,.records-content,.records-stripe,.about-content,.about-stripe,.event
+{
+	background-color: #292929;
+}
+
+.title, button,.button-disabled
+{
+	background-color:  #181818;		
+}
+
+.socials
+{
+	background: rgba(0, 0, 0, 0.5);
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) 
+{
+	.about-content, .records-content,	.about-stripe,.event
+	{
+		background: rgba(0, 0, 0, 0.8);
+	}
+}
+
+
+button,.button-disabled
+{	
+	background-color: #292929;
+}
+
+
+.fb:hover, .social:hover > .fb
+{
+	color: #4668b3;
+}
+
+.ig:hover, .social:hover > .ig
+{
+	color: #c13584;
+}
+
+.yt:hover, .social:hover > .yt
+{
+	color: #d94348;
+}
+
+.tw:hover, .social:hover > .tw
+{
+	color: #3095d3;
+}
+
+.sc:hover, .social:hover > .sc
+{
+	color: #ff7700;
+}
+
+.sp:hover, .social:hover > .sp
+{
+	color: #81b71a;
+}
+
+body
+{
 	font-family: 'Raleway', sans-serif;
+	font-weight: 200;
+}
+
+h1
+{
+	font-family: 'Cinzel', italic;
+	font-weight: 400;
+}
+
+h2
+{
+  font-family: 'Cinzel',italic;
+  font-size: 20px;
+  letter-spacing: 10px;
+  margin-bottom: 2vh;
+}
+
+h3
+{
+  font-size: 25px;
+}
+
+.num-fact,h3
+{
+	font-family: 'Petit Formal Script', cursive;
+}
+
+button,.button-disabled
+{
+	font-family: 'Cinzel', serif;
+	font-weight: 700;
+}
+
+.header
+{
+	font-family: 'Cinzel', serif;
+	font-weight: 200;
+}
+
+/******************/
+body
+{	
 	margin: 0 !important;
 	background-image: url("../img/bg-mobile-blurred.jpg");
 	background-repeat: no-repeat;
 	background-size: auto 100%;
 	background-attachment: fixed;
-		
+	
     animation-name: backgroundScroll;
 	animation-duration: 20s;
 	animation-iteration-count: infinite;
@@ -57,74 +174,41 @@ body
 	width: 100%;
 }
 
-.wrapper {
-	align-self:flex-start;
+.content
+{
 	order:2;
-	display:flex;
+	display: flex;
+	flex-wrap: nowrap;
 	flex-direction: column;
-	justify-content: space-between;
+	align-self:flex-start;
+	justify-content: space-around;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
 }
 
 .footer 
 {
-  align-self:flex-end;
-  /*padding: 1rem;*/
-  order:3;
-  text-align: center;
-  background-color: #292929;
- 
-}
-
-
-
-
-p
-{
-	font-family: 'Raleway', sans-serif;
-	font-weight: 200;
-
+	order:3;
+	align-self:flex-end;
+	text-align: center;
 }
 
 h1
 {
-	font-family: 'Cinzel', italic;
-	font-weight: 400;
-	padding: 0.5em 0em;
 	margin:0;
-	width:100%;
-	background-color:  #292929;
 	text-align:center;
 }
 
-.title h1
+.title
 {
-	background-color:  #181818;
-	
+	width:100%;
+	padding: 0.5em 0em;
 }
-
-
-h2
-{
-  font-family: 'Cinzel',italic;
-  color: white;
-  font-size: 20px;
-  letter-spacing: 10px;
-  margin-bottom: 2vh;
-}
-
-
-h3
-{
-  font-family: 'Petit Formal Script', cursive;
-  color: white;
-  font-size: 25px;
-  
-}
-
 
 a
 {
-	color: #fffff5;
 	text-decoration: none;
 }
 
@@ -133,75 +217,65 @@ a:hover
 	text-decoration: underline;
 }
 
- .button, .socialdiv, .socialsHeader div, .logo, #contact a, .nav-toggler, .about-socials div
+ .button, .social, .socials-header a, .logo, #contact a, .nav-toggler, .about-socials div
 {
 	transition: all 0.2s ease-in-out;
 }
 
- .button:hover, .socialdiv:hover, .socialsHeader div:hover, .logo:hover, #contact a:hover, .nav-toggler:hover,  .about-socials div:hover
+ .button:hover, .social:hover, .socials-header a:hover, .logo:hover, #contact a:hover, .nav-toggler:hover,  .about-socials div:hover
 {
 	-webkit-transform: translate(0,3px);
 	-ms-transform: translate(0,3px);
 	transform: translate(0,3px);
 }
 
-
-.socialdiv
+.socials
 {
-	width: 50%;
+	align-self: flex-end;
+	width: 100%;
+	margin-top:20vh;
+	padding-top: 3px;
+}
+
+#socials-grid
+{
+	display:flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-between;
 	padding-bottom: 20px;
-	float:left;
-
 }
 
-.socialdiv:hover
+
+.social
 {
-
-	text-decoration: underline;
+	width: 50%;	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
+
+.social label
+{
+	cursor: pointer;
+}
+
+.socials  i
+{
+	font-size: 50px;	
+}
+
+
 
 .fb, .ig, .yt, .tw, .sc, .sp
 {	
 	cursor:pointer;
 }
 
-.fb:hover, .socialdiv:hover > .fb
-{
-	color: #4668b3;
-}
-
-.ig:hover, .socialdiv:hover > .ig
-{
-	color: #c13584;
-}
-
-.yt:hover, .socialdiv:hover > .yt
-{
-	color: #d94348;
-}
-
-.tw:hover, .socialdiv:hover > .tw
-{
-	color: #3095d3;
-}
-
-.sc:hover, .socialdiv:hover > .sc
-{
-	color: #ff7700;
-}
-
-.sp:hover, .socialdiv:hover > .sp
-{
-	color: #81b71a;
-}
-
-.button,.button-disabled
+button,.button-disabled
 {
 	width: 250px;
 	font-size: 18px;
-	font-family: 'Cinzel', serif;
-	font-weight: 700;
-	color: #fffff5;
 	padding: 10px 0;
 	margin: 20px 0;
 	border: 1px solid #fffff5;
@@ -212,24 +286,18 @@ a:hover
 	transition: all 0.2s ease-in-out;
 }
 
-.button a
+button a
 {
-	color: #fffff5;
 	text-decoration: none;
 	display: block;
-
 }
 
-.button:hover
+button:hover
 {
 	-webkit-transform: translate(0,3px);
 	-ms-transform: translate(0,3px);
 	transform: translate(0,3px);
 }
-
-
-
-
 
 /* Small devices (portrait tablets and large phones, 425px and up) */
 @media only screen and (min-width: 425px) 

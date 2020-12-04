@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * This file contains PHP/HTML code which add navbar and main div opening tags to every page of the website. It should be added to every page in top of body section.
+	 * This file contains PHP/HTML code which add navbar to every page of the website. It should be added to every page in top of body section.
 	 */
 
 	//Add variables with links to subpages and social media links
@@ -9,10 +9,9 @@
 
 ?>
 
-<!-- This div is used as container for whole page-->
-<div class="page-container">
 
-	<header>
+
+<header>
 	<!-- This is a container for navbar-->
 	<div class="header">
 
@@ -31,45 +30,49 @@
 		
 		<!-- Navigation list (subpages)-->
 		<ol class="menu" itemscope itemtype="https://schema.org/BreadcrumbList">
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="<?=$mainpage;?>"> <span itemprop="name">Start</span></a> <meta itemprop="position" content="1" /></li>
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$about;?>"> <span itemprop="name">O zespole</span></a> <meta itemprop="position" content="2" /></li>
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$concerts;?>"> <span itemprop="name">Koncerty</span></a> <meta itemprop="position" content="3" /></li>
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$records;?>"> <span itemprop="name">Nagrania</span></a> <meta itemprop="position" content="4" /></li>
+		<?php
+			$i=1;
+			
+			foreach($menu as $name=>$link)
+			{
+				if($name == $pageTitle)
+				echo'<li class="current" itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"> <span itemprop="name">'.$name.'</span> <meta itemprop="position" content="'.$i.'" /></li>';
+				else echo'<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="'.$link.'"> <span itemprop="name">'.$name.'</span></a> <meta itemprop="position" content="'.$i.'" /></li>';
+				$i++;
+			}
+		?>
 			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$offer;?>" target="_blank"> <span itemprop="name">Oferta</span></a> <meta itemprop="position" content="5" /></li>
 			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$rider;?>" target="_blank"> <span itemprop="name">Rider</span></a> <meta itemprop="position" content="6" /></li>
 		</ol>
 		
 		<!-- Navigation list (social media)-->
-		<div class="socialsHeader">
-				<a href="<?=$fb;?>" target="_blank"> <div class="fb" id="fbHeader">
+		<div class="socials-header">
+				<a href="<?=$fb;?>" target="_blank" class="fb">
 					<i class="icon-facebook-official"></i>
-				</div></a>
-				<a href="<?=$ig;?>" target="_blank"><div class="ig" id="igHeader">
+				</a>
+				<a href="<?=$ig;?>" target="_blank" class="ig">
 					<i class="icon-instagram"></i>
-				</div></a>
-				<a href="<?=$yt;?>" target="_blank"><div class="yt" id="ytHeader">
+				</a>
+				<a href="<?=$yt;?>" target="_blank" class="yt">
 					<i class="icon-youtube-play"></i>
-				</div></a>
-				<a href="<?=$sp;?>" target="_blank"><div class="sp" id="spHeader">
+				</a>
+				<a href="<?=$sp;?>" target="_blank" class="sp">
 					<i class="icon-spotify"></i>
-				</div></a>
-				<a href="<?=$sc;?>" target="_blank"><div class="sc" id="scHeader">
+				</a>
+				<a href="<?=$sc;?>" target="_blank" class="sc">
 					<i class="icon-soundcloud"></i>
-				</div></a>
+				</a>
 		</div>
 		
 		<!-- Contact info in navbar-->
 		<div id="contact">
-			<div><a href="tel:<?=$phone;?>"><i class="icon-phone"></i> 602 538 140 </a></div>
-			<div><a href="mailto:<?=$mail;?>"><i class="icon-at"></i><?=$mail;?></a></div>
-		</div>
-		
-
-		
-		
+			<a href="tel:<?=$phone;?>">
+				<i class="icon-phone"></i> 602 538 140 
+			</a>
+			<a href="mailto:<?=$mail;?>">
+				<i class="icon-at"></i><?=$mail;?>
+			</a>
+		</div>	
 	</div>
-	</header>
+</header>
 	
-	<main>
-	<!-- This is a container for main content of page. ATTENTION: closing tags are included in file footer.php!-->
-	<div class="wrapper">

@@ -3,7 +3,11 @@
 	/**
 	 * This file contains PHP variables with links to subpages and social media links. The variables are used in all pages of website
 	 */
-	
+	$menu = ['Start'=>'/',
+	'O zespole' => '/o-zespole',
+	'Koncerty' => '/koncerty',
+	'Nagrania' => '/nagrania'
+	];
 	$mainpage = '/';
 	$about = '/o-zespole';
 	$records = '/nagrania';

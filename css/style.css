@@ -3,19 +3,6 @@ body
 	background-image: url("../img/bg-mobile.jpg");
 }
 
-.content
-{
-	display: flex;
-	flex-wrap: nowrap;
-	flex-direction: column;
-	justify-content: space-around;
-	/*margin: 25px 0;*/
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-}
-
 .content h2
 {
 	align-self: flex-start;
@@ -25,12 +12,6 @@ body
 {
 	align-self: flex-start;
 	margin: 3% 0;
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-	
-	
 }
 
 #logoBig img
@@ -40,33 +21,11 @@ body
 }
 
 
-
-.socials
-{
-	align-self: flex-end;
-	margin-top:20vh;
-	padding-top: 3px;
-	background: rgba(0, 0, 0, 0.5);
-	width: 100%;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.socials  i
-{
-	font-size: 50px;
-	
-}
-
-
-
-
 /* Small devices (portrait tablets and large phones, 425px and up) */
 @media only screen and (min-width: 425px) 
 {
 	
-	.socialdiv
+	.social
 	{
 	width: 33.33%;
 	
@@ -81,7 +40,6 @@ body
 	
 	h2::before, h2::after 
 	{
-	  background-color: white;
 	  content: " ";
 	  display: inline-block;
 	  height: 2px;
@@ -98,13 +56,10 @@ body
 @media only screen and (max-width: 992px)
 {
 	body
-{
-	background-image: url("../img/bg-mobile.jpg");
-	
-    animation-name: backgroundScroll;
-	background-color: black;
-	
-}
+	{
+		background-image: url("../img/bg-mobile.jpg");
+		animation-name: backgroundScroll;
+	}
 }
 
 
@@ -130,14 +85,14 @@ body
 	
 	width: 80%;
 	}
-	.socialdiv
+	.social
 	{
 	width: 20%;
 	
 	}
 
 
-
+}
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) 
 {

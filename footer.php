@@ -5,11 +5,9 @@
  */
 
  ?>
-	</div>
-	</main>
+	
 	<footer>
 	<div class="footer">
 			<a href="#">Główny Zawór Jazzu</a> &copy;&nbsp;2020&nbsp;Maciej&nbsp;Sadowski
 	</div>
 	</footer>
-</div>

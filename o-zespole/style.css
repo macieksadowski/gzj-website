@@ -1,20 +1,9 @@
-/*
-font-family: 'Cinzel Decorative', cursive;
-font-family: 'Cinzel', serif;
-font-family: 'Petit Formal Script', cursive;
-font-family: 'Raleway', sans-serif;
-*/
-
-
-
 .about-content
 {
 	display: flex;
 	flex-wrap:wrap;
 	justify-content: flex-start;
-	
 	flex-direction: row;
-	background-color:  #292929;
 	width: 100%;
 	margin-left:auto;
 	margin-right:auto;
@@ -26,8 +15,6 @@ font-family: 'Raleway', sans-serif;
 {
 	order:1;
 	flex: 1 1 50%;
-	
-
 }
 
 .about-photo img
@@ -62,9 +49,7 @@ font-family: 'Raleway', sans-serif;
 	padding: 30px 0;
 	margin-top: 20px;
 	margin-bottom: 40px;
-	background-color:  #292929;
 	width:100%;
-	
 	text-align: center;
 }
 
@@ -80,18 +65,11 @@ font-family: 'Raleway', sans-serif;
 	text-align: center;
 }
 
-.num-fact
-{
-	font-family: 'Petit Formal Script', cursive;
-	
-}
-
 .num-fact-number
 {
 	font-weight: 700;
 	font-size: 3em;
 	padding-bottom:.4em;
-
 }
 
 .num-fact-text
@@ -126,7 +104,6 @@ font-family: 'Raleway', sans-serif;
 
 #about-contact:hover
 {
-	
 	-webkit-transform: translate(0,3px);
 	-ms-transform: translate(0,3px);
 	transform: translate(0,3px);
@@ -139,11 +116,6 @@ font-family: 'Raleway', sans-serif;
 	margin-right: 20px;
 }
 
-
-
-
-
-
 .about-socials
 {
 	display: flex;
@@ -152,18 +124,16 @@ font-family: 'Raleway', sans-serif;
 	justify-content: space-around;
 	text-align: center;
 	font-size:10px;
+	padding-bottom:20px;
 }
 
-.socialdiv
+.social
 {
-	flex: 1 1 33%;
-	float:unset;
 	width:unset;
-	/*margin:0 10px;*/
 }
 
 
-.socialdiv i
+.social i
 {
 	font-size:35px;
 }
@@ -196,7 +166,6 @@ font-family: 'Raleway', sans-serif;
 	body
 {
 	background-image: unset;
-	background-color: black;
 	animation:  unset;
 }
 }
