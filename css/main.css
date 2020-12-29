@@ -29,14 +29,15 @@ html
 }
 
 /******COLORS & FONTS******/
-body,a
+body,a,table,input[type=submit],input[type=button],button
 {	
 	color:#fffff5;
 }
 .menu-button,
 .menu-button::before,
 .menu-button::after,
-h2::before, h2::after 
+h2::before, h2::after ,
+input
 {
 	background-color: #fffff5;
 }
@@ -46,12 +47,22 @@ h2::before, h2::after
 }
 
 
-.footer,.header,.menu > li,.records-content,.records-stripe,.about-content,.about-stripe,.event
+.footer,
+.header,.menu > li,
+.records-content,
+.records-stripe,
+.about-content,
+.about-stripe,.event,
+.loginform,
+.generator
 {
 	background-color: #292929;
 }
 
-.title, button,.button-disabled
+.title,
+input[type=submit],
+input[type=button],
+button
 {
 	background-color:  #181818;		
 }
@@ -63,18 +74,22 @@ h2::before, h2::after
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) 
 {
-	.about-content, .records-content,	.about-stripe,.event
+	.about-content,
+	.records-content,
+	.about-stripe,
+	.event,
+	.loginform,
+	.generator
 	{
 		background: rgba(0, 0, 0, 0.8);
 	}
 }
 
 
-button,.button-disabled
-{	
-	background-color: #292929;
+.button:disabled
+{
+	color: #555555;
 }
-
 
 .fb:hover, .social:hover > .fb
 {
@@ -136,7 +151,9 @@ h3
 	font-family: 'Petit Formal Script', cursive;
 }
 
-button,.button-disabled
+input[type=submit],
+input[type=button],
+button
 {
 	font-family: 'Cinzel', serif;
 	font-weight: 700;
@@ -217,17 +234,73 @@ a:hover
 	text-decoration: underline;
 }
 
- .button, .social, .socials-header a, .logo, #contact a, .nav-toggler, .about-socials div
+button, .social, .socials-header a, .logo, #contact a, .nav-toggler, .about-socials div
 {
 	transition: all 0.2s ease-in-out;
 }
 
- .button:hover, .social:hover, .socials-header a:hover, .logo:hover, #contact a:hover, .nav-toggler:hover,  .about-socials div:hover
+ button:hover, .social:hover, .socials-header a:hover, .logo:hover, #contact a:hover, .nav-toggler:hover,  .about-socials div:hover
 {
 	-webkit-transform: translate(0,3px);
 	-ms-transform: translate(0,3px);
 	transform: translate(0,3px);
 }
+
+
+
+input[type=submit],
+input[type=button],
+button
+{
+	width: 250px;
+	font-size: 18px;
+	padding: 10px 0;
+	margin: 20px 0;
+	border: 1px solid #fffff5;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+	outline: none;
+	transition: all 0.2s ease-in-out;
+}
+
+button:disabled
+{
+	border: 1px solid #555555;
+	cursor:unset;
+	transition: unset;
+}
+
+button a
+{
+	text-decoration: none;
+	display: block;
+}
+
+
+input[type=submit]:hover,
+input[type=button]:hover,
+button:hover
+{
+	-webkit-transform: translate(0,3px);
+	-ms-transform: translate(0,3px);
+	transform: translate(0,3px);
+}
+input[type=submit]:focus,
+input[type=button]:focus,
+button:focus
+
+{
+	-webkit-box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
+	-moz-box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
+	box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
+}
+
+button:disabled:hover
+{
+	transform:unset;
+}
+
 
 .socials
 {
@@ -236,6 +309,7 @@ a:hover
 	margin-top:20vh;
 	padding-top: 3px;
 }
+
 
 #socials-grid
 {
@@ -272,32 +346,6 @@ a:hover
 	cursor:pointer;
 }
 
-button,.button-disabled
-{
-	width: 250px;
-	font-size: 18px;
-	padding: 10px 0;
-	margin: 20px 0;
-	border: 1px solid #fffff5;
-	border-radius: 5px;
-	cursor: pointer;
-	text-align: center;
-	outline: none;
-	transition: all 0.2s ease-in-out;
-}
-
-button a
-{
-	text-decoration: none;
-	display: block;
-}
-
-button:hover
-{
-	-webkit-transform: translate(0,3px);
-	-ms-transform: translate(0,3px);
-	transform: translate(0,3px);
-}
 
 /* Small devices (portrait tablets and large phones, 425px and up) */
 @media only screen and (min-width: 425px) 

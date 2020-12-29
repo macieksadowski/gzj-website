@@ -11,8 +11,8 @@
 	{
 		header('location: ../index.php');
 		exit();
-	}
-	
+    }
+    	
 	//Add application specific variables
 	require_once "../appvars.php";
 	//Add application functions
@@ -57,17 +57,15 @@
         }
         if($mode == 'activate')
         {
-            $query = "UPDATE sales_session SET active = true";
+            $query = "UPDATE sales_session SET active = true WHERE id = $id";
             $result = $DBconnection->sendToDB($query);
             if($result == 0)
             {
                 $query = "SELECT id,income FROM sales_session WHERE active = true";
                 $result = $DBconnection->getFromDB($query);
-                $_SESSION['saleSession'] = $result[0]['id'];
-                $_SESSION['sessionIncome'] = $result[0]['income'];
                 resetAllErrorFlags();
     
-                header('location: new-sale-session.php');
+                header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);
             }
             else
             {

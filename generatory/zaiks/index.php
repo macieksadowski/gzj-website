@@ -23,7 +23,7 @@
 	/*VARIABLES
 	* **********************************************
 	*/
-	$errors = $_SESSION['errors'];
+	$errors = @$_SESSION['errors'];
 	$DBconnection = $_SESSION['DBConnection'];
 
 	//Define page name for menu file
@@ -46,47 +46,47 @@
 <?php 
 	require_once "../../head.php"; 
 ?>
-
+<!-- Inform robots to don't index this page-->
 <meta name="robots" content="noindex">
-
+<!-- Add CSS properties specific for this subpage. Main CSS file is included in file head.php!-->
 <link href="../style.css" rel="stylesheet" type="text/css" />
 <link href="../modal.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-
+<!-- This div is used as container for whole page-->
+<div class="page-container">
 	<?php require_once('../menu.php'); ?>
 	<main>
-	<div class="wrapper">
-	<div class="generator">
-		
-			
-			
+	<div class="content">
+		<div class="generator">
 			<form action="generate.php" method="post">
 				Wybierz utwory, które mają zostać wpisane do tabelki ZAiKS:
 				<?php
 				foreach($entriesArray as $key=>$entry) 
 				{
-					echo '<div class="item"><input type="checkbox" id="utwor'.$key.'" value="'.$entry['id'].'" name="songs[]">
-					
-				<label for="utwor'.$key.'">'.$entry['tytul'].'</label></div>';
+				?>
+				<div class="item">
+					<input type="checkbox" id="utwor<?=$key;?>" value="<?=$entry['id'];?>" name="songs[]">
+					<label for="utwor<?=$key;?>">
+						<?=$entry['tytul'];?>
+					</label>
+				</div>
+				<?php
 				}
 				?>
 				<div class="form-footer">
-				<input name="eventName" type="text" placeholder="Nazwa wydarzenia" onfocus="this.placeholder=''" onblur="this.placeholder='Nazwa wydarzenia'">
- 				<input name="generate" type="submit"value="Generuj dokument">
+					<input name="eventName" type="text" placeholder="Nazwa wydarzenia" onfocus="this.placeholder=''" onblur="this.placeholder='Nazwa wydarzenia'">
+ 					<input name="generate" type="submit"value="Generuj dokument">
 				</div>
-				
 			</form> 
-
-
-		
+		</div>
 	</div>
-	
+	</main>
 	<?php require_once('../../footer.php');
-	showModal();	 
-
+	showModal();
 	?>
+</div>
 </body>
 </html>
 

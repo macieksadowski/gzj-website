@@ -128,7 +128,7 @@
 					</span>
 				</a>
 				<button class="button">
-					<a href="<?=$offer;?>" target="_blank">
+					<a href="<?=$menu['Oferta'];?>">
 						Oferta koncertowa
 					</a>
 				</button>

@@ -6,14 +6,10 @@
 	$menu = ['Start'=>'/',
 	'O zespole' => '/o-zespole',
 	'Koncerty' => '/koncerty',
-	'Nagrania' => '/nagrania'
+	'Nagrania' => '/nagrania',
+	'Oferta' => '/oferta-koncertowa.pdf" target="_blank',
+	'Rider' => '/rider.pdf" target="_blank'
 	];
-	$mainpage = '/';
-	$about = '/o-zespole';
-	$records = '/nagrania';
-	$concerts = '/koncerty';
-	$offer = '/oferta-koncertowa.pdf';
-	$rider = '/rider.pdf';
 	$fb = 'https://facebook.com/glownyzaworjazzu';
 	$yt = 'https://www.youtube.com/channel/UCkOSkySgxXl_tACN8EWuOjQ';
 	$sc = 'https://soundcloud.com/glownyzaworjazzu';
