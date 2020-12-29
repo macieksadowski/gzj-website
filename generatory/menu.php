@@ -6,6 +6,8 @@
 
 //Add application specific variables
 require_once "../appvars.php";
+//Add variables with links to subpages and social media links
+require_once "links.php";
 
 ?>
 
@@ -13,9 +15,9 @@ require_once "../appvars.php";
 <!-- This is a container for navbar-->
 <div class="header">
 
-	<a href="#"><div class="logo">
+	<div class="logo">
 		<img src="/img/logo-square.png">
-	</div></a>
+	</div>
 	
 	
 	<input id="menu-toggle" type="checkbox" />
@@ -25,16 +27,21 @@ require_once "../appvars.php";
 	
 	
 	<ol class="menu" itemscope itemtype="https://schema.org/BreadcrumbList">
+	<?php
+		$i=1;
+			
+		foreach($menu as $name=>$link)
+		{
+			if($name == $PAGE_NAME)
+			echo'<li class="current" itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"> <span itemprop="name">'.$name.'</span> <meta itemprop="position" content="'.$i.'" /></li>';
+			else echo'<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="'.$link.'"> <span itemprop="name">'.$name.'</span></a> <meta itemprop="position" content="'.$i.'" /></li>';
+			$i++;
+		}
+	?>
+	
 		
-		<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="<?=$MERCH;?>"><span itemprop="name">Gadżety</span></a> <meta itemprop="position" content="1" /></li>
 		
-		<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="<?=$ZAIKS;?>"><span itemprop="name">Generator ZAiKS</span></a> <meta itemprop="position" content="21" /></li>
 		
-		<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="<?=$CONTRACTS;?>"><span itemprop="name">Generator umów</span></a> <meta itemprop="position" content="3" /></li>
-		
-		<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="<?=$FINANCES;?>" target="_blank"><span itemprop="name">Finanse</span></a> <meta itemprop="position" content="4" /></li>
-		
-		<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="../logout.php"><span itemprop="name">Wyloguj się</span></a> <meta itemprop="position" content="5" /></li>
 	</ol>
 	
 	

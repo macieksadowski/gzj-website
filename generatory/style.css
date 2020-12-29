@@ -5,7 +5,6 @@
 	flex-wrap:wrap;
 	justify-content: space-around;
 	flex-direction: row;
-	background-color:  #292929;
 	margin-left:auto;
 	margin-right:auto;
 	margin-bottom: 40px;
@@ -14,34 +13,37 @@
 
 .generator
 {
-	padding-top: 10px;
+	padding:20px;
 	display: flex;
 	flex-wrap:wrap;
 	justify-content: space-around;
-	align-content:center;
 	min-height:40vh;
-	flex-direction: row;
-	background-color:  #292929;
+	flex-direction: column;
 	width: 100%;
 	margin-left:auto;
 	margin-right:auto;
+	text-align: left;
 }
 
 .generator h1
 {
 	font-size: 28px;
 	width:40%;
-	background-color:unset;
 }
+
+
 
 .generator button
 {
 	width: 240px;
 	font-size: 14px;
 	padding: 4px 0;
-	margin: 8px 0;
-
+	margin: 8px 10px;
 }
+
+
+
+
 p .button
 {
 	width: 100px;
@@ -49,40 +51,69 @@ p .button
 	padding: 10px 2px;
 }
 
-#items
+#warehouse button
 {
+	padding:0;
+	border:none;
+	background-color: unset;
+	width:10px;
+	margin-left: 15px;
+	
+}
+.tableContainer
+{
+	overflow-x:auto;
+	max-width: 100%;
+}
+
+table
+{
+	table-layout: auto;
 	border-collapse:collapse;
 	border:none;
 	margin-left: auto;
 	margin-right: auto;
 	
     order: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    flex-direction: column;
+    
 	font-size: 20px;
 	padding: 30px;
 }
+table input
+{
+	
+	height:30px;
+}
+
+.nowrapCell
+{
+	white-space: nowrap;
+}
 
 
-#items th, #items td
+.plusButton
+{
+	width:26px !important;
+	height:26px;
+	padding: 0 !important;
+}
+
+
+th, td
 {
 	font-size: 18px;
-	color: #fffff5;
 	padding: 5px 10px;
 	margin: 20px 0;
 	border-bottom: 1px solid #fffff5;
-	
 	text-align: center;
 	outline: none;
+	
 }
 
-#items th
+input[type=number]:disabled
 {
-	background-color: #181818;
+	
 }
-
 
 .formtitle
 {
@@ -91,13 +122,13 @@ p .button
 	justify-content: space-between;
 	align-items: center;
 	width:100%;
+	padding: 10px;
+	padding-bottom: 20px;
+	text-align: center;
 }
-
-.inner-menu
+.formtitle div
 {
-	background-color: #292929;
 	width:100%;
-
 }
 
 form
@@ -105,19 +136,15 @@ form
 	margin-left:auto;
 	margin-right:auto;
 	order:1;
-	
 	display: flex;
 	flex-wrap:wrap;
 	justify-content: flex-start;
-	
 	flex-direction: column;
-	
 	font-size: 20px;
 }
 
 .form-row
-{
-	
+{	
 	width:100%;
 }
 
@@ -139,7 +166,6 @@ div.form-row
 
 div.form-row > label
 {
-	
 	color: #222;
 	padding-right:10px;
 	padding: 1px;
@@ -155,8 +181,7 @@ div.form-row > label
 	margin:1px;
 	margin-left:10px;
 	border:0;
-	border-radius: 0 5px   5px 0;
-	
+	border-radius: 0 5px 5px 0;
 }
 
 #kod_pocztowy
@@ -176,133 +201,61 @@ div.form-row > label
 	flex-wrap:wrap;
 	justify-content: space-between;
 	flex-direction: row;
-	
 }
 
 
 
 input[type=text],
 input[type=password],
-input[type=submit],
-input[type=button],
 input[type=number],
-select
+select,
+.plusMinusInput
 {
 	font-family: 'Raleway', sans-serif;
 	font-size: 20px;
+	padding:10px;
 	border: 2px solid #666;
 	border-radius: 5px;
-	padding: 10px;
 	margin: 20px 5px;
 	outline: none;
-	
 }
 
-input[type=text],
-input[type=password]
+table input[type=number]
 {
-	background-color: #efefef;
-	/*color: #666;*/
-}
-
-input[type=submit],input[type=button],button
-{
-	background-color: #292929;
-	font-family: 'Cinzel', serif;
-	font-weight: 700;
-	color: #fffff5;
-	border: 1px solid #fffff5;
-	text-align: center;
-	
-	
-}
-
-.button:disabled
-{
-	color: #555555;
-	border: 1px solid #555555;
-	cursor:unset;
-	transition: unset;
-}
-
-.button:disabled:hover
-{
-	transform:unset;
-}
-
-input[type=submit],input[type=button],button.button
-{
-	transition: all 0.2s ease-in-out;
-	cursor: pointer;
+	padding:0;
 }
 
 .item
 {
-	outline: none;
-	margin-top: 10px;	
-	transition: all 0.2s ease-in-out;
-}
-
-.error
-{
-	
-	outline: none;
-	margin-top: 10px;	
-	color: red;
-	text-align: center;
+	margin-top: 10px;
 }
 
 
 .item:hover,.item:focus-within
 {
 	text-decoration:underline;
-	-webkit-transform: translate(0,3px);
-	-ms-transform: translate(0,3px);
-	transform: translate(0,3px);
 }
 
 
 input[type=text]:focus,
-input[type=password]:focus
+input[type=password]:focus,
 {
 	
 	border: 2px solid #a5cda5;
 	background-color: #e9f3e9;
 	color: #428c42;
 	
+	
 }
 
-.form-row > input[type=text]:focus
+
+.form-row > input[type=text]:focus,
 {
 	
 	border: 0;
 	background-color: #e9f3e9;
 	color: #428c42;
 	
-}
-
-
-
-input[type=submit]:focus,
-input[type=button]:focus,
-button.button:focus
-
-{
-	-webkit-box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
-	-moz-box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
-	box-shadow: 0px 0px 15px 5px rgba(204,204,204,0.9);
-}
-
-
-
-input[type=submit]:hover,
-input[type=button]:hover,
-button.button:hover
-{
-	
-	-webkit-transform: translate(0,3px);
-	-ms-transform: translate(0,3px);
-	transform: translate(0,3px);
 }
 
 input::-webkit-input-placeholder
@@ -342,13 +295,61 @@ input:focus:-ms-input-placeholder
 }
 
 
+.plusMinusInput
+{
+	position: relative;
+	margin: 20px 5px;
+	height:30px;
+	width: 100px;
+}
 
 
 
+.plusMinusInput input
+{
+	position: absolute;
+	top: -2px;
+	right:0;
+	margin:0;
+	height:30px;
+    width: 100%;
+    text-align: center;
 
-
-
-
+    vertical-align: middle;
+	vertical-align: middle;
+	color: black;
+}
+.minus, .plus
+{
+	cursor: pointer;
+	position: absolute;
+	top: 0px;
+	width:30px;
+	height:100%;
+	background-color: #cdcdcd;
+	color: #222;
+	font-size: 23px;
+	text-align: center;
+	-webkit-user-select: none; 
+	-ms-user-select: none; 
+	user-select: none; 
+}
+.minus.disabled,
+.plus.disabled
+{
+	color:gray;
+	cursor: unset;
+}
+.minus
+{
+	border-radius: 4px 0 0 4px;
+	left: 0;
+}
+.plus
+{
+	border-radius: 0 4px 4px 0;
+	right: 0;
+}
 
 /* Small devices (portrait tablets and large phones, 425px and up) */
 @media only screen and (min-width: 425px) 
@@ -362,12 +363,7 @@ input:focus:-ms-input-placeholder
 @media only screen and (min-width: 768px) 
 {
 	
-.num-fact-text
-{
-	
-	font-size: 1.2em;
-}
-	
+
 }
 
 
@@ -377,14 +373,7 @@ input:focus:-ms-input-placeholder
 	.loginform,.generator
 	{
 		width: 67%;
-		background: rgba(0, 0, 0, 0.8);
 	}
-	
-	
-	
-	
-
-
 }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) 
@@ -393,7 +382,6 @@ input:focus:-ms-input-placeholder
 	{
 		width: 65%;
 	}
-	
 }
 
 

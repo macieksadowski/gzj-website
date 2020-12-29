@@ -26,7 +26,7 @@
 	$DBconnection = $_SESSION['DBConnection'];
     /************************************************/
 
-    if(!isset($_SESSION['saleSession']))
+    if(!isset($_GET['saleSession']))
     {
         $query = "INSERT INTO sales_session VALUES (0,curdate(),true,0)";
         $result = $DBconnection->sendToDB($query);
@@ -34,11 +34,9 @@
 	    {
             $query = "SELECT id,income FROM sales_session WHERE active = true";
             $result = $DBconnection->getFromDB($query);
-            $_SESSION['saleSession'] = $result[0]['id'];
-            $_SESSION['sessionIncome'] = $result[0]['income'];
             resetAllErrorFlags();
-
-            header('location: new-sale-session.php');
+            header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);
+            
 	    }
         else
         {
@@ -49,12 +47,11 @@
     }
     else
     {
-        $query = 'UPDATE sales_session SET active = false WHERE id='.$_SESSION['saleSession'];
+        $id = $_GET['saleSession'];
+        $query = 'UPDATE sales_session SET active = false WHERE id='.$id;
         $result = $DBconnection->sendToDB($query);
-        $_SESSION['success'] = 'Zakończono sprzedaż nr '.$_SESSION['saleSession'];
+        $_SESSION['success'] = 'Zakończono sprzedaż nr '.$id;
 		resetAllErrorFlags();
-        unset($_SESSION['saleSession']);
-        unset($_SESSION['sessionIncome']);
         header('location: index.php');
     }
 	

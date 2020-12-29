@@ -16,7 +16,7 @@
 	<div class="header">
 
 		<!-- Site logo-->
-		<a href="<?=$mainpage;?>">
+		<a href="<?=$menu['Start'];?>">
 			<div class="logo">
 				<img src="/img/logo-square.png">
 			</div>
@@ -41,8 +41,6 @@
 				$i++;
 			}
 		?>
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$offer;?>" target="_blank"> <span itemprop="name">Oferta</span></a> <meta itemprop="position" content="5" /></li>
-			<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item"  href="<?=$rider;?>" target="_blank"> <span itemprop="name">Rider</span></a> <meta itemprop="position" content="6" /></li>
 		</ol>
 		
 		<!-- Navigation list (social media)-->
