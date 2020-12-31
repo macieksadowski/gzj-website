@@ -62,9 +62,9 @@
 	<main>
 	<div class="content">
 		<div class="generator" style="flex-direction:column;">
-			<div>
+			<div class="formtitle">
 				<button class="button"><a href="./setSaleSession.php">Nowa sprzedaż</a></button>
-				<button class="button"><a href="./inventory.php">Przegląd zapasów</a></button>
+				<button class="button"><a href="./manageWarehouse.php">Przegląd zapasów</a></button>
 			</div>
 			<?php
 				$query = 'SELECT * FROM sales_session ';

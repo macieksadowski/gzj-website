@@ -37,7 +37,8 @@ body,a,table,input[type=submit],input[type=button],button
 .menu-button::before,
 .menu-button::after,
 h2::before, h2::after ,
-input
+input,
+select
 {
 	background-color: #fffff5;
 }
