@@ -63,51 +63,21 @@
 
 		$newAmount = $oldAmount - $amount;
 
-		$query = 'UPDATE inventory SET in_store = '.$newAmount.' WHERE size_id = '.$size;
-		$result = $DBconnection->sendToDB($query);  
-		if($result == 0)
-		{
-			$query = "INSERT INTO transactions VALUES (0,$sessionId,$selectedProduct,$size,$amount)";
-			$result = $DBconnection->sendToDB($query);
-			if($result == 0)
-			{	
-				$_SESSION['success'] = TRUE;
-				resetAllErrorFlags();
-			}
-			else
-			{
-				unset($_SESSION['success']);
-				$_SESSION['errors'][$result] = TRUE;
-			}
-		}
-		else
-		{
-			unset($_SESSION['success']);
-			$_SESSION['errors'][$result] = TRUE;
-		}
-	}
+		$queries = ['UPDATE inventory SET in_store = '.$newAmount.' WHERE size_id = '.$size,
+					"INSERT INTO transactions VALUES (0,$sessionId,$selectedProduct,$size,$amount)"
+					];
+		$DBconnection->sendToDBshowResult($queries,'');
 	
-	//If new transaction registered successfully then update page content
-	if(isset($_SESSION['success']))
-	{
 		$query = "SELECT inventory_products.price,transactions.amount FROM transactions INNER JOIN inventory_products ON(inventory_products.id = transactions.product_type) WHERE transactions.session_id = $sessionId";
-				$result_array = $DBconnection->getFromDB($query);
-				foreach($result_array as $entry)
-				{
-					$income += $entry['price'] * $entry['amount'];
-				}
-				$query = "UPDATE sales_session SET income = $income WHERE id = $sessionId";
-				$result = $DBconnection->sendToDB($query);
-				if($result == 0)
-				{	
-				$_SESSION['sessionIncome'] = $income;
-				resetAllErrorFlags();
-				}
-				else
-				{
-					unset($_SESSION['success']);
-					$_SESSION['errors'][$result] = TRUE;
-				}
+		$result_array = $DBconnection->getFromDB($query);
+		foreach($result_array as $entry)
+		{
+			$income += $entry['price'] * $entry['amount'];
+		}
+		$query = "UPDATE sales_session SET income = $income WHERE id = $sessionId";
+		$DBconnection->sendToDBshowResult($query,'Sprzedaż zarejestrowana!');
+		$_SESSION['sessionIncome'] = $income;
+		
 	}
 ?>
 
@@ -162,7 +132,7 @@
 							$selectedProduct = 1;
 						}
 						//Else mark as selected previous selected product
-						else if(isset($selectedProduct) && $key+1 == $selectedProduct)
+						else if(isset($selectedProduct) && $entry['id'] == $selectedProduct)
 						{
 							echo 'selected ';
 						}  
@@ -239,9 +209,10 @@
 					</th>
 			<?php
 			//Show preview of products amount as a table
-				$query = 'SELECT * FROM inventory_products 
+				$query = "SELECT * FROM inventory_products 
 					INNER JOIN inventory 
-					ON( inventory_products.id = inventory.product_id )';
+					ON( inventory_products.id = inventory.product_id ) 
+					ORDER BY inventory_products.product_name, FIELD(inventory.size,'S','M','L','XL','XXL')";
 				$list = $DBconnection->getFromDB($query);
 				$prev_id = 0;
 				foreach($list as $key=>$entry) 
@@ -262,7 +233,7 @@
 					}
 				?>	
 					<td>
-						<?=$entry['in_store'].' ('.$entry['in_warehouse'].')';?>
+						<?=$entry['in_store'];?>
 					</td>
 				<?php		
 					$prev_id = $id;

@@ -51,9 +51,6 @@
 		header('Location: ./index.php');
 		exit;
 	}
-
-	$ERROR_LIST = json_decode(file_get_contents('./errors.json',FILE_USE_INCLUDE_PATH));
-
 	
 	$result = $DBconnection->performLogin($login,$password);
 	if(is_array($result))

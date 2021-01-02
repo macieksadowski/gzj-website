@@ -29,30 +29,17 @@
     if(!isset($_GET['saleSession']))
     {
         $query = "INSERT INTO sales_session VALUES (0,curdate(),true,0)";
-        $result = $DBconnection->sendToDB($query);
-        if($result == 0)
-	    {
-            $query = "SELECT id,income FROM sales_session WHERE active = true";
-            $result = $DBconnection->getFromDB($query);
-            resetAllErrorFlags();
-            header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);
-            
-	    }
-        else
-        {
-            $_SESSION['errors'][$result] = TRUE;
-            header('location: index.php#error');
-        }
-		
+        $DBconnection->sendToDBshowResult($query,'Rozpoczęto sesję');
+        $query = "SELECT id,income FROM sales_session WHERE active = true";
+        $result = $DBconnection->getFromDBShowErrors($query,'index.php#error');
+        header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);	
     }
     else
     {
         $id = $_GET['saleSession'];
         $query = 'UPDATE sales_session SET active = false WHERE id='.$id;
-        $result = $DBconnection->sendToDB($query);
-        $_SESSION['success'] = 'Zakończono sprzedaż nr '.$id;
-		resetAllErrorFlags();
-        header('location: index.php');
+        $success = 'Zakończono sprzedaż nr '.$id;
+        $DBconnection->sendToDBshowResult($query,$success,'index.php','index.php');
     }
 	
 	

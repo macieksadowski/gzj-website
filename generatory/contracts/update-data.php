@@ -18,7 +18,6 @@
 	
 	$errors = $_SESSION['errors'];
 	$DBconnection = $_SESSION['DBConnection'];
-
 	
 	$person = $_POST['data'];
 
@@ -27,8 +26,7 @@
 	
 	$toUpdate['ulica']  = (implode(' ',explode(' ',$address,-1)));
 	$toUpdate['nr_domu'] =  end(explode(' ', $address));
-	
-	
+		
 	$query = "UPDATE dane SET ";
 	$i=0;
 	foreach($toUpdate as $key => $field)
@@ -37,29 +35,10 @@
 		if($i == count($toUpdate))
 			$query .= $key.' = \''.$field.'\' ';
 		else
-			$query .= $key.' = \''.$field.'\', ';
-		
+			$query .= $key.' = \''.$field.'\', ';		
 	}
 	
 	$query .= 'WHERE id = '.$_POST['person'] ;
-	$result = $DBconnection->sendToDB($query);
-	if($result == 0)
-	{
-		$_SESSION['success'] = 'Pomyślnie zaktualizowano dane!';
-		resetAllErrorFlags();
-		header('location: index.php');
-	}
-	else
-	{
-		$_SESSION['errors'][$result] = TRUE;
-		header('location: index.php#error');
-	}
-		
-	
-		
-		
-		
-	
-
+	$DBconnection->sendToDBshowResult($query,'Pomyślnie zaktualizowano dane!','index.php','index.php#error');
 	
 ?>

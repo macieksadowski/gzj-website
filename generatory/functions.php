@@ -100,7 +100,10 @@ if(isset($_SESSION['success']))
 else if(isset($_SESSION['errors']))
 {
     $errors = $_SESSION['errors'] ;
-    //If there is error in memory then print it
+	//If there is error in memory then print it
+	$json = file_get_contents("../errors.json");
+	$errorDescriptions = json_decode($json, true);
+	  
     $communicate = '';
     foreach($errors as $num => $error)
     {
@@ -113,7 +116,7 @@ else if(isset($_SESSION['errors']))
                 $print = true;
             }
             
-            $communicate .= ' '.$num;
+            $communicate .= ' '.$errorDescriptions[$num];
         }
     }
     //After printing errors reset error memory

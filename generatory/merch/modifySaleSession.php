@@ -41,53 +41,26 @@
         if($mode == 'delete')
         {
             $query = "DELETE FROM sales_session WHERE id = $id";
-            $result = $DBconnection->sendToDB($query);
-            if($result == 0)
-            {
-               
-                resetAllErrorFlags();
-                $_SESSION['success'] = 'Usunięto sesję sprzedażową (id:'.$id.') !';
-                header('location: index.php');
-            }
-            else
-            {
-                $_SESSION['errors'][$result] = TRUE;
-                header('location: index.php#error');
-            }
+            $success = 'Usunięto sesję sprzedażową (id:'.$id.') !';
+            $DBconnection->sendToDBshowResult($query,$success,'index.php','index.php#error');
         }
         if($mode == 'activate')
         {
             $query = "UPDATE sales_session SET active = true WHERE id = $id";
-            $result = $DBconnection->sendToDB($query);
-            if($result == 0)
-            {
-                $query = "SELECT id,income FROM sales_session WHERE active = true";
-                $result = $DBconnection->getFromDB($query);
-                resetAllErrorFlags();
-    
-                header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);
-            }
-            else
-            {
-                $_SESSION['errors'][$result] = TRUE;
-                header('location: index.php#error');
-            } 
+                        
+            $DBconnection->sendToDBshowResult($query,'Rozpoczeto sesję!');
+            $query = "SELECT id,income FROM sales_session WHERE active = true";
+            $result = $DBconnection->getFromDBShowErrors($query,'index.php#error');           
+                    $successPath = 'saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income'];
+           
+            header('location: saleSession.php?saleSession='.$result[0]['id'].'&sessionIncome='.$result[0]['income']);
+            exit();   
         }
         if($mode == 'view')
         {
             $query = "SELECT transactions.product_type, transactions.product, transactions.amount, inventory.size_id, inventory.size, inventory_products.product_name, inventory_products.price FROM transactions INNER JOIN( inventory INNER JOIN inventory_products ON( inventory.product_id = inventory_products.id ) ) ON ( transactions.product = inventory.size_id ) WHERE transactions.session_id = $id ORDER BY inventory.size_id ASC";
-            $result = $DBconnection->getFromDB($query);
-            if(!is_array($result))
-            {
-                $_SESSION['errors'][$result] = TRUE;
-                header('location: index.php#error');
-
-            }
-
-
-
-
-
+            $result = $DBconnection->getFromDBShowErrors($query,'index.php#error');
+            
 ?>
 
     <!DOCTYPE HTML>
@@ -104,26 +77,26 @@
     </head>
     
     <body>
-    
+    <!-- This div is used as container for whole page-->
+    <div class="page-container">
         <?php require_once('../menu.php'); ?>
         <main>	
-        <div class="generator sprzedaz">
-        
-            <div class="formtitle">
-            <h1>Podsumowanie</h1>
-            <p>sprzedaż nr <?=$id;?></p>
-            <label><button class="button"><a href="./index.php">Powrót</a></button></label>
-            </div>
-            
-            
-            <table id="items">
-            <tr>
-                <th>Nazwa</th>
-                <th>Rozmiar</th>
-                <th>Cena szt.</th>
-                <th>Ilość</th>
-                <th>Kwota</th>
-            </tr>   
+        <div class="content">
+            <div class="generator">
+                <div class="formtitle">
+                    <h1>Podsumowanie</h1>
+                    <p>sprzedaż nr <?=$id;?></p>
+                    <button class="button"><a href="./index.php">Powrót</a></button>
+                </div>
+
+                <table id="items">
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Rozmiar</th>
+                        <th>Cena szt.</th>
+                        <th>Ilość</th>
+                        <th>Kwota</th>
+                    </tr>   
             <?php
             $lastEntry = count($result)-1;
             $amount = 0;
@@ -170,12 +143,14 @@
             
             ?>
             
-            </table>
-        
+                </table>
+            </div>
+	    </div>
+	    </main>
         <?php require_once('../../footer.php');
         showModal();	
          ?>
-    
+    </div>
     </body>
     </html>
 

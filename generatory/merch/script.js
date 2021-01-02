@@ -89,6 +89,7 @@ function ShowAddNewProduct() {
 
   function addNewSize(clickedButton)
   {
+
 	  var table = document.getElementById("newProductTable");
 	  var row = table.insertRow(-1);
 	  var cell1 = row.insertCell(0);
@@ -96,7 +97,7 @@ function ShowAddNewProduct() {
 	  var cell3 = row.insertCell(2);
 
 	  var deleteButton = document.createElement("button");
-	  deleteButton.style = "color:red";
+	  deleteButton.className = "deleteButton";
 	  deleteButton.setAttribute('onclick',"removeSize(this)");
 	 
 	  deleteButton.type = "button";
@@ -106,7 +107,7 @@ function ShowAddNewProduct() {
 	  
 	  var selectList = document.createElement("select");
 	  selectList.name = "newProduct[sizes][size][]";
-	  var sizes = ['N','S','L','XL'];
+	  var sizes = ['N','S','M','L','XL'];
 	  sizes.forEach(element => {
 		  var option = document.createElement("option");
 		  option.value = element;

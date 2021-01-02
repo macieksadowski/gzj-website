@@ -33,48 +33,41 @@
 	
 
 	/************************************************/
-	
-	//If new product form submitted then add new product to database
-	if(isset($_POST['newProduct']))
+		
+	//If delete button by product pressed then remve this product from database
+	if(isset($_POST['productToRemove']))
 	{
-		$name = $_POST['newProduct']['name'];
-		$price = $_POST['newProduct']['price'];
-		$sizes = $_POST['newProduct']['sizes']['size'];
-		$amounts = $_POST['newProduct']['sizes']['amount'];
-		$query = "INSERT INTO inventory_products VALUES (0,'$name',$price)";
+		$size_id = $_POST['productToRemove'];
+		$products = $_POST['products'];
+		$occurences = 0;
+		$productName = '';
+		foreach($products as $key=>$item)
+		{
+			if(strval('item') == $size_id)
+			{
+				$occurences++;
+				$productName = $item[''];
+			}
+		}
+		if($occurences < 2)
+		{
+
+		}
+		$query = "DELETE FROM inventory WHERE size_id = $size_id";
 		$result = $DBconnection->sendToDB($query);
 		if($result == 0)
 		{
-			$query = "SELECT id FROM `inventory_products` WHERE `product_name` = '$name'";
-			$result = $DBconnection->getFromDB($query);
-			$id = $result[0]['id'];
-			foreach($sizes as $key => $item)
-			{
-				$query = 'INSERT INTO inventory (size,product_id,in_warehouse) VALUES ("'.$item.'",'.$id.','.$amounts[$key].')';
-				$result = $DBconnection->sendToDB($query);
-				if($result != 0)
-				{
-					unset($_SESSION['success']);
-					$_SESSION['errors'][$result] = TRUE;
-					break;
-				}
-			}
-			if($result == 0)
-			{
-				$_SESSION['success'] = TRUE;
-				resetAllErrorFlags();
-			}
+		   
+			resetAllErrorFlags();
+			$_SESSION['success'] = 'Usunięto produkt (id:'.$size_id.') !';
 		}
 		else
 		{
-			unset($_SESSION['success']);
 			$_SESSION['errors'][$result] = TRUE;
 		}
-
 	}
-
 	//If form submitted (Save button pressed) then update database
-	if(isset($_POST['products']))
+	else if(isset($_POST['products']))
 	{
 		$oldVals = $_SESSION['oldVals'];
 		$toUpdate = $_POST['products'];
@@ -109,7 +102,7 @@
 				$result = $DBconnection->sendToDB($query);
 				if($result == 0)
 				{
-					$_SESSION['success'] = TRUE;
+					$_SESSION['success'] = 'Zmiany zapisano pomyślnie';
 					resetAllErrorFlags();
 					if(isset($_POST['saveandclose']))
 					{
@@ -124,7 +117,54 @@
 				}
 			}
 		}
+		if(!isset($result) && isset($_POST['saveandclose']))
+		{
+			header('location: index.php');
+			exit();
+		}
+		
 	}
+	//If new product form submitted then add new product to database
+	else if(isset($_POST['newProduct']))
+	{
+		$name = $_POST['newProduct']['name'];
+		$price = $_POST['newProduct']['price'];
+		$sizes = $_POST['newProduct']['sizes']['size'];
+		$amounts = $_POST['newProduct']['sizes']['amount'];
+		$query = "INSERT INTO inventory_products VALUES (0,'$name',$price)";
+		$result = $DBconnection->sendToDB($query);
+		if($result == 0)
+		{
+			$query = "SELECT id FROM `inventory_products` WHERE `product_name` = '$name'";
+			$result = $DBconnection->getFromDB($query);
+			$id = $result[0]['id'];
+			foreach($sizes as $key => $item)
+			{
+				$query = 'INSERT INTO inventory (size,product_id,in_warehouse) VALUES ("'.$item.'",'.$id.','.$amounts[$key].')';
+				$result = $DBconnection->sendToDB($query);
+				if($result != 0)
+				{
+					unset($_SESSION['success']);
+					$_SESSION['errors'][$result] = TRUE;
+					break;
+				}
+			}
+			if($result == 0)
+			{
+				$_SESSION['success'] = 'Pomyślnie dodano produkt';
+				resetAllErrorFlags();
+			}
+		}
+		else
+		{
+			unset($_SESSION['success']);
+			$_SESSION['errors'][$result] = TRUE;
+		}
+
+	}
+
+	
+	
 
 	//Preprare SQL query and get products list from DB
 	$query = "SELECT 
@@ -194,7 +234,7 @@
 			<table id="newProductTable">
 			<tr>
 				<td>
-					<button style = "color:red" onclick="ShowAddNewProduct()" type = "button">x</button>
+					<button class="deleteButton" onclick="ShowAddNewProduct()" type = "button">x</button>
 				</td>
 				<td>
 					<input type="text" name="newProduct[name]" placeholder="Nazwa">
@@ -241,6 +281,7 @@
 					<th>Cena</th>
 					<th>W sklepie</th>
 					<th>Magazyn</th>
+					<th>Usuń</th>
 				</tr>
 				<?php
 				$productTypeOld  = '';
@@ -293,6 +334,9 @@
 					</td>
 					<td>
 						<input class="inWarehouse" onchange="disablePlusMinus(this)" type="number" name="products[<?=$item['size_id'];?>][in_warehouse]" min="0" max="999" value="<?=$item['in_warehouse'];?>">
+					</td>
+					<td>
+					<button type ="submit" name="productToRemove" value="<?=$item['size_id'];?>" class="deleteButton">x</button>
 					</td>
 				</tr>
 				<?php

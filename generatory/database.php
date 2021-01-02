@@ -22,6 +22,12 @@ class Database
     {
         return $this->host;
     }
+
+    /**
+     *  This function is used to get data from DB. It opens the connection,performs query and closes the connection. 
+     * @param $query SQL query to send 
+     * @return data array or error code
+     */
     function getFromDB($query)
     {
         //Estabilish new connection with DB
@@ -54,6 +60,28 @@ class Database
         }
     }
 
+    /**
+     *  This function is used to get data from the DB. Additionally, it sets error code variable in the session instead of returning it
+     * @param $query SQL query to send 
+     * @param $returnPath
+     * @return data array
+     */
+    function getFromDBShowErrors($query,$returnPath = false)
+    {
+        $result = $this->getFromDB($query);
+        if(!is_array($result))
+        {
+            $_SESSION['errors'][$result] = TRUE;
+            if($returnPath != false)
+            {
+                header('location: '.$returnPath);
+                exit();
+            }
+
+        }
+        else return $result;
+    }
+
     function sendToDB($query)
     {
         //Estabilish new connection with DB
@@ -75,6 +103,45 @@ class Database
             }	
             $DBconnection->close();
             return 0;
+        }
+    }
+
+    /**
+     *  This function is used to send data to the DB. Additionally, it sets error code or  success  variable in the session instead of returning it  
+     * @param $query SQL query to send 
+     * @param $successCommunicate
+     * @param $returnPathSuccess
+     * @param $returnPathError
+     */
+    function sendToDBshowResult($queries,$successCommunicate,$returnPathSuccess = false,$returnPathError = false)
+    {
+        if(!is_array($queries))
+        {
+            $queries = [$queries];
+        }
+        foreach($queries as $query)
+        {
+            $result = $this->sendToDB($query);
+            if($result != 0)
+            {
+                $_SESSION['errors'][$result] = TRUE;
+                break;
+            }
+        }
+		if($result == 0)
+		{
+			resetAllErrorFlags();
+            $_SESSION['success'] = $successCommunicate;
+            if($returnPathSuccess != false)
+            {
+                header('location: '.$returnPathSuccess);
+                exit();
+            }
+		}
+        if($returnPathError != false)
+        {
+            header('location: '.$returnPathError);
+            exit();
         }
     }
 
