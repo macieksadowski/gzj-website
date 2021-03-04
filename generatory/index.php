@@ -70,7 +70,7 @@
 	</main>
 	<?php 
 	require_once "../footer.php";
-	require_once('./modal.php');	 
+	showModal();	 
 	?>
 </div>
 </body>

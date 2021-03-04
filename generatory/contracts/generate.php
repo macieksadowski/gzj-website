@@ -1,122 +1,77 @@
 <?php
-	/*
-	** This PHP file is used to generate MS Word document - contract filled with personal data of selected person
-	*/
-	
-	//Add DB credentials and methods
-	require_once "../database.php";
-	session_start();
-	//Add application functions
-	require_once "../functions.php";
 
-	//If user isn't logged redirect to login page 
-	if(!isset($_SESSION['logged']))
-	{
-		header('location: ../index.php');
-		exit();
-	}
-	
-	$errors = $_SESSION['errors'];
-	$DBconnection = $_SESSION['DBConnection'];
+    // This PHP file is used to generate MS Word document - contract filled with personal data of selected person
 
-	//If user didn't set filename return to form and show error message
-	if(strlen($_POST['fileName']) < 2)
-	{
-		$_SESSION['errors'][9] = TRUE;
-		header('location: ./index.php#error');
-		exit();
-	}
-	
-	
+    require_once '../header.php';
 
-	$outputLocation = './documents/';
+    //If user didn't set filename return to form and show error message
+    if (strlen($_POST['fileName']) < 2) {
+        $_SESSION['errors'][9] = true;
+        header('location: ./index.php#error');
 
-	//Generate SELECT query
-	$query = 'SELECT * FROM dane WHERE id = '.$_POST['person'] ;
-	$result = $DBconnection->getFromDB($query);
-	if(is_array($result))
-	{
-		$entriesArray = $result;
-		if(!empty($entriesArray))
-		{
-			//Set type of contract (select a template) and set output file name
-			//$inputFilename  = "./contracts/";
-			if($_POST['contractType'] == 'zlecenie')
-			{
-				$inputFilename = 'GZJ-zlecenie.docx';
-				$outputFilename = 'GZJ-zlecenie-'.$_POST['fileName'].'.docx';
-			}
-			else if($_POST['typ'] == 'dzielo')
-			{
-				$inputFilename = 'GZJ-dzielo.docx';
-				$outputFilename = 'GZJ-dzielo-'.$_POST['fileName'].'.docx';
-			}
+        exit();
+    }
 
-			
-			$person = $entriesArray[0];
+    $outputLocation = './documents/';
 
-			//Conversion of PESEL number to Date of Birth String
-			$dateOfBirth = PESELtoDate($person['PESEL']);
-			
+    //Generate SELECT query
+    $query = 'SELECT * FROM dane WHERE id = '.$_POST['person'];
+    $result = $DBconnection->getFromDB($query);
+    if (is_array($result)) {
+        $entriesArray = $result;
+        if (!empty($entriesArray)) {
+            //Set type of contract (select a template) and set output file name
+            //$inputFilename  = "./contracts/";
+            if ('zlecenie' == $_POST['contractType']) {
+                $inputFilename = 'GZJ-zlecenie.docx';
+                $outputFilename = 'GZJ-zlecenie-'.$_POST['fileName'].'.docx';
+            } elseif ('dzielo' == $_POST['typ']) {
+                $inputFilename = 'GZJ-dzielo.docx';
+                $outputFilename = 'GZJ-dzielo-'.$_POST['fileName'].'.docx';
+            }
 
-			//Generate strings for replacing in template
-				
-			$keywords = array();
+            $person = $entriesArray[0];
 
-			if(substr($person['imie'], -1) == 'a')
-			{
-				$keywords['GODNOSC'] = "Panią";
-				$keywords['SUFIX'] = "ą";
-			}
-			else
-			{
-				$keywords['GODNOSC'] = "Panem";
-				$keywords['SUFIX'] = "ym";
-			}
-			$keywords['IMIE_ODMIENIONE'] = $person['imie_odmienione'];
-			$keywords['IMIE'] = $person['imie'];
-			$keywords['NAZWISKO_ODMIENIONE'] = $person['nazwisko_odmienione'];
-			$keywords['NAZWISKO'] = $person['nazwisko'];
-			$keywords['MIASTO_ODMIENIONE'] = $person['miasto_odmienione'];
-			$keywords['MIASTO'] = $person['miasto'];
-			$keywords['KOD_POCZTOWY'] = $person['kod_pocztowy'];
-			$keywords['ULICA'] = $person['ulica'];
-			$keywords['NR_DOMU'] = $person['nr_domu'];
-			$keywords['NR_PESEL'] = $person['PESEL'];
-			$keywords['MIEJSCE_URODZENIA_ODMIENIONE'] = $person['miejsce_urodzenia_odmienione'];
-			$keywords['MIEJSCE_URODZENIA'] = $person['miejsce_urodzenia'];
-			$keywords['NR_KONTA'] = $person['nr_konta'];
-			$keywords['URZAD_SKARBOWY'] = $person['urzad_skarbowy'];
-			$keywords['DATA_URODZENIA'] = $dateOfBirth;
-			
+            //Conversion of PESEL number to Date of Birth String
+            $dateOfBirth = PESELtoDate($person['PESEL']);
 
-			
+            //Generate strings for replacing in template
 
-			$errorCode = generateDocumentFromTemplate($inputFilename,$keywords,$outputLocation,$outputFilename);
-			if(!$errorCode)
-			{
-				resetAllErrorFlags();
-				header('location: '.$outputLocation.$outputFilename);
-			}
-			else
-			{
-				$_SESSION['errors'][$errorCode] = TRUE;
-				header('location: index.php#error');
-			}
+            $keywords = [];
 
-			
-		}
-	}
-	else
-	{
-		$_SESSION['errors'][$result] = TRUE;
-		header('location: index.php');
-	}
-	
+            if ('a' == substr($person['imie'], -1)) {
+                $keywords['GODNOSC'] = 'Panią';
+                $keywords['SUFIX'] = 'ą';
+            } else {
+                $keywords['GODNOSC'] = 'Panem';
+                $keywords['SUFIX'] = 'ym';
+            }
+            $keywords['IMIE_ODMIENIONE'] = $person['imie_odmienione'];
+            $keywords['IMIE'] = $person['imie'];
+            $keywords['NAZWISKO_ODMIENIONE'] = $person['nazwisko_odmienione'];
+            $keywords['NAZWISKO'] = $person['nazwisko'];
+            $keywords['MIASTO_ODMIENIONE'] = $person['miasto_odmienione'];
+            $keywords['MIASTO'] = $person['miasto'];
+            $keywords['KOD_POCZTOWY'] = $person['kod_pocztowy'];
+            $keywords['ULICA'] = $person['ulica'];
+            $keywords['NR_DOMU'] = $person['nr_domu'];
+            $keywords['NR_PESEL'] = $person['PESEL'];
+            $keywords['MIEJSCE_URODZENIA_ODMIENIONE'] = $person['miejsce_urodzenia_odmienione'];
+            $keywords['MIEJSCE_URODZENIA'] = $person['miejsce_urodzenia'];
+            $keywords['NR_KONTA'] = $person['nr_konta'];
+            $keywords['URZAD_SKARBOWY'] = $person['urzad_skarbowy'];
+            $keywords['DATA_URODZENIA'] = $dateOfBirth;
 
-	
-		
-						
-			
-	
-?>
+            $errorCode = generateDocumentFromTemplate($inputFilename, $keywords, $outputLocation, $outputFilename);
+            if (!$errorCode) {
+                resetAllErrorFlags();
+                header('location: '.$outputLocation.$outputFilename);
+            } else {
+                $_SESSION['errors'][$errorCode] = true;
+                header('location: index.php#error');
+            }
+        }
+    } else {
+        $_SESSION['errors'][$result] = true;
+        header('location: index.php');
+    }
