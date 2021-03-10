@@ -1,0 +1,31 @@
+<header>
+	<!-- This is a container for navbar-->
+	<div class="header">
+
+		<!-- Site logo-->
+		<a href="$Start">
+			<div class="logo">
+				<img src="/img/logo-square.png">
+			</div>
+		</a>
+		
+		<!-- Menu button for mobile version-->
+		<input id="menu-toggle" type="checkbox" />
+		<label class='menu-button-container' for="menu-toggle">
+				<div class='menu-button'></div>
+		</label>
+		
+		<!-- Navigation list (subpages)-->
+		<ol class="menu" itemscope itemtype="https://schema.org/BreadcrumbList">
+		  
+			$i=1;
+			
+			foreach($menu as $name=>$link)
+			{
+				if($name == $pageTitle)
+				echo'<li class="current" itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"> <span itemprop="name">'.$name.'</span> <meta itemprop="position" content="'.$i.'" /></li>';
+				else echo'<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="'.$link.'"> <span itemprop="name">'.$name.'</span></a> <meta itemprop="position" content="'.$i.'" /></li>';
+				$i++;
+			}
+		?>
+		</ol>
