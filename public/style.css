@@ -1,0 +1,111 @@
+body
+{
+	background-image: url("../assets/img/bg-mobile.jpg");
+}
+
+.content h2
+{
+	align-self: flex-start;
+}
+
+#logoBig
+{
+	align-self: flex-start;
+	margin: 3% 0;
+}
+
+#logoBig img
+{
+	max-width: 100%;
+    max-height: 15vh;
+}
+
+
+/* Small devices (portrait tablets and large phones, 425px and up) */
+@media only screen and (min-width: 425px) 
+{
+	
+	.social
+	{
+	width: 33.33%;
+	
+	}
+	
+	
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) 
+{
+	
+	h2::before, h2::after 
+	{
+	  content: " ";
+	  display: inline-block;
+	  height: 2px;
+	  position: relative;
+	  vertical-align: middle;
+	  width: 40px;
+	  margin: 0 15px;
+	  border-radius: 75px;
+	}
+
+	
+}
+
+@media only screen and (max-width: 992px)
+{
+	body
+	{
+		background-image: url("../assets/img/bg-mobile.jpg");
+		animation-name: backgroundScroll;
+	}
+}
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) 
+{
+	body
+	{
+		background-image: url("../assets/img/bg.jpg");
+	}
+
+	h2
+	{
+		margin-bottom:0;
+	}
+	#logoBig
+	{
+		margin-top:0;
+		margin-bottom:5%;
+	}
+	.content
+	{
+	
+	width: 80%;
+	}
+	.social
+	{
+	width: 20%;
+	
+	}
+
+
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) 
+{
+	h2
+	{
+		margin-bottom: 2vh;
+	}
+	#logoBig
+	{
+		margin: 3% 0;
+		margin-bottom:3%;
+	}
+	
+}
+
+

@@ -4,85 +4,102 @@ require_once 'menu.php';
 
 class page
 {
-    private $menu;
+    public $menu;
     private $page_info;
+    private $page;
 
-    public function __construct()
+    public function __construct($menu = __DIR__.'/data/menu.json')
     {
-        $this->page_info = json_decode(file_get_contents('./page.json'));
+        $this->page_info = $this->getData('./page.json');
+        $this->page = file_get_contents(__DIR__.'/templates/layout.html');
 
-        $this->menu = new menu($this->page_info->PAGE_NAME, './menu.json', './links.json');
+        $this->menu = new menu($this->page_info['PAGE_NAME'], $menu);
+    }
+
+    public function getPageInfo()
+    {
+        return $this->page_info;
     }
 
     public function show($content)
     {
-        echo '<!DOCTYPE HTML>
-        <html lang="pl">';
-        echo $this->header();
-        echo '<body>
-        <!-- This div is used as container for whole page-->
-        <div class="page-container">';
-        echo $this->menu->print(true, true);
-        echo '<main>
-		<!-- This is a container for main content of page. -->
-		<div class="content">';
+        $this->header();
+        $this->footer();
+        $this->toLayout('MENU', $this->menu->print(true, true));
+        $this->scripts();
+        $this->toLayout('CONTENT', $content);
+        echo $this->page;
+    }
 
-        echo file_get_contents($content);
+    public static function getData($dataFile)
+    {
+        return json_decode(file_get_contents($dataFile), 1);
+    }
 
-        echo '</div>
-		</main>';
-        echo $this->footer();
-        echo '	</div>
-        </body>
-        </html>';
+    public static function fillWithData(&$source, $data)
+    {
+        foreach ($data as $key => $value) {
+            $source = str_replace('{{'.$key.'}}', $value, $source);
+        }
+    }
+
+    private function toLayout($field, $content)
+    {
+        $this->page = str_replace('{{'.$field.'}}', $content, $this->page);
+    }
+
+    private function scripts()
+    {
+        $str = '';
+        if (isset($this->page_info['SCRIPTS'])) {
+            foreach ($this->page_info['SCRIPTS'] as $script) {
+                $str .= '<script src="../script/'.$script.'.js" type="text/javascript"></script>'.PHP_EOL;
+            }
+            $this->fillWithData($this->page, ['SCRIPTS' => $str]);
+        }
+        $this->toLayout('SCRIPTS', $str);
     }
 
     private function footer()
     {
-        $str = file_get_contents('./templates/footer.html');
-
-        return str_replace('$date', date('Y'), $str);
+        $data = ['year' => date('Y')];
+        $footer = file_get_contents(__DIR__.'/templates/footer.html');
+        $this->fillWithData($footer, $data);
+        $this->toLayout('FOOTER', $footer);
     }
 
     private function header()
     {
-        $str = file_get_contents('./templates/header.html');
-        $str .= $this->title();
-        $str .= $this->meta_name('description', $this->page_info->DESCRIPTION);
-        $str .= $this->meta_name('keywords', $this->page_info->KEYWORDS);
+        $template = file_get_contents(__DIR__.'/templates/header.html');
 
-        $str .= '<!-- 	Facebook meta  	-->'.PHP_EOL;
-        $str .= '<meta property="og:title" content="'.$this->page_info->PAGE_NAME.' - Główny Zawór Jazzu" />'.PHP_EOL;
-        foreach ($this->page_info->FACEBOOK_META as $key => $value) {
-            $str .= $this->meta_property($key, $value);
-        }
-        $str .= '<!-- 	Google funcs	-->'.PHP_EOL;
-        $str .= '<script type="application/ld+json">'.PHP_EOL;
-        $str .= json_encode($this->page_info->GOOGLE_META, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL;
-        $str .= '</script>'.PHP_EOL;
-        foreach ($this->page_info->css as $value) {
-            $str .= $this->link('stylesheet', $value, 'text/css');
-        }
-
-        return $str;
+        $this->fillWithData(
+            $template,
+            ['PAGE_NAME' => $this->title(),
+                'DESCRIPTION' => $this->meta('name', 'description', $this->page_info['DESCRIPTION']),
+                'KEYWORDS' => $this->meta('name', 'keywords', $this->page_info['KEYWORDS']), ]
+        );
+        $this->toLayout('HEADER', $template);
     }
 
     private function title()
     {
-        return '<title>'.$this->page_info->PAGE_NAME.'</title>'.PHP_EOL;
+        return '<title>'.$this->page_info['PAGE_NAME'].'</title>'.PHP_EOL;
     }
 
-    private function meta_property($property, $content)
+    private function meta($type, $value, $content)
     {
-        return '<meta property="'.$property.'" content="'.$content.'" />'.PHP_EOL;
+        if ('property' == $type) {
+            $str = '<meta property="'.$value.'" content="'.$content.'" />'.PHP_EOL;
+        }
+        if ('name' == $type) {
+            $str = '<meta name="'.$value.'" content="'.$content.'" />'.PHP_EOL;
+        }
+        if (isset($str)) {
+            return $str;
+        }
     }
 
-    private function meta_name($name, $content)
-    {
-        return '<meta name="'.$name.'" content="'.$content.'" />'.PHP_EOL;
-    }
-
-    private function link($rel, $href, $type = '')
+    private function link($template, $rel, $href, $type = '')
     {
         return '<link rel="'.$rel.'" href="'.$href.'" type="'.$type.'" />'.PHP_EOL;
     }

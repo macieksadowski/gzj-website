@@ -1,32 +1,37 @@
 <?php
 
+//require_once '/page.php';
+
 class menu
 {
     private $links;
     private $menuItems;
     private $current;
+    private $menu;
 
-    public function __construct($current, $menuItems, $links)
+    public function __construct($current, $menuItems)
     {
-        $this->links = json_decode(file_get_contents($links), true);
+        $this->links = json_decode(file_get_contents(__DIR__.'/data/links.json'), true);
         $this->menuItems = json_decode(file_get_contents($menuItems), true);
         $this->current = $current;
+        $this->menu = file_get_contents(__DIR__.'/templates/menu.html');
     }
 
-    public function print($showContactBar = false, $showSocialbar = false)
+    public function getLinks()
     {
-        $opening = '<header>
-					<!-- This is a container for navbar-->
-					<div class="header">';
-        $menuBtn = file_get_contents('./templates/menuBtn.html');
-        $menuItemsBegin = '
-		<!-- Navigation list (subpages)-->
-		<ol class="menu" itemscope itemtype="https://schema.org/BreadcrumbList">';
-        $menuItemsClose = '</ol>';
-        $closing = '</div>
-					</header>';
-        $str = $opening.$this->siteLogo().$menuBtn.$menuItemsBegin;
+        return $this->links;
+    }
 
+    public function getItems()
+    {
+        return $this->menuItems;
+    }
+
+    public function print($showContactBar = false, $showSocialBar = false)
+    {
+        page::fillWithData($this->menu, ['START' => $this->menuItems['Start']]);
+
+        $str = '';
         $i = 1;
         foreach ($this->menuItems as $name => $link) {
             if ($name == $this->current) {
@@ -36,42 +41,32 @@ class menu
             }
             ++$i;
         }
-        $str .= $menuItemsClose;
-        if ($showSocialbar) {
-            $str .= $this->socialBar();
+        page::fillWithData($this->menu, ['MENUITEMS' => $str]);
+
+        $this->socialBar($showSocialBar);
+
+        $this->contactBar($showContactBar);
+
+        return $this->menu;
+    }
+
+    private function contactBar($show)
+    {
+        $template = '';
+        if ($show) {
+            $template = file_get_contents(__DIR__.'/templates/contactBar.html');
+            page::fillWithData($template, $this->links);
         }
-        if ($showContactBar) {
-            $str .= $this->contactBar();
+        page::fillWithData($this->menu, ['CONTACTBAR' => $template]);
+    }
+
+    private function socialBar($show)
+    {
+        $template = '';
+        if ($show) {
+            $template = file_get_contents(__DIR__.'/templates/socialBar.html');
+            page::fillWithData($template, $this->links);
         }
-        $str .= $closing;
-
-        return $str;
-    }
-
-    private function prepareHTML($source, $variablesToReplace)
-    {
-        $str = file_get_contents($source);
-        $variablesToReplace = (is_array($variablesToReplace)) ? $variablesToReplace : [$variablesToReplace];
-        foreach ($variablesToReplace as $name => $variable) {
-            $toReplace = '$'.$name;
-            $str = str_replace($toReplace, $variable, $str);
-        }
-
-        return $str;
-    }
-
-    private function siteLogo()
-    {
-        return $this->prepareHTML('./templates/siteLogo.html', $this->menuItems);
-    }
-
-    private function contactBar()
-    {
-        return $this->prepareHTML('./templates/contactBar.html', $this->links);
-    }
-
-    private function socialBar()
-    {
-        return $this->prepareHTML('./templates/socialBar.html', $this->links);
+        page::fillWithData($this->menu, ['SOCIALBAR' => $template]);
     }
 }

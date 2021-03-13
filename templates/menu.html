@@ -3,9 +3,9 @@
 	<div class="header">
 
 		<!-- Site logo-->
-		<a href="$Start">
+		<a href="{{START}}">
 			<div class="logo">
-				<img src="/img/logo-square.png">
+				<img src="/assets/img/logo-square.png">
 			</div>
 		</a>
 		
@@ -17,15 +17,9 @@
 		
 		<!-- Navigation list (subpages)-->
 		<ol class="menu" itemscope itemtype="https://schema.org/BreadcrumbList">
-		  
-			$i=1;
-			
-			foreach($menu as $name=>$link)
-			{
-				if($name == $pageTitle)
-				echo'<li class="current" itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"> <span itemprop="name">'.$name.'</span> <meta itemprop="position" content="'.$i.'" /></li>';
-				else echo'<li itemprop="itemListElement" itemscope  itemtype="https://schema.org/ListItem"><a  itemprop="item" href="'.$link.'"> <span itemprop="name">'.$name.'</span></a> <meta itemprop="position" content="'.$i.'" /></li>';
-				$i++;
-			}
-		?>
+		{{MENUITEMS}}
 		</ol>
+	{{SOCIALBAR}}
+	{{CONTACTBAR}}
+	</div>
+</header>
