@@ -1,16 +1,16 @@
 @font-face {
   font-family: 'Cinzel-Decorative';
-  src: url('./fonts/CinzelDecorative-Regular.ttf');
+  src: url('./font/CinzelDecorative-Regular.ttf');
 }
 
 @font-face {
   font-family: 'Cinzel-Decorative-Bold';
-  src: url('./fonts/CinzelDecorative-Bold.ttf');
+  src: url('./font/CinzelDecorative-Bold.ttf');
 }
 
 @font-face {
   font-family: 'Petit-Formal-Script';
-  src: url('./fonts/PetitFormalScript-Regular.ttf');
+  src: url('./font/PetitFormalScript-Regular.ttf');
 }
 
 @keyframes first-animation {
@@ -61,7 +61,7 @@
 }
 
 body {
-  background: url('./assets/img/bg.png');
+  background: url('./img/bg.png');
 }
 
 @media screen and (min-width: 3000px) {
@@ -143,11 +143,11 @@ div.content {
   cursor: pointer;
 }
 
-#fb { content: url('./assets/img/fb.png'); }
-#yt { content: url('./assets/img/yt.png'); }
-#sc { content: url('./assets/img/sc.png'); }
-#ig { content: url('./assets/img/ig.png'); }
-#spotify { content: url('./assets/img/spotify.png'); }
+#fb { content: url('./img/fb.png'); }
+#yt { content: url('./img/yt.png'); }
+#sc { content: url('./img/sc.png'); }
+#ig { content: url('./img/ig.png'); }
+#spotify { content: url('./img/spotify.png'); }
 
 #oferta {
   font-family: 'Petit-Formal-Script';

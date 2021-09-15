@@ -41,9 +41,10 @@
 
 .records-list-item
 {
-	flex: 1 1 50px;
+	flex: 1 1 300px;
 	padding: 10px;
 	min-width: 250px;
+	max-width:500px;
 }
 
 .records-list-item img

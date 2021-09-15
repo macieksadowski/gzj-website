@@ -1,6 +1,72 @@
 {
     "PAGE_NAME": "Nagrania",
-    "DESCRIPTION":"",
-    "KEYWORDS":"",
-    "SCRIPTS":["yt"]
+    "DESCRIPTION": "",
+    "KEYWORDS": "",
+    "SCRIPTS": [
+        "yt"
+    ],
+    "RECORDS": [
+        {
+            "NAME": "Koncerty",
+            "YEAR": "",
+            "COVER": "",
+            "LINKS": [
+                "6UEAk718Jj8",
+                "mN0ysLCSsKo",
+                "G3BdfPO5zOc",
+                "So9S2GJ6Zzk",
+                "B_kN_r4lcZQ"
+            ]
+        },
+        {
+            "NAME": "GOK Komorniki",
+            "YEAR": 2020,
+            "COVER": "",
+            "LINKS": [
+                "bAzYbewpu1g",
+                "hq9EyVA_kqo",
+                "NocJOb6GUCU",
+                "_B23zY1FKp0"
+            ]
+        },
+        {
+            "NAME": "Jasminowy",
+            "YEAR": 2020,
+            "COVER": "../assets/img/records/jasminowy.png",
+            "LINKS": [
+                "1xWZxVqCRUk",
+                "81IrrlGEHe0",
+                "4gNheQl13ME"
+            ]
+        },
+        {
+            "NAME": "Orle",
+            "YEAR": 2019,
+            "COVER": "../assets/img/records/orle-gniazdo.jpg",
+            "LINKS": [
+                "SIMkkIljSEU",
+                "SoAPrzVIBRc",
+                "EcYMdS350To"
+            ]
+        },
+        {
+            "NAME": "DASH",
+            "YEAR": 2019,
+            "COVER": "../assets/img/records/dash.png",
+            "LINKS": [
+                "LcCcjjztNQQ",
+                "Qr7p-mDae3A",
+                "GTm3TjtgIQQ"
+            ]
+        },
+        {
+            "NAME": "Pretekst",
+            "YEAR": 2018,
+            "COVER": "../assets/img/records/pretekst.png",
+            "LINKS": [
+                "AfejRjo1q-0",
+                "3bSeKNfsCV0"
+            ]
+        }
+    ]
 }

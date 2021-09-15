@@ -27,9 +27,19 @@ class menu
         return $this->menuItems;
     }
 
-    public function print($showContactBar = false, $showSocialBar = false)
+    public function onlyBar()
     {
         page::fillWithData($this->menu, ['START' => $this->menuItems['Start']]);
+        page::fillWithData($this->menu, ['MENUITEMS' => '']);
+    }
+
+    public function print($showContactBar = false, $showSocialBar = false)
+    {
+        if (isset($this->menuItems['Start'])) {
+            page::fillWithData($this->menu, ['START' => $this->menuItems['Start']]);
+        } else {
+            page::fillWithData($this->menu, ['START' => './']);
+        }
 
         $str = '';
         $i = 1;

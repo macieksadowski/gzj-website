@@ -1,6 +1,5 @@
 <?php
 require_once '../page.php';
-
 $page = new page();
 $socialLinks = $page->menu->getLinks();
 ob_start();
