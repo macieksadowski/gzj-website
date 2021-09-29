@@ -101,7 +101,8 @@ class page
             $template,
             ['PAGE_NAME' => $this->title(),
                 'DESCRIPTION' => $this->meta('name', 'description', $this->page_info['DESCRIPTION']),
-                'KEYWORDS' => $this->meta('name', 'keywords', $this->page_info['KEYWORDS']), ]
+                'KEYWORDS' => $this->meta('name', 'keywords', $this->page_info['KEYWORDS']),
+                'CSS' => $this->css(), ]
         );
         $this->toLayout('HEADER', $template);
     }
@@ -124,8 +125,25 @@ class page
         }
     }
 
-    private function link($template, $rel, $href, $type = '')
+    private function link($rel, $href, $type = '')
     {
         return '<link rel="'.$rel.'" href="'.$href.'" type="'.$type.'" />'.PHP_EOL;
+    }
+
+    private function css()
+    {
+        $str = '';
+        foreach ($this->getData(SITE_ROOT.'/data/defaultCss.json') as $css) {
+            $str .= $this->link('stylesheet', $css, 'text/css');
+        }
+        if (isset($this->page_info['CSS'])) {
+            foreach ($this->page_info['CSS'] as $css) {
+                $str .= $this->link('stylesheet', $css, 'text/css');
+            }
+        } else {
+            $str .= $this->link('stylesheet', 'style.css', 'text/css');
+        }
+
+        return $str;
     }
 }
