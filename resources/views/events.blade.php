@@ -34,12 +34,14 @@
                             $ticketInfo = '';
                             $re = '/wstęp wolny/miu';
                             preg_match_all($re, $event['description'], $matches, PREG_SET_ORDER, 0);
-                            if (!empty($matches)) {
-                                $ticketInfo = 'Wstęp wolny';
-                            } else {
-                                $ticketInfo = 'Bilety do nabycia u&nbsp;organizatora';
-                            }
                         @endphp
+                        @if (!empty($matches))
+                            Wstęp wolny
+                        @else
+                            Bilety do nabycia u&nbsp;organizatora
+                        @endif
+
+
                         <div class="ticketInfo">{{$ticketInfo}}</div>
                     @endempty
                 @endif
