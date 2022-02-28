@@ -62,6 +62,7 @@ class PublicController extends Controller
 
     public function default($view, $css,$additionalArgs = [])
     {
+        setlocale(LC_ALL, 'pl_PL.UTF-8');
         $args = [
             "phone"=> "+48602538140",
             "mail"=> "glownyzaworjazzu@gmail.com",
