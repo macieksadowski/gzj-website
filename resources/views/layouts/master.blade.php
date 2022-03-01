@@ -1,6 +1,6 @@
 
 <!DOCTYPE HTML>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     @include('layouts.header')
     <body>
         <!-- This div is used as container for whole page-->
