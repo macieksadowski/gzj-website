@@ -41,9 +41,9 @@ class GeneratorController extends Controller
 
             try {
                 $documentPath = DocumentGenerator::generateZaiks($songs,$fileName,$OUTPUTLOCATION,$INPUTTEMPLATE);
-                return response()->download(public_path($documentPath));
+                return response()->download(($documentPath));
             } catch (\Throwable $e) {
-                return back()->withErrors(['generatorError'=> __('generator.default')]);
+                return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);
             }
         }
 

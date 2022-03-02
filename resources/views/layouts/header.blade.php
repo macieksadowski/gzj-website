@@ -50,6 +50,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/b-2.2.2/kt-2.6.4/r-2.2.9/datatables.min.js"></script>
 <link href={{ asset('/css/dual-listbox.css') }} rel="stylesheet" type="text/css">
@@ -59,6 +61,7 @@
 <link href={{ asset('/css/fontello.css') }} rel="stylesheet" type="text/css">
 <link href={{ asset('/css/pageCSS/'.$css) }} rel="stylesheet" type="text/css">
 <link href={{ asset('/css/table.css') }} rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
 <script type="text/javascript" src="https://cdn.rawgit.com/maykinmedia/dual-listbox/master/dist/dual-listbox.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>-->
 
