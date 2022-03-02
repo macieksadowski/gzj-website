@@ -20,7 +20,7 @@ class GeneratorController extends Controller
 
 
         $name = $request->validated()['eventName'];
-        $songs = Song::whereIn('id', $request->validated()['songs']);
+        $songs = Song::whereIn('id', $request->validated()['songs'])->get();
 
         $fileName = 'GZJ-ZAiKS-';
 
@@ -34,6 +34,8 @@ class GeneratorController extends Controller
             $actualTime = strftime('%e-%m-%y-%H-%M', $actualTimestamp->getTimestamp());
             $fileName .= $actualTime;
         }
+
+        $fileName .= '.docx';
 
         if (!empty($songs)) {
 

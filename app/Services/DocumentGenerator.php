@@ -57,7 +57,7 @@ class DocumentGenerator
         $zip = new ZipArchive();
 
         //Make a copy of template file
-        copy($template, $outputLocation . $outputFilename .  '.docx');
+        copy($template, $outputLocation . $outputFilename);
 
 
         // Open copied file
