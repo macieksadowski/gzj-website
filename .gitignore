@@ -14,4 +14,7 @@ yarn-error.log
 /.idea
 /.vscode
 /tmp
-tmp/xdebug.log
+*.log
+public/generators/*
+!public/generators/templates
+
