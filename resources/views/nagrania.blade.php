@@ -7,16 +7,22 @@
 
     @if ($record['name'] == 'Koncerty')
         <section>
-            <div class="records-stripe">
+            <div class="records-stripe ">
                 <div class="records-name">
                     <h1>{{$record['name']}}</h1>
                 </div>
-                <div class="records-list">
-                    @foreach ($record->links as $link)
-                        <div class="records-list-item">
-                            <div class="youtube-player" data-id="{{$link['url']}}"></div>
-                        </div>
-                    @endforeach
+                <div class="splide records-list">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            @foreach ($record->links as $link)
+                            <li class="splide__slide">
+
+                                    <div class="youtube-player" data-id="{{$link['url']}}"></div>
+
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
@@ -55,6 +61,16 @@
     @parent
 
     <script src="{{ asset('script/yt.js')}}"></script>
+    <script>
+        var splide = new Splide( '.splide', {
+        type   : 'loop',
+        perPage: 3,
+        focus  : 'center',
+        cover      : true,
+	    heightRatio: 0.5,
+        } );
 
+        splide.mount();
+    </script>
 
 @endsection
