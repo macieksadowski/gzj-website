@@ -4,7 +4,12 @@
 <meta name="google-site-verification" content="MiQKEZcz4YKn7I5v_HHhbPyBwIhTkUQ3A0maBFTjZN0" />
 <meta name="google-site-verification" content="C0IRoVkYt0yqUZta7TPVZWL95zO-aYn-CD9XhvhikEI" />
 
-<title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
+@hasSection('title')
+    <title>{{ config('app.name') }} - @yield('title')</title>
+@else
+    <title>{{ config('app.name') }}</title>
+@endif
+
 @yield('description')
 @yield('keywords')
 
