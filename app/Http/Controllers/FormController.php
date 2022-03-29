@@ -27,7 +27,7 @@ class FormController extends Controller
 
     public function updateMember(Request $request) {
 
-        $member = Member::where('id', '=', $request->data['id'])->first();
+        $member = Member::where('id', '=', $request->member_id)->first();
 
         $member->first_name = $request->data['first_name'];
         $member->last_name = $request->data['last_name'];
