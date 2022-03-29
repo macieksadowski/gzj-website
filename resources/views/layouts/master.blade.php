@@ -15,15 +15,18 @@
                 </div>
             </main>
 
-            @if ($errors->any() || session('success'))
+
                 <div class="bottom-modal"
                 @if (session('success'))
                 id="success"
                 @else
                 id="error"
                 @endif
+                @if ($errors->any() || session('success'))
                 style="display:block;"  >
-
+                @else
+                style="display:none;"  >
+                @endif
                     <!-- Modal content -->
                     <div class="bottom-modal-content">
                         <div class="bottom-modal-body">
@@ -45,7 +48,7 @@
                 </div>
 
 
-            @endif
+
 
 
             @include('layouts.footer')
