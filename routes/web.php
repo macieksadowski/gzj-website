@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/', [DashboardController::class,'dashboard'])->name('dashboard');
         Route::get('/zaiks', [DashboardController::class, 'zaiks'])->name('zaiks');
+        Route::get('/contract-generator', [DashboardController::class, 'contractGenerator'])->name('contract-generator');
         Route::get('/events', [DashboardController::class, 'events'])->name('eventy');
         Route::get('/events/{id}', [DashboardController::class, 'event'])->name('events.show');
         Route::get('/contracts', [DashboardController::class, 'contracts'])->name('contracts');
@@ -48,6 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('zaiks/generate', [GeneratorController::class, 'zaiks'] )->name('generateZAiKS');
         Route::post('/events/{id}', [FormController::class, 'addMemberToContract'] );
         Route::post('/contracts', [FormController::class, 'newContract'] );
+        Route::post('/contract-generator', [FormController::class, 'updateMember'] );
+        Route::post('/contract-generator/generate', [GeneratorController::class, 'contract'] )->name('generateContract');
 
 
     });

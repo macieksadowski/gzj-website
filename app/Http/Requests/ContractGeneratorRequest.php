@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GeneratorRequest extends FormRequest
+class ContractGeneratorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class GeneratorRequest extends FormRequest
     public function rules()
     {
         return [
-            'songs' => ['required'],
-            'eventName' => ['string','nullable']
+            'fileName' => ['string','nullable'],
+            'contractType' => ['string','required'],
+            'member_id' => ['integer','required']
         ];
     }
 
