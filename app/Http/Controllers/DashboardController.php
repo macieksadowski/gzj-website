@@ -10,6 +10,7 @@ use App\Models\Member;
 use App\Models\Song;
 use App\Models\Transaction;
 use App\Services\PolishNames;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -24,6 +25,17 @@ class DashboardController extends Controller
     {
         $songs = Song::orderBy('title')->get();
         return $this->default('zaiks',$songs);
+    }
+
+    public function contractGenerator(Request $request)
+    {
+        $selectedMember = Member::where('id', '=', $request->id)->first();
+        if($selectedMember == null) {
+            $selectedMember = Member::where('id', '=', 11)->first();
+        }
+        $members = Member::all();
+
+        return $this->default('contracts-generator',['members'=>$members,'selected'=>$selectedMember]);
     }
 
 
@@ -64,6 +76,7 @@ class DashboardController extends Controller
     {
         $this->menuItems["Start"] = route('dashboard');
         $this->menuItems["Generator ZAiKS"] = route('zaiks');
+        $this->menuItems["Generator Umów"] = route('contract-generator');
         $this->menuItems["Wydarzenia"] = route('eventy');
         $this->menuItems["Wyloguj się"] = route('logout');
         $paramsTable = [

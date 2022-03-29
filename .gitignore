@@ -15,6 +15,7 @@ yarn-error.log
 /.vscode
 /tmp
 *.log
-public_html/generators/*
+public_html/generators/contracts/*
+public_html/generators/zaiks/*
 !public_html/generators/templates
 

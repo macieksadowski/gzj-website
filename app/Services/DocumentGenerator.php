@@ -7,6 +7,47 @@ use ZipArchive;
 class DocumentGenerator
 {
 
+    public static function generateContract($member, $fileName, $outputLocation, $inputTemplate)
+    {
+        //Conversion of PESEL number to Date of Birth String
+        $birthDate = PolishNames::peselToDate($member->pesel);
+
+        //Generate strings for replacing in template
+        $keywords = [];
+
+        if ('a' == substr($member->first_name, -1)) {
+            $keywords['GODNOSC'] = 'Panią';
+            $keywords['SUFIX'] = 'ą';
+            $keywords['NAZWISKO_ODMIENIONE'] = PolishNames::getSurnameDeclined($member->last_name,'f');
+        } else {
+            $keywords['GODNOSC'] = 'Panem';
+            $keywords['SUFIX'] = 'ym';
+            $keywords['NAZWISKO_ODMIENIONE'] = PolishNames::getSurnameDeclined($member->last_name,'m');
+        }
+
+        $keywords['IMIE_ODMIENIONE'] = PolishNames::getNameDeclined($member->first_name);
+        $keywords['IMIE'] = $member->first_name;
+        $keywords['NAZWISKO'] = $member->last_name;
+        $keywords['MIASTO_ODMIENIONE'] = PolishNames::GetTownNameDeclined($member->town);
+        $keywords['MIASTO'] = $member->town;
+        $keywords['KOD_POCZTOWY'] = $member->postal_code;
+        $keywords['ULICA'] = $member->street;
+        $keywords['NR_DOMU'] = $member->house_no;
+        $keywords['NR_PESEL'] = $member->pesel;
+        $keywords['MIEJSCE_URODZENIA_ODMIENIONE'] = PolishNames::GetTownNameDeclined($member->birth_place);
+        $keywords['MIEJSCE_URODZENIA'] = $member->birth_place;
+        $keywords['NR_KONTA'] = $member->account_no;
+        $keywords['URZAD_SKARBOWY'] = $member->tax_office;
+        $keywords['DATA_URODZENIA'] = $birthDate;
+
+        $errorCode = DocumentGenerator::generateDocumentFromTemplate($inputTemplate, $keywords, $outputLocation, $fileName);
+        if (!$errorCode) {
+            return $outputLocation . $fileName;
+        } else {
+            return '';
+        }
+    }
+
     /**
      * This function generates a MS Word document with a fullfilled ZAiKS Table with given entries from an empty template file.
      *
