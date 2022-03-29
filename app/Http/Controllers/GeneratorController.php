@@ -8,6 +8,7 @@ use App\Services\DocumentGenerator;
 use DateTime;
 use App\Http\Requests\ZaiksGeneratorRequest;
 use App\Http\Requests\ContractGeneratorRequest;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -37,6 +38,7 @@ class GeneratorController extends Controller
                 $documentPath = DocumentGenerator::generateZaiks($songs,$fileName,self::$ZAIKS_OUTPUT_LOCATION,self::$ZAIKS_TEMPLATE);
                 return response()->download(($documentPath));
             } catch (\Throwable $e) {
+                Log::error($e);
                 return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);
             }
         }
@@ -59,6 +61,7 @@ class GeneratorController extends Controller
             $documentPath = DocumentGenerator::generateContract($member,$fileName,self::$CONTRACTS_OUTPUT_LOCATION,$inputTemplate);
             return response()->download(($documentPath));
         } catch (\Throwable $e) {
+            Log::error($e);
             return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);
         }
 
