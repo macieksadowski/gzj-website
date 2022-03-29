@@ -1,6 +1,6 @@
 /node_modules
-/public/hot
-/public/storage
+/public_html/hot
+/public_html/storage
 /storage/*.key
 /vendor
 .env*
@@ -15,6 +15,6 @@ yarn-error.log
 /.vscode
 /tmp
 *.log
-public/generators/*
-!public/generators/templates
+public_html/generators/*
+!public_html/generators/templates
 
