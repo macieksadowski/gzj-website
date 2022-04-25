@@ -42,7 +42,7 @@ class DashboardController extends Controller
     public function events()
     {
 
-        $events = Event::orderBy('date')->get();
+        $events = Event::orderBy('date', 'desc')->get();
         //$categories = FinanceCategory::all();
         //$trsnsactions = Transaction::whereDate('date','>','2021-10-01')->get();
         return $this->default('wydarzenia', $events);

@@ -53,6 +53,7 @@
                     url: 'https://cdn.datatables.net/plug-ins/1.11.4/i18n/pl.json'
                 },
                 "autoWidth": false,
+                "order": [ 2, 'desc' ],
                 "columns": [
                     null,
                     { "width": "60%" },
