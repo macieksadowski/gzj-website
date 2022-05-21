@@ -56,8 +56,12 @@
                     <b>
                         {{$event['place']['name']}}
                     </b><br />
-                    @isset($event['place']['location'])
-                        {{$event['place']['location']['city']}}, {{$event['place']['location']['street']}}
+                    @isset($event['place']['location']['city'])
+                        {{$event['place']['location']['city']}}
+                    @endisset
+                    @isset($event['place']['location']['street'])
+                        -
+                        {{$event['place']['location']['street']}}
                     @endisset
                 </div>
             </div>
