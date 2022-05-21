@@ -14,11 +14,10 @@ class PublicController extends Controller
         "Koncerty" => "/koncerty",
         "Nagrania" => "/nagrania",
         "Oferta" => "/oferta-koncertowa.pdf\" target=\"_blank\"",
-        "Rider" => [
+        "Do pobrania" => [
+            "Presspack" => "/presspack\" target=\"_blank\"",
             "Rider" => "/rider.pdf\" target=\"_blank\""
-
-        ]
-
+        ],
     ];
 
     public $socialLinks = [
