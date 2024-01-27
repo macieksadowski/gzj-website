@@ -6,10 +6,10 @@
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Start</a></li>
-          <li><a class="nav-link scrollto" href="#team">O zespole</a></li>
-          <li><a class="nav-link scrollto " href="#albums">Nagrania</a></li>
-          <li><a class="nav-link scrollto" href="#events">Koncerty</a></li>
+          <li><a class="nav-link scrollto" href="{{ $menuItems['O zespole']}}">O zespole</a></li>
+          <li><a class="nav-link scrollto " href="{{ $menuItems['Nagrania']}}">Nagrania</a></li>
+          <li><a class="nav-link scrollto" href="{{ $menuItems['Koncerty']}}">Koncerty</a></li>
+          <li><a class="nav-link scrollto " href="{{ $menuItems['Dyskografia']}}">Dyskografia</a></li>
           <li class="dropdown"><a href="#"><span>Do pobrania</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <!--

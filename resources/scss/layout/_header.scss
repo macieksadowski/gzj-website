@@ -55,7 +55,7 @@
         list-style: none;
         align-items: center;
 
-        @media (max-width: 991px) {
+        @media (max-width: $extra-large-device) {
             display: none;
         }
     }
@@ -180,7 +180,7 @@
     line-height: 0;
     transition: 0.5s;
 
-    @media (max-width: 991px) {
+    @media (max-width: $extra-large-device) {
         display: block;
     }
 

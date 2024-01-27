@@ -10,10 +10,11 @@ use App\Services\FbRequestService;
 class PublicController extends Controller
 {
     public $menuItems = [
-        "Start"=>"/",
-        "O zespole" => "/o-zespole",
-        "Koncerty" => "/koncerty",
-        "Nagrania" => "/nagrania",
+        "Start"=>"#hero",
+        "O zespole" => "#about",
+        "Koncerty" => "#events",
+        "Nagrania" => "#records",
+        "Dyskografia" => "#albums",
         "Oferta" => "/oferta-koncertowa.pdf",
         "Do pobrania" => [
             "Presspack" => "/presspack",

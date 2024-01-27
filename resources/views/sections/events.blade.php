@@ -21,11 +21,11 @@
                             <h4>{{ $event['name'] }}</h4>
                             <div class="container event-info">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-6 col-sm-3 order-1">
                                         <p>{{ strftime('%A %e.%m.%yr. godz.%H:%M', $event['start_time']->getTimestamp()) }}
                                         </p>
                                     </div>
-                                    <div class="col-6 event-info__link">
+                                    <div class="col-6 order-2 event-info__link">
                                         @if ($event['is_online'])
                                             <p>Wydarzenie online</p>
                                         @else
@@ -47,15 +47,13 @@
                                             @endempty
                                           @endif
                                       </div>
-                                      <div class="col-3 event-info__link">
+                                      <div class="col-3 order-4 order-sm-3 event-info__link ">
                                         <a href="https://facebook.com/events/{{ $event['id'] }}" target="_blank"
                                         class="link-button link-button_social"><i class="bi bi-facebook"></i></a>
                                       </div>
-                                  </div>
-                                <div class="row">
-                                  <div class="col-6">
+                                  <div class="col-9 col-sm-6 order-3 order-sm-4">
                                     <p>
-                                        <strong>{{ $event['place']['name'] }}</strong>
+                                        <strong>{{ $event['place']['name'] }}</strong><br />
                                         @isset($event['place']['location']['city'])
                                             {{ $event['place']['location']['city'] }}
                                         @endisset

@@ -4,7 +4,9 @@
     }
 
     &__container {
-        margin: +20px;
+        @media (min-width: $large-device) {
+            margin: +20px;
+        }
     }
 
     & h4 {
@@ -42,7 +44,11 @@
         }
 
         & i {
-            font-size: 2.8rem;
+            font-size: 3.8rem;
+
+            @media (min-width: $medium-device) {
+                font-size: 2.8rem;
+            }
 
             @media (min-width: $extra-large-device) {
                 font-size: 4.8rem;

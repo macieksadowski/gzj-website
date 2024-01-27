@@ -1405,7 +1405,7 @@ section {
   list-style: none;
   align-items: center;
 }
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
   .navbar ul {
     display: none;
   }
@@ -1504,7 +1504,7 @@ section {
   line-height: 0;
   transition: 0.5s;
 }
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
   .mobile-nav-toggle {
     display: block;
   }
@@ -1737,9 +1737,6 @@ section {
 .splide__list {
   height: auto;
 }
-.splide__video {
-  max-height: 386px;
-}
 .splide__pagination {
   bottom: 1em;
 }
@@ -1781,12 +1778,12 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
   text-transform: uppercase;
   transition: 0.3s;
   position: relative;
-  top: 10px;
-  padding: 10px 30px;
+  top: 1rem;
+  padding: 1rem 2rem;
 }
 @media (min-width: 576px) {
   .link-button {
-    padding: 10px 40px;
+    padding: 1rem 4rem;
   }
 }
 .link-button:hover {
@@ -1794,7 +1791,7 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
   color: #fff;
 }
 .link-button_social {
-  top: -0.6rem;
+  top: 0rem;
   padding: 1.2rem 0.6rem;
 }
 .link-button_social i {
@@ -1845,10 +1842,17 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
-  height: 100vh;
-  background: url("../img/Hero.jpg") top center;
+  height: 75vh;
+  background: url("../img/Hero-mobile.jpg") top center;
   background-size: cover;
   position: relative;
+}
+@media (min-width: 576px) {
+  #hero {
+    height: 100vh;
+    background: url("../img/Hero.jpg") top center;
+    background-size: cover;
+  }
 }
 #hero:before {
   content: "";
@@ -1922,6 +1926,7 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
 }
 .events .event-box .event-info__link {
   text-align: right;
+  margin-bottom: 3rem;
 }
 .events .event-box .event-info__link .link-button_social {
   margin-right: 1rem;
@@ -1992,8 +1997,10 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
 .album__cover img {
   width: 100%;
 }
-.album__container {
-  margin: 20px;
+@media (min-width: 992px) {
+  .album__container {
+    margin: 20px;
+  }
 }
 .album h4 {
   padding-top: 30px;
@@ -2019,7 +2026,12 @@ button:hover, input[type=submit]:hover, input[type=button]:hover {
   padding-bottom: 1rem;
 }
 .album__links i {
-  font-size: 2.8rem;
+  font-size: 3.8rem;
+}
+@media (min-width: 576px) {
+  .album__links i {
+    font-size: 2.8rem;
+  }
 }
 @media (min-width: 1200px) {
   .album__links i {

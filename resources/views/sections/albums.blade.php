@@ -9,7 +9,7 @@
 
       <div class="row">
       
-        <div class="col-12 col-lg-4 d-flex align-items-stretch album"  >
+        <div class="col-12 col-md-4 d-flex align-items-stretch album"  >
           <div class="box album__container">
             <div class="album__cover">
               <img src="{{asset('img/albums/poczatek-front-lg.jpg')}}" alt="Okładka albumu Początek" />
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-4 d-flex align-items-stretch album"  >
+        <div class="col-12 col-md-4 d-flex align-items-stretch album"  >
           <div class="box album__container">
             <div class="album__cover">
               <img src="{{asset('img/albums/drugi-akapit-front-lg.jpg')}}" alt="Okładka albumu Drugi Akapit" />
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-4 d-flex align-items-stretch album"  >
+        <div class="col-12 col-md-4 d-flex align-items-stretch album"  >
           <div class="box album__container">
             <div class="album__cover">
               <img src="{{asset('img/albums/noca-w-pewnym-miescie-front-lg.jpg')}}" alt="Okładka albumu Nocą w pewnym mieście" />
