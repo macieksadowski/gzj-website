@@ -18,13 +18,13 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-        return $this->default('dashboard', null);
+        return $this->default('dashboard-sections.start', null);
     }
 
     public function zaiks()
     {
         $songs = Song::orderBy('title')->get();
-        return $this->default('zaiks',$songs);
+        return $this->default('dashboard-sections.zaiks',$songs);
     }
 
     public function contractGenerator(Request $request)
@@ -35,7 +35,7 @@ class DashboardController extends Controller
         }
         $members = Member::all();
 
-        return $this->default('contracts-generator',['members'=>$members,'selected'=>$selectedMember]);
+        return $this->default('dashboard-sections.contracts-generator',['members'=>$members,'selected'=>$selectedMember]);
     }
 
 
@@ -45,7 +45,7 @@ class DashboardController extends Controller
         $events = Event::orderBy('date', 'desc')->get();
         //$categories = FinanceCategory::all();
         //$trsnsactions = Transaction::whereDate('date','>','2021-10-01')->get();
-        return $this->default('wydarzenia', $events);
+        return $this->default('dashboard-sections.wydarzenia', $events);
     }
 
     public function event($id)
@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $sum = Transaction::where('ev_id',$id)->sum('amount');
         $members = Member::all();
         $transactions = Transaction::where('ev_id',$id)->get();
-        return $this->default('wydarzenie', ['event' => $event,'transactions' => $transactions,'sum'=>$sum,'members'=>$members ]);
+        return $this->default('dashboard-sections.wydarzenie', ['event' => $event,'transactions' => $transactions,'sum'=>$sum,'members'=>$members ]);
     }
 
     public function contracts()

@@ -1,34 +1,41 @@
-<header>
-	<!-- This is a container for navbar-->
-	<div class="header">
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-lg-between">
 
-		<!-- Site logo-->
-		<a href="START">
-			<div class="logo">
-				<img src={{ asset('img/logo-square.png') }}>
-			</div>
-		</a>
+      <div class="logo me-auto me-lg-0"><img src="{{asset('/img/logo-header.gif')}}" alt="Logo Główny Zawór Jazzu" class="img-fluid"></div>
 
-		<!-- Menu button for mobile version-->
-		<input id="menu-toggle" type="checkbox" />
-		<label class='menu-button-container' for="menu-toggle">
-				<div class='menu-button'></div>
-		</label>
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Start</a></li>
+          <li><a class="nav-link scrollto" href="#team">O zespole</a></li>
+          <li><a class="nav-link scrollto " href="#albums">Nagrania</a></li>
+          <li><a class="nav-link scrollto" href="#events">Koncerty</a></li>
+          <li class="dropdown"><a href="#"><span>Do pobrania</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <!--
+              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="#">Deep Drop Down 1</a></li>
+                  <li><a href="#">Deep Drop Down 2</a></li>
+                  <li><a href="#">Deep Drop Down 3</a></li>
+                  <li><a href="#">Deep Drop Down 4</a></li>
+                  <li><a href="#">Deep Drop Down 5</a></li>
+                </ul>
+              </li>-->
+              <li><a href="{{ $menuItems['Oferta'] }}" target="blank">Oferta</a></li>
+              <li><a href="{{ $menuItems['Do pobrania']['Presspack'] }}" target="blank">Presspack</a></li>
+              <li><a href="{{ $menuItems['Do pobrania']['Rider'] }}" target="blank">Rider</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="#"><span>Kontakt</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="tel:{{ $phone }}"><i class="bi-telephone" ></i>+48602538140</a></a></li>
+              <li><a href="mailto:{{ $mail }}"><i class="bi-at" ></i>glownyzaworjazzu@gmail.com</a></a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
 
-		<!-- Navigation list (subpages)-->
-        {!! \App\Services\MenuHelper::ol($menuItems, Request::path()) !!}
-
-    @section('social_bar')
-
-    @show
-    @section('contact_bar')
-
-    @show
-
-	</div>
-    @if (!Request::is('*/'))
-    <div class="title">
-        <h1>@yield('title')</h1>
     </div>
-    @endif
-</header>
+  </header><!-- End Header -->

@@ -1,0 +1,55 @@
+/*--------------------------------------------------------------
+# Events
+--------------------------------------------------------------*/
+.events {
+
+    &__noevents {
+        font-size: 1.8rem;
+    }
+    
+    & .event-box {
+        border: 1px solid #ebebeb;
+        margin: 40px 0;
+        transition: all ease-in-out 0.3s;
+        background: $color-text-white;
+
+        & .cover  {
+            overflow: hidden;
+        
+            & img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        & h4 {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            border-bottom: 1px solid black;
+            //margin-bottom: 20px;
+            padding-top: 5px;
+            font-size: 24px;
+            font-family: "Cinzel", serif;
+        }
+
+        & .event-info {
+            padding: 20px;
+
+            &__link {
+                text-align: right;
+
+                & .link-button_social {
+                    margin-right: 1rem;
+                }
+            }
+
+        }
+
+        &:hover {
+            border-color: #fff;
+            box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+        }
+    }
+}

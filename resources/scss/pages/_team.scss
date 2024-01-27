@@ -1,0 +1,73 @@
+/*--------------------------------------------------------------
+# Team
+--------------------------------------------------------------*/
+.team {
+    background: #fff;
+    padding: 60px 0;
+
+    & .member-container:hover {
+        z-index:3;
+    }
+
+    & .member {
+
+        transition: transform 0.5s ease-in-out;
+
+        &-img {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+
+
+            &__back {
+                position: absolute;
+                top:0;
+                transition: filter 0.5s ease-in-out;
+                filter: opacity(0%);
+
+            }
+
+
+        }
+
+        &-info {
+            padding: 25px 4px;
+            //max-width: 10vw;
+
+            @media (min-width: $medium-device) {
+                padding: 25px 15px;
+            }
+
+            & h4 {
+                font-weight: 700;
+                margin-bottom: 5px;
+                font-size: 18px;
+                color: #151515;
+            }
+
+            & span {
+                display: block;
+                font-size: 13px;
+                font-weight: 400;
+                color: #aaaaaa;
+            }
+
+            & p {
+                font-style: italic;
+                font-size: 14px;
+                line-height: 26px;
+                color: #777777;
+            }
+        }
+
+        &:hover {
+
+            transform: scale(1.1, 1.1);
+
+            & .member-img__back {
+                filter: opacity(100%);
+            }
+        }
+    }
+
+}

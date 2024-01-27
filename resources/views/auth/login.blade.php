@@ -1,7 +1,7 @@
-@extends('layouts.master')
+@extends('layouts.dashboard')
 @section('title', 'Logowanie')
 
-@section('content')
+@section('inner-content')
 
 <section>
     <div class="loginform">

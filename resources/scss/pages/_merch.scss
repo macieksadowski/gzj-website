@@ -1,0 +1,21 @@
+.merch {
+
+    &:hover {
+        z-index: 3;
+    }
+
+    &__container {
+
+        transition: transform 0.5s ease-in-out;
+        margin: 15px;
+
+        & img {
+            width: 100%;
+        }
+        
+        &:hover {
+           
+            transform: scale(1.2, 1.2);
+        }
+    }
+}

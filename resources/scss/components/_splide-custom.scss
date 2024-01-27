@@ -1,0 +1,28 @@
+.splide {
+
+  &__list {
+    height: auto;
+  }
+
+  &__video {
+    max-height: 386px;
+  }
+
+  &__pagination {
+    bottom: 1.0em;
+  }
+
+  &__slide {
+
+    overflow:  hidden;
+    height: 386px;
+    height: fit-content;
+
+
+    & img {
+      width:100%;
+      margin: -10% 0;
+      height: auto;
+    }
+  }
+}

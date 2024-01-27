@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\RecordSet;
-use App\Services\FbProxy;
+use App\Models\Style;
+use App\Services\FbRequestService;
 
 class PublicController extends Controller
 {
@@ -13,10 +14,10 @@ class PublicController extends Controller
         "O zespole" => "/o-zespole",
         "Koncerty" => "/koncerty",
         "Nagrania" => "/nagrania",
-        "Oferta" => "/oferta-koncertowa.pdf\" target=\"_blank\"",
+        "Oferta" => "/oferta-koncertowa.pdf",
         "Do pobrania" => [
-            "Presspack" => "/presspack\" target=\"_blank\"",
-            "Rider" => "/rider.pdf\" target=\"_blank\""
+            "Presspack" => "/presspack",
+            "Rider" => "/rider.pdf"
         ],
     ];
 
@@ -26,11 +27,27 @@ class PublicController extends Controller
         "SC"=> "https://soundcloud.com/glownyzaworjazzu",
         "SP"=> "https://open.spotify.com/artist/5mjGrW9DVffOeQPxSlnNoZ?autoplay=true&v=A",
         "IG"=> "https://www.instagram.com/glownyzaworjazzu/",
+        "TK"=> "https://www.tiktok.com/@glownyzaworjazzu"
     ];
 
     public function index()
     {
-        return $this->default('start', "Start.css");
+        $fbService = new FbRequestService();
+
+        //* EVENTS */
+        try {
+            $actualEvents = $fbService->getActualEvents();
+        } catch (\Throwable $th) {
+            return $this->withErrors('layouts.public', "", ['fbProxyError'=> __('fb-proxy.default')]);
+        }
+        //* STYLES */
+        $styles = Style::all();
+        //* YOUTUBE RECORDS */
+        //$records = 
+
+
+        return $this->default('layouts.public', "", ["events"=>$actualEvents, "styles"=>$styles]);
+
     }
 
     public function about()
@@ -47,9 +64,9 @@ class PublicController extends Controller
 
     public function events()
     {
-        $fbProxy = new FbProxy();
+        $fbService = new FbRequestService();
         try {
-            $actualEvents = $fbProxy->getActualEvents();
+            $actualEvents = $fbService->getActualEvents();
             return $this->default('events', "Events.css",["events"=>$actualEvents]);
         } catch (\Throwable $th) {
             return back()->withErrors(['fbProxyError'=> __('fb-proxy.default')]);
@@ -71,5 +88,17 @@ class PublicController extends Controller
         ];
 
         return view($view, array_merge($args,$additionalArgs));
+    }
+
+    public function withErrors($view, $errors, $additionalArgs = []) {
+        setlocale(LC_ALL, 'pl_PL.UTF-8');
+        $args = [
+            "phone"=> "+48602538140",
+            "mail"=> "glownyzaworjazzu@gmail.com",
+            "menuItems" => $this->menuItems,
+            "socialLinks" => $this->socialLinks
+        ];
+
+        return view($view, array_merge($args,$additionalArgs))->withErrors($errors);
     }
 }

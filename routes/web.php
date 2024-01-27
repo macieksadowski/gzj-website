@@ -32,6 +32,13 @@ Route::get('/drugi_akapit', function () {
     return redirect()->away('https://songwhip.com/glownyzaworjazzu/drugi-akapit');
 });
 
+Route::get('/noca_w_pewnym_miescie', function () {
+    return redirect()->away('https://songwhip.com/glownyzaworjazzu/noca-w-pewnym-miescie');
+});
+
+Route::get('/poczatek', function () {
+    return redirect()->away('https://songwhip.com/glownyzaworjazzu/poczatek');
+});
 
 
 Route::group(['middleware' => 'auth'], function () {

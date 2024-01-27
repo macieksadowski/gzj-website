@@ -1,0 +1,72 @@
+a {
+    color: $color-accent;
+    text-decoration: none;
+
+    &:hover {
+        color: $color-accent-hover;
+        text-decoration: none;
+    }
+}
+
+/*--------------------------------------------------------------
+# Disable aos animation delay on mobile devices
+--------------------------------------------------------------*/
+@media screen and (max-width: 768px) {
+    [data-aos-delay] {
+        transition-delay: 0 !important;
+    }
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+    padding: 30px 10px;
+    overflow: hidden;
+
+    @media (min-width: $medium-device) {
+        padding: 60px 0;
+    }
+}
+
+.section-title {
+    padding-bottom: 10px;
+
+    @media (min-width: $medium-device) {
+        padding-bottom: 40px;
+    }
+
+    & h2 {
+        font-size: 1.4rem;
+        font-weight: 500;
+        padding: 0;
+        line-height: 1px;
+        margin: 0 0 5px 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: $color-gray;
+        font-family: $raleway;
+
+        &::after {
+            content: "";
+            width: 120px;
+            height: 1px;
+            display: inline-block;
+            background: $color-accent;
+            margin: 4px 10px;
+        }
+    }
+
+    & p {
+        margin: 0;
+        font-size: 2.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-family: $cinzel;
+        color: $color-black-todo;
+
+        @media (min-width: $medium-device) {
+            font-size: 3.6rem;
+        }
+    }
+}

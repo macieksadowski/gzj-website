@@ -1,0 +1,12 @@
+{
+    "/css/main.css": "/css/main.css",
+    "/js/main.min.js": "/js/main.min.js",
+    "/js/public.min.js": "/js/public.min.js",
+    "/js/dashboard.min.js": "/js/dashboard.min.js",
+    "/resources/css/aos.css": "/resources/css/aos.css",
+    "/resources/css/bootstrap.min.css": "/resources/css/bootstrap.min.css",
+    "/resources/css/splide.min.css": "/resources/css/splide.min.css",
+    "/resources/css/jquery.modal.min.css": "/resources/css/jquery.modal.min.css",
+    "/resources/css/select2.min.css": "/resources/css/select2.min.css",
+    "/resources/css/splide-extension-video.min.css": "/resources/css/splide-extension-video.min.css"
+}

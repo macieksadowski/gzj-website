@@ -1,0 +1,43 @@
+/*--------------------------------------------------------------
+# Cta
+--------------------------------------------------------------*/
+.cta {
+    background: linear-gradient(rgba(2, 2, 2, 0.5), rgba(0, 0, 0, 0.5)), url("../img/DSC08711_1.jpg") fixed center center;
+    background-size: cover;
+    -webkit-filter: grayscale(50%);
+    /* Safari 6.0 - 9.0 */
+    filter: grayscale(50%);
+    padding: 150px 0;
+
+
+    & h3 {
+        color: $color-text-white;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    & p {
+        color: $color-text-white;
+    }
+
+    & .cta-btn {
+        font-family: "Raleway", sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 1px;
+        display: inline-block;
+        padding: 8px 28px;
+        border-radius: 4px;
+        transition: 0.5s;
+        margin-top: 10px;
+        border: 2px solid $color-text-white;
+        color: $color-text-white;
+
+        &:hover {
+            background: $color-accent-hover;
+            border-color: $color-accent-hover;
+            color: $color-black-todo;
+        }
+    }
+
+}

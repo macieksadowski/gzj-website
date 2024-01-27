@@ -1,0 +1,55 @@
+/*--------------------------------------------------------------
+# Default text button
+--------------------------------------------------------------*/
+button, input[type=submit], input[type=button] {
+    background-color: $color-accent;
+    color: $color-text-white;
+    font-family: $raleway;
+    font-weight: 600;
+    box-shadow: $shadow-standard;
+    text-transform: uppercase;
+    transition: 0.3s;
+
+    &:hover {
+        background-color: $color-accent-hover;
+        color:$color-text-white;
+    }
+}
+
+
+.link-button {
+
+    background-color: $color-accent;
+    color: $color-text-white;
+    font-family: $raleway;
+    font-weight: 600;
+    box-shadow: $shadow-standard;
+    text-transform: uppercase;
+    transition: 0.3s;
+    position: relative;
+    top: 10px;
+    padding: 10px 30px;
+
+    @media (min-width: $medium-device) {
+        padding: 10px 40px;
+    }
+
+    &:hover {
+        background-color: $color-accent-hover;
+        color:$color-text-white;
+    }
+
+    &_social {
+        top: -0.6rem;
+        padding: 1.2rem 0.6rem;
+
+        & i {
+            font-size: 3.0rem;
+            position: relative;
+            top: 0.7rem;
+        }
+
+
+    }
+
+}

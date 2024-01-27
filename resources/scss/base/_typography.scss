@@ -1,0 +1,33 @@
+//Google fonts
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;700&family=Petit+Formal+Script&family=Raleway:wght@300;400;600&display=swap");
+
+//Font variables
+$cinzel-decorative: 'Cinzel Decorative', cursive;
+$cinzel: 'Cinzel', serif;
+$cinzel-italic: 'Cinzel', italic;
+$petit-formal-script: 'Petit Formal Script', cursive;
+$raleway: 'Raleway', sans-serif;
+html {
+    font-size: 62.5%;
+    font-family: $raleway;
+    color: $color-text-dark;
+}
+
+body {
+    font-size: 1.5rem;
+}
+
+h1 {
+    font-size: 3.6rem;
+}
+
+h2 {
+    font-size: 2.4rem;
+}
+
+h4 {
+    font-family: $cinzel;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5rem;
+}

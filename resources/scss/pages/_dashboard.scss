@@ -1,0 +1,62 @@
+@import "../components/dual-listbox";
+@import "../components/modal-bottom";
+
+.dashboard {
+    padding-top: 74px;
+
+    &__generator {
+        //padding:20px 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        min-height: 40vh;
+        flex-direction: column;
+        width: 100%;
+        //margin-left:auto;
+        //margin-right:auto;
+        //text-align: left;
+        //justify-self: flex-start;
+
+        #kod_pocztowy {
+            width: 70px;
+        }
+
+        & form {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        &__formrow {
+            width: 100%;
+
+
+        }
+
+        & button {
+            font-size: 14px;
+            margin: 8px 10px;
+        }
+
+        & h1 {
+            font-size: 28px;
+        }
+
+        &__footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            flex-direction: column;
+            width: 100%;
+            gap: 1rem;
+            padding-top: 2.5rem;
+
+
+            @media (min-width: $medium-device) {
+                max-width: 80%;
+            }
+        }
+    }
+}
