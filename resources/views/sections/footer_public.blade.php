@@ -1,6 +1,6 @@
  <!-- ======= Footer ======= -->
  <footer id="footer">
-     <div class="footer-top">
+     <div class="footer-top" id="contact">
          <div class="container">
 
              <div class="section-title">
@@ -19,7 +19,7 @@
                              <div class="col-8 contact__info">
                                  <h4>Telefon</h4>
                                  <p>Bartosz Matuszczak</p>
-                                 <p> +48 123 456 789</p>
+                                 <p>{{ $phone }}</p>
                              </div>
                          </div>
                      </a>
@@ -30,7 +30,7 @@
                              </div>
                              <div class="col-8 contact__info">
                                  <h4>E-mail</h4>
-                                 <p>glownyzaworjazzu@gmail.com</p>
+                                 <p>{{ $mail }}</p>
                              </div>
                          </div>
                      </a>

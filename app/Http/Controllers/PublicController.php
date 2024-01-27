@@ -15,6 +15,7 @@ class PublicController extends Controller
         "Koncerty" => "#events",
         "Nagrania" => "#records",
         "Dyskografia" => "#albums",
+        "Kontakt" => "#contact",
         "Oferta" => "/oferta-koncertowa.pdf",
         "Do pobrania" => [
             "Presspack" => "/presspack",

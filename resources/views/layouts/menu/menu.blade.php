@@ -27,10 +27,10 @@
               <li><a href="{{ $menuItems['Do pobrania']['Rider'] }}" target="blank">Rider</a></li>
             </ul>
           </li>
-          <li class="dropdown"><a href="#"><span>Kontakt</span> <i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown"><a href="{{ $menuItems['Kontakt']}}"><span>Kontakt</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="tel:{{ $phone }}"><i class="bi-telephone" ></i>+48602538140</a></a></li>
-              <li><a href="mailto:{{ $mail }}"><i class="bi-at" ></i>glownyzaworjazzu@gmail.com</a></a></li>
+              <li><a href="tel:{{ $phone }}"><i class="bi-telephone" ></i>{{ $phone }}</a></a></li>
+              <li><a href="mailto:{{ $mail }}"><i class="bi-at" ></i>{{ $mail }}</a></a></li>
             </ul>
           </li>
         </ul>
