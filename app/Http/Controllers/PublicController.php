@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\RecordLink;
 use App\Models\RecordSet;
 use App\Models\Style;
 use App\Services\FbRequestService;
@@ -45,10 +46,18 @@ class PublicController extends Controller
         //* STYLES */
         $styles = Style::all();
         //* YOUTUBE RECORDS */
-        //$records = 
+        $maxNumberOfRecordsInSplide = 8;
+
+        $unhighlightedRecords = RecordLink::where('highlighted', false)->get()->toArray();
+        $highlightedRecords = RecordLink::where('highlighted', true)->get()->toArray();
+        $selectedRecords = [];
+        $selectedRecords = array_merge($selectedRecords, $highlightedRecords);
+        shuffle($unhighlightedRecords);
+        $selectedRandomRecords = array_slice($unhighlightedRecords, 0, $maxNumberOfRecordsInSplide - count($highlightedRecords));
+        $selectedRecords = array_merge($selectedRecords, $selectedRandomRecords);
 
 
-        return $this->default('layouts.public', "", ["events"=>$actualEvents, "styles"=>$styles]);
+        return $this->default('layouts.public', "", ["events"=>$actualEvents, "styles"=>$styles, "records"=>$selectedRecords]);
 
     }
 

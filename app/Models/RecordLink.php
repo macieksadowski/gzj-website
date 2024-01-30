@@ -11,6 +11,8 @@ class RecordLink extends Model
 
     protected $fillable = [
         'url',
+        'title',
+        'highlighted'
     ];
 
     public function recordSet()
