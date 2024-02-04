@@ -1,8 +1,8 @@
 /node_modules
 /public_html/hot
-/public_html/storage
-/public_html/css/*
-/public_html/js/*
+public_html/storage
+public_html/css/
+public_html/js/
 /storage/*.key
 /vendor
 .env*
@@ -20,4 +20,4 @@ yarn-error.log
 public_html/generators/contracts/*
 public_html/generators/zaiks/*
 !public_html/generators/templates
-
+public_html/img/unused/
