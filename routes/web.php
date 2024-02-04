@@ -20,9 +20,9 @@ use App\Http\Controllers\GeneratorController;
 
 
 Route::get('/', [PublicController::class,'index']);
-Route::get('/o-zespole', [PublicController::class,'about']);
-Route::get('/koncerty', [PublicController::class,'events']);
-Route::get('/nagrania', [PublicController::class,'records']);
+// Route::get('/o-zespole', [PublicController::class,'about']);
+// Route::get('/koncerty', [PublicController::class,'events']);
+// Route::get('/nagrania', [PublicController::class,'records']);
 
 Route::get('/presspack', function () {
     return redirect()->away('https://drive.google.com/drive/folders/1Y5HuLKQnPW9BcxFSZzCFTOPeKsxM6ZfD?usp=sharing');
