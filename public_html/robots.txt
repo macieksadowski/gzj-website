@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /dashboard/
+Disallow: /generators/
+
+
+Sitemap: https://www.glownyzaworjazzu.pl/sitemap.xml
