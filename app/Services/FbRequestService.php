@@ -7,15 +7,18 @@ use Illuminate\Support\Facades\Http;
 use DateTime;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * This class is responsible for making requests to the Facebook Graph API.
+ */
 class FbRequestService {
 
     private $client;
     private $graphApiVersion;
     private $accessToken;
 
+    /** The request string for the events node of the Facebook Graph API */
     private $eventsRequest = 'fields=events{cover,id,name,start_time,place,ticket_uri,description,is_online}';
     
-
     public function __construct()
     {
         $this->client = new PendingRequest();
@@ -24,6 +27,10 @@ class FbRequestService {
 
     }
 
+    /** 
+     * This function makes a request to the Facebook Graph API and returns all events of the band.
+     * @return array Array of events
+     */
     public function getEvents()
     {
         $response = Http::withUrlParameters([
@@ -46,6 +53,10 @@ class FbRequestService {
         return $response_decoded['events']['data'];
     }
 
+    /** 
+     * This function returns all events that have not yet taken place.
+     * @return array Array of events, ordered by date in descending order
+     */
     public function getActualEvents()
     {
         $actualTime = new DateTime();

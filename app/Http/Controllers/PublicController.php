@@ -10,6 +10,11 @@ use App\Services\FbRequestService;
 
 class PublicController extends Controller
 {
+    /**
+     * The menu items of the navigation bar. The key is the name of the item, the value is the anchor to the section.
+     * If the value is an array, it means that the item has a dropdown menu. The key is the name of the dropdown item, the value is the anchor to the section.
+     * @var array
+     */
     public $menuItems = [
         "Start"=>"#hero",
         "O zespole" => "#about",
@@ -24,6 +29,10 @@ class PublicController extends Controller
         ],
     ];
 
+    /**
+     * The links to the social media of the band, used in the navigation bar and in the footer
+     * @var array
+     */
     public $socialLinks = [
         "FB"=> "https://facebook.com/glownyzaworjazzu",
         "YT"=> "https://www.youtube.com/channel/UCkOSkySgxXl_tACN8EWuOjQ",
@@ -61,11 +70,19 @@ class PublicController extends Controller
 
     }
 
+    /**
+     * Renders the view with the information about the band
+     * @return \Illuminate\View\View
+     */
     public function about()
     {
         return $this->default('o-zespole', "O-zespole.css");
     }
 
+    /** 
+     * Renders the view with all records of the band
+     * @return \Illuminate\View\View
+     */
     public function records()
     {
         $records = RecordSet::all();
@@ -73,6 +90,10 @@ class PublicController extends Controller
         return $this->default('nagrania', "Nagrania.css",["records"=>$records]);
     }
 
+    /**
+     * Renders the view with all upcoming events from the Facebook page of the band
+     * @return \Illuminate\View\View
+     */      
     public function events()
     {
         $fbService = new FbRequestService();
@@ -87,6 +108,13 @@ class PublicController extends Controller
 
 
 
+    /**
+     * This method is used to render the view with the default layout
+     * @param string $view The name of the view
+     * @param string $css The name of the additional css file
+     * @param array $additionalArgs Additional arguments to pass to the view
+     * @return \Illuminate\View\View
+     */
     public function default($view, $css,$additionalArgs = [])
     {
         setlocale(LC_ALL, 'pl_PL.UTF-8');
@@ -101,6 +129,13 @@ class PublicController extends Controller
         return view($view, array_merge($args,$additionalArgs));
     }
 
+    /**
+     * This method is used to render the view with the default layout and errors in a modal dialog
+     * @param string $view The name of the view
+     * @param array $errors The errors to display
+     * @param array $additionalArgs Additional arguments to pass to the view
+     * @return \Illuminate\View\View
+     */
     public function withErrors($view, $errors, $additionalArgs = []) {
         setlocale(LC_ALL, 'pl_PL.UTF-8');
         $args = [
