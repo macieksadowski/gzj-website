@@ -8,10 +8,21 @@
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 @foreach ($menuItems as $menuItem => $menuItemPath)
-                    <li><a class="nav-link 
-                  @if (str_contains($menuItemPath,'/' . Request::path())) active @endif
-                    "
-                            href="{{ $menuItemPath }}">{{ $menuItem }}</a></li>
+                    <li 
+                        @if (is_array($menuItemPath)) 
+                        class="dropdown"><a>{{ $menuItem }}<i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                @foreach ($menuItemPath as $menuItemDrop => $menuItemPathDrop)
+                                    <li><a href="{{ $menuItemPathDrop }}">{{ $menuItemDrop }}</a></li>
+                                @endforeach
+                            </ul>
+
+                        @else
+                        ><a class="nav-link @if (url()->current() == $menuItemPath) active @endif"
+                            href="{{ $menuItemPath }}">{{ $menuItem }}
+                        </a>
+                        @endif
+                    </li>
                 @endforeach
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
