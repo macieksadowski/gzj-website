@@ -1,0 +1,20 @@
+.eventSummary {
+
+    & .section-title p {
+        font-size: 3rem;
+    }
+
+    &__detailstable {
+        width: 100%;
+    }
+
+    &__actionBar {
+
+        padding-top: 3rem;
+
+        & button {
+            min-width: 180px;
+        }
+    }
+
+}

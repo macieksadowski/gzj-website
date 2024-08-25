@@ -1,18 +1,63 @@
-@import "../components/dual-listbox";
 @import "../components/modal-bottom";
 
+.dataTables_wrapper .dataTables_length select {
+    color: black;
+}
+
+.select2-dropdown {
+    z-index: 9999;
+}
+
+.deleteBtn {
+
+    & input {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+
+    & i {
+        cursor: pointer;
+    }
+}
+
+button a {
+    color: $color-text-white;
+
+    &:hover {
+        color: unset;
+    }
+}
+
+.cash-amount {
+    text-align: right;
+
+    &--negative {
+        color: red;
+    }
+}
+
+.number-cell {
+    text-align: right;
+}
+
+#eventsTable tr {
+    cursor: pointer;
+}
+
 .dashboard {
-    padding-top: 74px;
+    padding-top: 100px;
 
     &__generator {
         //padding:20px 0;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
-        align-items: center;
+        align-content: space-around;
         min-height: 40vh;
         flex-direction: column;
-        width: 100%;
+        width: 90%;
+        margin: auto;
         //margin-left:auto;
         //margin-right:auto;
         //text-align: left;
@@ -22,17 +67,15 @@
             width: 70px;
         }
 
-        & form {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            flex-direction: column;
-        }
+        // & form {
+        //     display: flex;
+        //     align-items: stretch;
+        //     flex-wrap: wrap;
+        //     flex-direction: column;
+        // }
 
         &__formrow {
             width: 100%;
-
-
         }
 
         & button {
@@ -46,17 +89,57 @@
 
         &__footer {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            flex-direction: column;
-            width: 100%;
             gap: 1rem;
             padding-top: 2.5rem;
-
-
-            @media (min-width: $medium-device) {
-                max-width: 80%;
-            }
         }
+    }
+}
+
+.dual-listbox {
+
+    &__button {
+        background-color: $color-accent !important;
+        color: $color-text-white !important;
+        border: 1px solid $color-accent-border !important;
+
+
+    }
+
+    @media (max-width: $large-device) {
+
+        & .listboxSelectedList,
+        & .listboxAvailableList {
+            width: 44%;
+            padding: 0 10px;
+        }
+
+        &__available,
+        &__selected {
+            width: unset !important;
+        }
+
+        
+        & .listboxFirstButtons {
+            
+                order: 4;
+                flex-direction: row;
+        }
+    }
+
+    @media (max-width: $medium-device) {
+        & .listboxAvailableList {
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        & .listboxSelectedList {
+            width: 90%;
+            padding: 0 10px;
+        }
+
+        &__buttons:not(.listboxFirstButtons) {
+            width: 8%;
+        }
+        
     }
 }
