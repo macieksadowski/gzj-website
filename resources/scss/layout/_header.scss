@@ -62,13 +62,6 @@
 
     & li {
         position: relative;
-    }
-
-    & a,
-    & a:focus {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         padding: 10px 0 10px 30px;
         font-size: 2.0rem;
         font-family: $cinzel;
@@ -76,20 +69,25 @@
         text-transform: uppercase;
         color: $color-text-white;
         white-space: nowrap;
-        transition: 0.3s;
+        transition: 0.03s;
+
+        & a:not([href]) {
+            color: $color-text-white;
+        }
 
         & i {
             font-size: 1.2rem;
             line-height: 0;
             margin-left: 5px;
         }
-    }
 
-    & a:hover,
-    & .active,
-    & .active:focus,
-    & li:hover>a {
-        color: $color-accent;
+        &:hover {
+            color: $color-accent;
+        }
+
+        & a.active {
+            color: $color-accent;
+        }
     }
 
     & .dropdown {
@@ -110,6 +108,7 @@
 
             & li {
                 min-width: 200px;
+                padding: 0;
             }
 
             & a {
@@ -216,18 +215,12 @@
         transition: 0.3s;
     }
 
-    & a,
-    & a:focus {
-        padding: 10px 20px;
-        font-size: 1.5rem;
-        color: #151515;
-    }
+    & li {
+        color: $color-black-todo;
 
-    & a:hover,
-    & .active,
-    & li:hover>a {
-        color: #151515;
-        background-color: $color-accent;
+        & a:not([href]) {
+            color: $color-black-todo;
+        }
     }
 
     & .dropdown {
@@ -242,24 +235,6 @@
             background: #fff;
             box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
 
-            & li {
-                min-width: 200px;
-            }
-
-            & a {
-                padding: 10px 20px;
-                color: #151515;
-
-                & i {
-                    font-size: 1.2rem;
-                }
-            }
-
-            & a:hover,
-            & .active:hover,
-            & li:hover>a {
-                background-color: $color-accent;
-            }
         }
 
         &>.dropdown-active {

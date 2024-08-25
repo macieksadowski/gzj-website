@@ -10,7 +10,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "pacerit/laravel-polish-validation-rules": "^6.0"
+        "pacerit/laravel-polish-validation-rules": "^6.0",
+        "yajra/laravel-datatables-oracle": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -20,6 +21,10 @@
         "phpunit/phpunit": "^10.1"
     },
     "autoload": {
+        "classmap": [
+            "app/Models",
+            "database"
+        ],
         "psr-4": {
             "App\\": "app/"
         }

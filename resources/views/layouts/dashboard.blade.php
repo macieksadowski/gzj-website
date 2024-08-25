@@ -46,5 +46,19 @@
 
 @section('scripts')
     @parent
-    <script src="{{ asset('/js/dashboard.min.js') }}"></script>
+    <script src="{{ asset('/js/dual-listbox.js') }}"></script>
+
+    <script src="{{ asset('/js/dataTables.min.js') }}"></script>
+    <script src="{{ asset('/js/dataTables.bootstrap5.min.js') }}"></script>
+    
+    <script src="{{ asset('/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('/js/buttons.bootstrap5.min.js') }}"></script>
+    
+    <script src="{{ asset('/js/dataTables.searchPanes.min.js') }}"></script>
+    <script src="{{ asset('/js/searchPanes.bootstrap5.min.js') }}"></script>
+    
+    <script src="{{ asset('/js/dataTables.select.min.js') }}"></script>
+    <script src="{{ asset('/js/select.bootstrap5.min.js') }}"></script>
+    
+    <script src="{{ asset('/js/dashboard.js') }}"></script>
 @endsection

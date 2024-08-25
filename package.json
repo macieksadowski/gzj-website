@@ -1,38 +1,63 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "npm run development",
-    "development": "mix",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production"
-  },
-  "devDependencies": {
-    "@splidejs/splide": "^4.1.4",
-    "@splidejs/splide-extension-video": "^0.8.0",
-    "aos": "^2.3.4",
-    "bootstrap": "^5.3.2",
-    "jquery": "^3.7.1",
-    "laravel-mix": "^6.0.6",
-    "sass": "^1.32.11",
-    "sass-loader": "^11.0.1",
-    "tailwindcss": "^2.0.2"
-  },
-  "type": "module",
   "name": "gzj-website",
   "version": "1.0.0",
-  "main": "webpack.mix.js",
-  "directories": {
-    "test": "tests"
-  },
-  "author": "",
-  "license": "ISC",
   "description": "",
+  "author": {
+    "name": "Maciej Sadowski",
+    "url": "https://github.com/macieksadowski"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/macieksadowski/gzj-website"
+  },
+  "scripts": {
+    "clean": "recursive-delete public_html",
+    "js": "rollup --config",
+    "css": "node sass.js",
+    "svg": "svgo -f resources/svg public_html/svg -r --disable=removeViewBox,removeTitle",
+    "img": "imagemin resources/img/**/* resources/img/* --out-dir=public_html/img --plugin=pngquant --plugin=mozjpeg --plugin=pngcrush --plugin=zopfli",
+    "copy": "recursive-copy resources/copy public_html",
+    "build-dirty": "npm-run-all -p js css copy",
+    "build": "npm-run-all -s clean build-dirty",
+    "watch-css": "chokidar './resources/**/*.scss' -c 'npm run css'",
+    "watch-js": "chokidar './resources/**/*.js' -c 'npm run js'",
+    "watch-svg": "chokidar './resources/**/*.svg' -c 'npm run svg'",
+    "watch-img": "chokidar './resources/img/**/*.*' -c 'npm run img'",
+    "watch-copy": "chokidar './resources/copy/**/*.*' -c 'npm run copy'",
+    "watch": "npm-run-all -p watch-css watch-js",
+    "server-start": "browser-sync start --files 'public_html' --server 'public_html'",
+    "server": "npm-run-all -p watch server-start"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "browser-sync": "^2.26.14",
+    "chokidar-cli": "^2.1.0",
+    "imagemin-cli": "^6.0.0",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-pngcrush": "^6.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "imagemin-zopfli": "^6.0.0",
+    "npm-run-all": "^4.1.5",
+    "recursive-fs": "^2.1.0",
+    "rollup": "^2.6.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.26.5",
+    "svgo": "^1.3.2"
+  },
   "dependencies": {
-    "datatables": "^1.10.18",
-    "jquery-modal": "^0.9.2",
-    "select2": "^4.1.0-rc.0"
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "bootstrap": "^5.3.3",
+    "datatables.net-bs5": "^2.0.2",
+    "datatables.net-buttons-bs5": "^3.0.1",
+    "datatables.net-searchpanes-bs5": "^2.3.0",
+    "datatables.net-select-bs5": "^2.0.0",
+    "dual-listbox": "^2.0.0",
+    "i": "^0.3.7",
+    "jquery": "^3.7.1",
+    "jszip": "^3.10.1",
+    "npm": "^10.5.0",
+    "sass": "^1.75.0",
+    "select2": "^4.1.0-rc.0",
+    "select2-bootstrap-theme": "^0.1.0-beta.10"
   }
 }

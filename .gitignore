@@ -21,3 +21,4 @@ public_html/generators/contracts/*
 public_html/generators/zaiks/*
 !public_html/generators/templates
 public_html/img/unused/
+package-lock.json
