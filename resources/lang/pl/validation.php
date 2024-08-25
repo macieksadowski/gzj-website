@@ -133,6 +133,9 @@ return [
         ],
         'songs' => [
             'required' => 'Musisz wybrać przynajmniej jednen utwór z listy.'
+        ],
+        'event-date' => [
+            'unique' => 'Wydarzenie z taką datą już istnieje'
         ]
     ],
 ];
