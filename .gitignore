@@ -17,8 +17,8 @@ yarn-error.log
 /.vscode
 /tmp
 *.log
-public_html/generators/contracts/*
-public_html/generators/zaiks/*
+public_html/generators/contracts/*.docx
+public_html/generators/zaiks/*.docx
 !public_html/generators/templates
 public_html/img/unused/
 package-lock.json
