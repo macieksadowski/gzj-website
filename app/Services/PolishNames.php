@@ -37,6 +37,32 @@ class PolishNames
 
     }
 
+    /**
+     * Function to convert polish PESEL number (personal ID number) to date of birth in single string format 
+     */
+    //generate function to convert PESEL to date of birth
+    public static function peselToDate($pesel) {
+        $dateOfBirth = substr($pesel, 4, 2);
+        $dateOfBirth .= '.';
+        $month = (int) substr($pesel, 2, 2);
+
+        if ($month > 20) {
+            $month = $month - 20;
+            $year = '.20';
+            $year .= substr($pesel, 0, 2);
+        } else {
+            $year = '.19';
+            $year .= substr($pesel, 0, 2);
+        }
+        if ($month < 10) {
+            $dateOfBirth .= '0';
+        }
+        $dateOfBirth .= $month;
+        $dateOfBirth .= $year;
+        
+        return $dateOfBirth;
+    }
+
     /** Makes a request to the website and returns the declined form of the given word. If the word is not found, it returns the word itself.
      * @param $word The word to decline
      * @param $url The url of the website to make the request

@@ -7,114 +7,111 @@
 
             <form method="get">
                 @csrf
-                <p class="dashboard__generator__formrow">Na kogo ma być wygenerowana umowa?
-                    <select onchange="this.form.submit()" id="osoba" name="id">
-
+                <div class="form-group row">
+                    <label for="contract-person-select">Na kogo ma być wygenerowana umowa?</label>
+                    <select onchange="this.form.submit()" id="contract-person-select" name="id" class="form-select">
                         @foreach ($members as $member)
                             <option @if ($member->id == $selected->id) selected @endif value={{ $member->id }}>
                                 {{ $member->first_name }} {{ $member->last_name }}</option>';
                         @endforeach
                     </select>
-                </p>
-
+                </div>
             </form>
             <form method="post">
                 @csrf
                 <input type="hidden" name="member_id" value="{{ $selected->id }}">
-                <p class="dashboard__generator__formrow">Wybierz typ umowy:
-                    <input type="radio" id="zlecenie" name="contractType" value="zlecenie" checked>
-                    <label class="item" for="zlecenie">
-                        Zlecenie
-                    </label>
-                    <input type="radio" id="dzielo" name="contractType" value="dzielo">
-                    <label class="item" for="dzielo">
-                        O dzieło
-                    </label>
-                </p>
-                <div id="personal-data">
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Imię:</label>
-                        <input disabled class="data-field" type="text" id="first_name" name="data[first_name]"
-                            value="{{ $selected->first_name }}">
-                        <label>
-                            Nazwisko:</label>
-                        <input disabled class="data-field" type="text" id="last_name" name="data[last_name]"
-                            value="{{ $selected->last_name }}">
+                <fieldset class="row mb-3">
+                    <legend class="col-form-label col-sm-2 pt-0">Typ umowy</p>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input type="radio" id="zlecenie" name="contractType" value="zlecenie" checked class="form-check-input">
+                            <label for="zlecenie" class="form-check-label">Zlecenie</label>
+                        </div>
+                        <div class="form-check">                    
+                            <input type="radio" id="dzielo" name="contractType" value="dzielo" class="form-check-input">
+                            <label class="item" for="dzielo" class="form-check-label">O dzieło</label>
+                        </div>
                     </div>
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Ulica:
-                        </label>
-                        <input disabled class="data-field" type="text" id="street" name="data[street]"
+                </fieldset>
+                <div class="row g-3" id="personal-data">
+                        <div class="col-6">
+                            <label for="first_name" class="form-label">Imię</label>
+                            <input disabled class="form-control" type="text" id="first_name" name="data[first_name]"
+                                value="{{ $selected->first_name }}">
+                        </div>
+                        <div class="col-6">
+                            <label for="last_name" class="form-label">Nazwisko</label>
+                            <input disabled class="form-control" type="text" id="last_name" name="data[last_name]"
+                                value="{{ $selected->last_name }}">
+                        </div>
+                    <div class="col-9">
+                        <label for="street" class="form-label">Ulica</label>
+                        <input disabled class="form-control" type="text" id="street" name="data[street]"
                             value="{{ $selected->street }}">
-                        <label>
-                            Nr domu:
-                        </label>
-                        <input disabled class="data-field" type="text" id="house_no" name="data[house_no]"
+                    </div>
+                    <div class="col-3">
+                        <label for="house_no" class="form-label">Nr domu</label>
+                        <input disabled class="form-control" type="text" id="house_no" name="data[house_no]"
                             value="{{ $selected->house_no }}">
                     </div>
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Kod pocztowy:</label>
-                        <input disabled class="field" id="postal_code" name="data[postal_code]"
+                    <div class="col-3">
+                        <label for="postal_code" class="form-label">Kod pocztowy</label>
+                        <input disabled class="form-control" id="postal_code" name="data[postal_code]"
                             value="{{ $selected->postal_code }}" autocomplete="off" maxlength="6" type="text" />
-                        <label>
-                            Miasto:
-                        </label>
-                        <input disabled class="data-field" type="text" id="town" name="data[town]"
+                    </div>
+                    <div class="col-9">
+                        <label for="town" class="form-label">Miasto</label>
+                        <input disabled class="form-control" type="text" id="town" name="data[town]"
                             value="{{ $selected->town }}">
                     </div>
-                    <div class="dashboard__generator__formrow"><label>PESEL:</label>
-                        <input disabled class="data-field" type="text" id="pesel" name="data[pesel]"
+                    <div class="col-4">
+                        <label for="pesel" class="form-label">PESEL:</label>
+                        <input disabled class="form-control" type="text" id="pesel" name="data[pesel]"
                             value="{{ $selected->pesel }}" inputmode="numeric" maxlength="11">
                     </div>
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Miejsce urodzenia:
-                        </label>
-                        <input disabled class="data-field" type="text" id="birth_place" name="data[birth_place]"
+                    <div class="col-8">
+                        <label for="birth_place" class="form-label">Miejsce urodzenia</label>
+                        <input disabled class="form-control" type="text" id="birth_place" name="data[birth_place]"
                             value="{{ $selected->birth_place }}">
                     </div>
-
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Nr konta:
-                        </label>
-                        <input disabled class="data-field" type="text" id="account_no" name="data[account_no]"
+                    <div class="col-12">
+                        <label for="account_no" class="form-label">Numer konta</label>
+                        <input disabled class="form-control" type="text" id="account_no" name="data[account_no]"
                             value="{{ $selected->account_no }}" inputmode="numeric" maxlength="32">
                     </div>
-                    <div class="dashboard__generator__formrow">
-                        <label>
-                            Urząd skarbowy:
-                        </label>
-                        <input disabled class="data-field" type="text" id="tax_office" name="data[tax_office]"
+                    <div class="col-12">
+                        <label for="tax_office" class="form-label">Urząd skarbowy</label>
+                        <input disabled class="form-control" type="text" id="tax_office" name="data[tax_office]"
                             value="{{ $selected->tax_office }}">
                     </div>
                 </div>
                 <div class="dashboard__generator__footer">
-                    <input name="fileName" type="text" placeholder="Nazwa pliku" onfocus="this.placeholder=''"
+                    <input class="form-control" name="fileName" type="text" placeholder="Nazwa pliku" onfocus="this.placeholder=''"
                         onblur="this.placeholder='Nazwa pliku'">
-                    <input name="edit" type="button"  id="button-edit" value="Zmień dane">
-                    <input type="button" name="copy" id="button-copy" value="Kopiuj dane">
+                    <input name="edit" type="button"  id="button-edit" value="Zmień dane"  class="btn btn-primary">
+                    <input type="button" name="copy" id="button-copy" value="Kopiuj dane"  class="btn btn-primary">
                     <input formaction="{{ route('generateContract') }}" name="generate" type="submit"
-                        value="Generuj dokument">
+                        value="Generuj dokument"  class="btn btn-primary">
                 </div>
             </form>
         </div>
     </section>
     <!-- Modal -->
-    <div class="modal fade" id="clipboardModal" tabindex="-1" role="dialog" aria-labelledby="clipboardModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal fade" tabindex="-1"  id="clipboardModal" aria-labelledby="clipboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kopiuj dane</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                </div>
                 <div class="modal-body" id="modal-text">
                     ...
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="modal-copy-button">Kopiuj</button>
+                    <button type="button" class="btn btn-primary" id="modal-copy-button">Kopiuj</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div>                    
+
 @endsection

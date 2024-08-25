@@ -4,9 +4,21 @@ namespace App\Services;
 
 use ZipArchive;
 
+/**
+ * This class is responsible for generating MS Word documents from templates.
+ */
 class DocumentGenerator
 {
 
+    /**
+     * This function generates a MS Word document with a fullfilled contract with given member data from an empty template file.
+     *
+     * @param Object $member Object with member data
+     * @param String $fileName Name of generated file (without extension)
+     * @param String $outputLocation Path  where generated file should be saved
+     * @param String $inputTemplate Filepath to a template document (it has to be a MS Word .docx document)
+     * @return String Path to ouptut file when succesfully generated or empty String otherwise
+     */
     public static function generateContract($member, $fileName, $outputLocation, $inputTemplate)
     {
         //Conversion of PESEL number to Date of Birth String
@@ -66,7 +78,7 @@ class DocumentGenerator
         foreach ($songs as $key => $song) {
             $row = $rowTemp;
             $row = str_replace('ID', ($key + 1), $row);
-            $row = str_replace('TYTUL', $song->title, $row);
+            $row = str_replace('TYTUL', $song->title_official, $row);
             $row = str_replace('KOMPOZYTOR', $song->composer, $row);
             $row = str_replace('AUTOR', $song->text_author, $row);
             $to_replace .= $row;
@@ -96,7 +108,7 @@ class DocumentGenerator
 
         //Make new MS Word file
         $zip = new ZipArchive();
-
+ 
         //Make a copy of template file
         copy($template, $outputLocation . $outputFilename);
 
