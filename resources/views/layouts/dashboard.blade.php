@@ -59,6 +59,9 @@
     
     <script src="{{ asset('/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('/js/select.bootstrap5.min.js') }}"></script>
+
+    <script src="{{ asset('/js/select2.min.js') }}"></script>
+    <script src="{{ asset('/js/select2.pl.js') }}"></script>
     
     <script src="{{ asset('/js/dashboard.js') }}"></script>
 @endsection
