@@ -5,6 +5,7 @@
 .btn-primary {
     background-color: $color-accent !important; /* Change the background color */
     border-color: $color-accent-border !important; /* Change the border color */
+    color: $color-text-white; /* Change the text color */
 }
 
 /* Customizing the primary button color on hover */
@@ -15,7 +16,7 @@
 
 .btn {
     font-family: $raleway;
-    color: $color-text-white;
+    //color: $color-text-white;
     font-weight: 600;
     box-shadow: $shadow-standard;
     text-transform: uppercase;
