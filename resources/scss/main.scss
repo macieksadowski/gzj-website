@@ -1,17 +1,17 @@
-// @import "./aos.css";
-// @import "./splide.min.css";
-// @import "./splide-extension-video.min.css";
-// @import "./select2.min.css";
-// @import "./table.css";
-// @import "./bootstrap.min.css";
-// @import "./dual-listbox.css";
+@import "../../node_modules/bootstrap/scss/functions";
+
+@import "./base/colors";
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+
 @import "../css/aos.css";
 @import "../css/splide.min.css";
 @import "../css/splide-extension-video.min.css";
 @import "../css/select2.min.css";
 @import "../css/select2-bootstrap.min.css";
 @import "../css/table.css";
-@import "../css/bootstrap.min.css";
+//@import "../css/bootstrap.min.css";
 @import "../css/dual-listbox.css";
 @import "../css/dataTables.bootstrap5.min.css";
 @import "../css/searchPanes.bootstrap5.min.css";
