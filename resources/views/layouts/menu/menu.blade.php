@@ -10,7 +10,7 @@
           <li><a class="nav-link scrollto " href="{{ $menuItems['Nagrania']}}">Nagrania</a></li>
           <li><a class="nav-link scrollto" href="{{ $menuItems['Koncerty']}}">Koncerty</a></li>
           <li><a class="nav-link scrollto " href="{{ $menuItems['Dyskografia']}}">Dyskografia</a></li>
-          <li class="dropdown"><a href="#"><span>Do pobrania</span> <i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown"><span>Do pobrania</span> <i class="bi bi-chevron-down"></i>
             <ul>
               <!--
               <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
@@ -27,10 +27,10 @@
               <li><a href="{{ $menuItems['Do pobrania']['Rider'] }}" target="blank">Rider</a></li>
             </ul>
           </li>
-          <li class="dropdown"><a href="{{ $menuItems['Kontakt']}}"><span>Kontakt</span> <i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown"><a href="{{ $menuItems['Kontakt']}}" class="nav-link"><span>Kontakt</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="tel:{{ $phone }}"><i class="bi-telephone" ></i>{{ $phone }}</a></a></li>
-              <li><a href="mailto:{{ $mail }}"><i class="bi-at" ></i>{{ $mail }}</a></a></li>
+              <li><a href="tel:{{ $phone }}" class="nav-link"><i class="bi-telephone" ></i>{{ $phone }}</a></a></li>
+              <li><a href="mailto:{{ $mail }}" class="nav-link"><i class="bi-at" ></i>{{ $mail }}</a></a></li>
             </ul>
           </li>
         </ul>
