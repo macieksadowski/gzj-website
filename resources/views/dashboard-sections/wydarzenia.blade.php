@@ -4,27 +4,34 @@
 @section('inner-content')
 
 <section>
-    <div class="generator">
-        (Kliknij, aby wyświetlić szczegóły wydarzenia)<br/><br/>
+    <div class="dashboard__generator">
+        (Kliknij, aby wyświetlić szczegóły wydarzenia)
+
+        <br/><br/>
         <table id="eventsTable" class="hover responsive nowrap" >
             <thead>
                 <th>Id</th>
                 <th data-priority="1">Nazwa Wydarzenia</th>
                 <th data-priority="2">Data</th>
-                <th>Typ</th>
+                <th data-priority="3">Saldo</th>
+                <th data-priority="4">Liczba umów</th>
+                <th data-priority="5">Typ</th>
             </thead>
-
+            <tbody>
         @foreach ($pageVariable as $event)
 
             <tr>
-                <td>{{ $event->ev_id}}</td>
+                <td>{{ $event->id}}</td>
                 <td>{{ $event->name}}</td>
                 <td>{{ $event->date}}</td>
-                <td>{{ $event->type->name}}</td>
+                <td class="cash-amount @if ($event->saldo < 0) cash-amount--negative @endif">{{ $event->saldo}}</td>
+                <td class="number-cell">{{ $event->contracts_amount}}</td>
+                <td>{{ $event->type->value}}</td>
             </tr>
 
 
             @endforeach
+            </tbody>
         </table>
     </div>
 
@@ -35,50 +42,7 @@
 @section('scripts')
     @parent
 
-    <script>
-
-
-        $(document).ready(function() {
-            var table =  $('#eventsTable').DataTable( {
-                dom: 'lfrtip',
-                buttons: [
-                    {
-                    text: 'Reload',
-                    ction: function ( e, dt, node, config ) {
-                    dt.ajax.reload();
-                    }
-                    }
-                ],
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.11.4/i18n/pl.json'
-                },
-                "autoWidth": false,
-                "order": [ 2, 'desc' ],
-                "columns": [
-                    null,
-                    { "width": "60%" },
-                    null,
-                    null
-
-                ],
-                responsive: {
-                    details: false
-                }
-
-
-            } );
-
-
-
-            $('#eventsTable').on('click', 'tbody tr', function() {
-            window.location.href = `{{URL::route('eventy')}}/${table.row(this).data()[0]}`;
-            });
-
-
-        } );
-
-
-    </script>
+    <script src="{{ asset('/js/events.js') }}"></script>
 
 
 @endsection
