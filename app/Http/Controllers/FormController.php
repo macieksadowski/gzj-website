@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Contract;
+use App\Models\Event;
 use App\Models\Member;
 use Illuminate\Http\Request;
 
@@ -16,11 +17,20 @@ class FormController extends Controller
 
     public function newContract(Request $request)
     {
-        $contract = new Contract;
-        $contract->mem_id = $request->member;
-        $contract->ev_id = $request->event;
-        $contract->amount = $request->amount;
-        $contract->save();
+        $validatedData = $request->validate([
+            'contract' => 'required',
+            'contract-amount' => 'nullable|decimal:2',
+            'contract-event' => 'exists:events,id',
+            'contract-person' => 'nullable|exists:members,id',
+        ]);
+  
+        if ($validatedData['contract'] != 'no') {
+            $contract = new Contract;
+            $contract->contract_amount = $validatedData['contract-amount'];
+            $contract->event_id = $validatedData['contract-event'];
+            $member = Member::find($validatedData['contract-person']);
+            $member->contracts()->save($contract);
+        }
 
         return back();
     }
