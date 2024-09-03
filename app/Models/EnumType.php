@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
+use EnumTypeDiscriminator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FinanceCategory extends Model
+class EnumType extends Model
 {
     use HasFactory;
 
-    public function type()
-    {
-        return $this->belongsTo(EnumType::class, 'enum_type_id');
-    }
-
+    protected $casts = [
+        'discriminator' => EnumTypeDiscriminator::class
+    ];
 }

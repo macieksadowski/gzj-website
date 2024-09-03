@@ -9,5 +9,9 @@ class Member extends Model
 {
     use HasFactory;
 
+    public function contracts() {
+        return $this->hasMany(Contract::class);
+    }
+
 
 }

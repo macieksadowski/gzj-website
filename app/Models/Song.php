@@ -13,6 +13,12 @@ class Song extends Model
         'title',
         'performer',
         'composer',
-        'text_author'
+        'text_author',
+        'title_official',
+
+        'tempo',
+        'drums_annotations',
+        'announcer_annotations_1',
+        'announcer_annotations_2'
     ];
 }

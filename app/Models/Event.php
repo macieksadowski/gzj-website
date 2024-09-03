@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Event extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ev_id';
-
-    public function type()
-    {
-        return $this->belongsTo(EventType::class,'type_id');
-    }
-
     public function contracts() {
-        return $this->hasMany(Contract::class,'ev_id');
+        return $this->hasMany(Contract::class);
     }
+    public function type() {
+        return $this->belongsTo(EnumType::class);
+    }
+    
+    public function setlistEntries() {
+        return $this->hasMany(SetlistEntry::class);
+    }
+
+    protected $fillable = ['date', 'name'];
 }
