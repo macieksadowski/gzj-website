@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\GeneratorController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ZaiksMusicWorksController;
 use Illuminate\Support\Facades\Storage;
 
 /*
@@ -63,6 +64,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/contracts/{id}', [DashboardController::class, 'contract'])->name('contracts.show');
         Route::post('/contracts', [FormController::class, 'newContract'] )->name('newContract');
 
+        Route::get('/zaiks-music-works', [ZaiksMusicWorksController::class, 'index']);
+        Route::post('/zaiks-music-works/search', [ZaiksMusicWorksController::class, 'search'])->name('zaiks-music-works.search');
         //songs
         Route::get('/songs', [SongsController::class, 'index'])->name('songs');
 
