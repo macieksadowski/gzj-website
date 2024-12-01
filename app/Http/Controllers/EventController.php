@@ -29,6 +29,11 @@ class EventController extends Controller
         return $this->dashboardCtrl->default('dashboard-sections.wydarzenia', $events);
     }
 
+    public function getAllEvents() {
+        $events = Event::orderBy('date', 'desc')->get();
+        return response()->json($events);
+    }
+
     /**
      * Show the step One Form for creating a new event.
      *

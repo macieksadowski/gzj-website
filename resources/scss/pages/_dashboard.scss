@@ -4,6 +4,10 @@
     color: black;
 }
 
+.dt-processing {
+    position: fixed !important;
+}
+
 .select2-dropdown {
     z-index: 9999;
 }
@@ -68,6 +72,10 @@ button a {
             gap: 1rem;
             padding-top: 2.5rem;
         }
+    }
+
+    &__table-button {
+        margin: 0 10px;
     }
 }
 

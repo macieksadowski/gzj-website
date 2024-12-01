@@ -66,28 +66,23 @@ Route::group(['middleware' => 'auth'], function () {
         //songs
         Route::get('/songs', [SongsController::class, 'index'])->name('songs');
 
-        // Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
-        // Route::get('/finances/{id}', [FinancesController::class, 'displayTransaction'] )->name('editTransaction')->where('id', '[0-9]+');
+        Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
+        Route::post('/finances', [FinancesController::class, 'newTransaction'] )->name('newTransaction');
+        Route::post('/finances/{id}', [FinancesController::class, 'editTransaction'] );
+        Route::get('/finances/{id}', [FinancesController::class, 'displayTransaction'] )->name('editTransaction')->where('id', '[0-9]+');
+        Route::get('/finances/delete/{id}', [FinancesController::class, 'deleteTransaction'])->name('deleteTransaction');
 
-        // Route::get('/finances/source', function () {
-        //     $file = Storage::disk('public')->get('transactions.json');
-        //     return response($file, 200)
-        //         ->header('Content-Type', 'application/json')
-        //         ->header('Access-Control-Allow-Origin', '*');
-        // });
+        Route::get('/finances/source', function () {
+            $file = Storage::disk('public')->get('transactions.json');
+            return response($file, 200)
+                ->header('Content-Type', 'application/json')
+                ->header('Access-Control-Allow-Origin', '*');
+        });
 
-        // Route::get('finances/categories', [FinancesController::class, 'categories'] )->name('categories');
-        // Route::post('finances/categories', [FinancesController::class, 'newCategory'] )->name('newCategory');
-        // Route::post('finances/categories/{id}', [FinancesController::class, 'editCategory'] );
-        
-        // Route::post('/finances/new-transaction', [FinancesController::class, 'newTransaction'] )->name('newTransaction');
-        // Route::post('/finances/{id}', [FinancesController::class, 'editTransaction'] );
-        // Route::post('/finances/delete/{id}', [FinancesController::class, 'deleteTransaction'])->name('deleteTransaction');
-
-        // Route::group(['prefix' => '/api'], function () {
-        //     Route::get('/income-categories', [FinancesController::class, 'getIncomeCategories'])->name('api.incomeCategories');
-        //     Route::get('/expense-categories', [FinancesController::class, 'getExpenseCategories'])->name('api.expenseCategories');
-        // });
+        Route::get('finances/categories', [FinancesController::class, 'categories'] )->name('categories');
+        Route::post('finances/categories', [FinancesController::class, 'newCategory'] )->name('newCategory');
+        Route::post('finances/categories/{id}', [FinancesController::class, 'editCategory'] );
+    
 
 
     });
