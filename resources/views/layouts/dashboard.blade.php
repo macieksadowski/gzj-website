@@ -64,4 +64,6 @@
     <script src="{{ asset('/js/select2.pl.js') }}"></script>
     
     <script src="{{ asset('/js/dashboard.js') }}"></script>
+
+    @stack('scripts')
 @endsection

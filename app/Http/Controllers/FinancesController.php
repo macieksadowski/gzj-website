@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\FinanceCategory;
 use App\Models\Transaction;
-use App\Models\Event;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Log;
 use Yajra\DataTables\DataTables;
+use function Laravel\Prompts\alert;
 
 class FinancesController extends Controller
 {
@@ -20,6 +20,8 @@ class FinancesController extends Controller
 
     public function index(Request $request) {
 
+        $totalSaldo = $this->getTotalSaldo();
+
         $validator = Validator::make($request->all(), [
             'start-date' => 'date',
             'end-date' => 'date',
@@ -27,6 +29,10 @@ class FinancesController extends Controller
 
         $startDate = $request->has('start-date') ? $request->input('start-date') : date('Y-m-d', strtotime('-12 months'));
         $endDate = $request->has('end-date') ? $request->input('end-date') : date('Y-m-d');
+
+        $newTransactionContainer = new Transaction();
+        $newTransactionContainer->date = date('Y-m-d');
+        $newTransactionContainer->category()->associate(FinanceCategory::where('name', 'Inne')->first());
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
@@ -72,30 +78,41 @@ class FinancesController extends Controller
                 ->searchPane('cat_id', function() {
                     return FinanceCategory::query()->get(['id as value', 'name as label']);
                 })
-                ->searchPane('ev_id', function() {
-                    $events = Event::orderBy('date', 'desc')->get();
-                    $result = $events->map(function ($event) {
-                        return [
-                            'value' => $event->id,
-                            'label' => $event->name . ' - ' . date('Y', strtotime($event->date)),
-                        ];
-                    });
-                
-                    return $result;
+                ->searchPane('ev_id', function() use ($transactions) {
+                    // Convert to collection and sort by event date
+                    $sortedTransactions = collect($transactions)
+                    ->filter(fn($t) => isset($t->event))
+                    ->sortByDesc(fn($t) => $t->event->date);
 
+                    Log::info($sortedTransactions);
+                    
+                    $events = $sortedTransactions
+                    ->map(function($transaction) {
+                        return [
+                            'value' => $transaction->event->id,
+                            'label' => $transaction->event->name . ' - ' . date('Y', strtotime($transaction->event->date))
+                        ];
+                    })
+                    ->unique()
+                    ->values()
+                    ->all();
+
+                    Log::info($events);
+
+                    return $events;
                 })
                 ->make(true);
         }
 
-        return $this->dashboardCtrl->default('dashboard-sections.finances', ['startDate' => $startDate, 'endDate' => $endDate]);
+        return $this->dashboardCtrl->default('dashboard-sections.finances', ['startDate' => $startDate, 'endDate' => $endDate, 'newTransactionContainer' => $newTransactionContainer, 'totalSaldo' => $totalSaldo]);
     }
-
 
     public function categories()
     {
         $categories = FinanceCategory::all();
         return $this->dashboardCtrl->default('dashboard-sections.finances-categories', ['categories' => $categories]);
     }
+
     public function getIncomeCategories()
     {
         $incomeCategories = FinanceCategory::whereRelation('type', 'value', 'WPŁYWY')->get();
@@ -120,6 +137,7 @@ class FinancesController extends Controller
 
         return redirect()->route('categories');
     }
+
     public function editCategory(Request $request, $id)
     {
         $category = FinanceCategory::find($id);
@@ -128,29 +146,16 @@ class FinancesController extends Controller
 
         return redirect()->route('categories');
     }
-
     public function newTransaction(Request $request)
     {
-        $validatedData = $request->validate([
-            'date' => 'required|date',
-            'category' => 'required|exists:App\Models\FinanceCategory,id',
-            'amount' => 'required|numeric',
-            'description' => 'required',
-            'event' => 'exists:App\Models\Event,id',
-            'cash-transaction' => 'required|boolean'
-        ]);
+        $validatedData = $this->validateTransactionRequest($request);
 
         $transaction = new Transaction();
-        $transaction->date = $validatedData['date'];
-        $transaction->category()->associate(FinanceCategory::find($validatedData['category']));
-        $transaction->amount = $validatedData['amount'];
-        $transaction->description = $validatedData['description'];
-        $transaction->event()->associate($validatedData['event']);
-        $transaction->cash_transaction = $validatedData['cash-transaction'];
+        $this->fillTransaction($transaction, $validatedData);
 
         $transaction->save();
 
-        return redirect()->withSuccess('Transakcja dodana pomyślnie')->route('finances');
+        return redirect()->route('finances')->withSuccess('Transakcja dodana pomyślnie');
     }
 
     public function displayTransaction($id)
@@ -161,37 +166,60 @@ class FinancesController extends Controller
 
     public function editTransaction(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $validatedData = $this->validateTransactionRequest($request);
+
+        $transaction = Transaction::find($id);
+        $this->fillTransaction($transaction, $validatedData);
+
+        $transaction->save();
+
+        return redirect()->route('finances')->withSuccess('Transakcja zaktualizowana pomyślnie');
+    }
+
+    private function validateTransactionRequest($request)
+    {
+        $validated = $request->validate([
             'date' => 'required|date',
             'category' => 'required|exists:App\Models\FinanceCategory,id',
             'amount' => 'required|numeric',
             'description' => 'required',
-            'event' => 'exists:App\Models\Event,id',
-            'cash-transaction' => 'required|boolean'
+            //event can be null but if it's not null it has to exist
+            'event' => 'nullable|exists:App\Models\Event,id'
         ]);
+        if($request->has('cash')){
+            $validated['cash'] = true;
+        }
+        return $validated;
+    }
 
-        $transaction = Transaction::find($id);
+    private function fillTransaction($transaction, $validatedData)
+    {
         $transaction->date = $validatedData['date'];
         $transaction->category()->associate(FinanceCategory::find($validatedData['category']));
         $transaction->amount = $validatedData['amount'];
         $transaction->description = $validatedData['description'];
         $transaction->event()->associate($validatedData['event']);
-        $transaction->cash_transaction = $validatedData['cash-transaction'];
-
-        $transaction->save();
-
-        return redirect()->withSuccess('Transakcja zaktualizowana pomyślnie')->route('finances');
+        if(isset($validatedData['cash'])) {
+            $transaction->cash_transaction = true;
+        }
     }
 
     public function deleteTransaction(Request $request)
     {
-        $validatedData = $request->validate([
-            'id' => 'required|exists:App\Models\Transaction,id',
-        ]);
-        $transaction = Transaction::find($validatedData['id']);
-        $transaction->delete();
+        $transactionId = $request->id;
+        if (isset($transactionId) && Transaction::where('tr_id', $transactionId)->exists()) {
+            $transaction = Transaction::find($transactionId);
+            $transaction->delete();
+            return redirect()->back()->with('success', 'Transakcja usunięta pomyślnie');
+        } else {
+            return redirect()->back()->with('error', 'Transakcja nie istnieje');
+        }
+    }
 
-        return redirect()->with('success', 'Transakcja usunięta pomyślnie')->route('finances');
+    private function getTotalSaldo()
+    {
+        $totalSaldo = Transaction::sum('amount');
+        return $totalSaldo;
     }
 
 }

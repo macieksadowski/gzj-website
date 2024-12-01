@@ -16,13 +16,17 @@ class EditTransactionForm extends Component
     public $events;
 
     public $transaction;
+
+    public $action;
     /**
      * Create a new component instance.
      */
-    public function __construct($transaction = null)
+    public function __construct($transaction = null, $action)
     {
         $this->transaction = $transaction;
 
+        $this->action = $action;
+        
         $this->financeCategories = FinanceCategory::all();
         
         $this->events = Event::all();
