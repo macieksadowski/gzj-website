@@ -10,17 +10,28 @@
 
         <div class="col-sm-12 col-md-8 about__content" >
           <p class="fst-italic">
-            Przed Państwem Główny Zawór Jazzu - dziewięcioosobowy zespół muzyczny z Poznania. Trzy wokalistki oraz pięciu instrumentalistów zabierze słuchaczy w&nbsp;niezwykłą podróż w&nbsp;czasie i&nbsp;przestrzeni. Jazz, swing, blues, a&nbsp;nawet latino w połączeniu ze znanymi polskimi przebojami muzyki rozrywkowej takich artystów jak: Kult, Maanam, Dawid Podsiadło, Krzysztof Zalewski czy&nbsp;Perfect pozwolą zanurzyć&nbsp;się w&nbsp;niepowtarzalnym klimacie retro ubiegłego wieku. Radiowe utwory nabierają nowego charakteru oscylując między wzruszającymi balladami a&nbsp;tanecznymi swingami.
+            Przed Państwem Główny Zawór Jazzu - ośmioosobowy zespół muzyczny z&nbsp;Poznania, 
+            który nadaje największym polskim przebojom unikalne, jazzowe brzmienie. 
+            Trzy utalentowane wokalistki, dynamiczna sekcja rytmiczna oraz pełne energii 
+            instrumenty dęte tworzą wyjątkowe aranżacje czerpiąc inspiracje z&nbsp;różnych 
+            nurtów jazzu – od swingu, przez bluesa, latin, po&nbsp;soul i&nbsp;R&B. 
+            W repertuarze grupy można usłyszeć utwory artystów takich jak Kult, 
+            Maanam, Perfect, Sanah, Kayah, Sławomir czy Dawid Podsiadło – w&nbsp;świeżych, 
+            niebanalnych wersjach, w których klasyka spotyka się z&nbsp;żywą, 
+            emocjonalną interpretacją.
           </p>
           <p><br /></p>
           <p class="fst-italic">
-            Zespół występuje zarówno w&nbsp;kameralnych klubach, jak i&nbsp;na&nbsp;większych scenach,
-            a&nbsp;także na&nbsp;eventach firmowych. Repertuar jest zawsze dostosowany do&nbsp;charakteru
-            wydarzenia. Spektrum utworów, których retro&#x2011;aranżacje są&nbsp;prezentowane
-            na&nbsp;koncertach, oraz&nbsp;różnorodność gatunków zainteresują zarówno starsze pokolenia,
-            jak&nbsp;i&nbsp;młodzież. Podczas koncertów kreacje rodem z&nbsp;pierwszej połowy zeszłego
-            stulecia ściśle współgrają ze&nbsp;stylistyką utworów, zabierając słuchacza
-            w&nbsp;niepowtarzalną podróż w&nbsp;czasie.
+            
+            Zespół występuje zarówno w kameralnych klubach, jak&nbsp;i&nbsp;na&nbsp;dużych scenach 
+            plenerowych, festiwalach, eventach firmowych oraz w ośrodkach kultury. 
+            Każdy koncert to niepowtarzalna muzyczna podróż – płynna i&nbsp;angażująca, 
+            balansuje między nastrojowymi balladami a tanecznymi rytmami. 
+            To prawdziwe, energetyczne show, w którym muzyka wykonywana na&nbsp;żywo i
+            &nbsp;stylizacja artystów tworzą wyjątkowy klimat.
+          </p>
+          <p class="fst-italic">
+            Odkryj na nowo największe polskie hity w jazzowych aranżacjach!
           </p>
         </div>
 
