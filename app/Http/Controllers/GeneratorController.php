@@ -36,7 +36,10 @@ class GeneratorController extends Controller
             try {
                 $documentPath = self::$ZAIKS_TEMPLATE;
                 $documentPath = DocumentGenerator::generateZaiks($songs,$fileName,self::$ZAIKS_OUTPUT_LOCATION,self::$ZAIKS_TEMPLATE);
-                return response()->download(($documentPath));
+                return response()->download($documentPath, $fileName . '.docx', [
+                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+                ]);
             } catch (\Throwable $e) {
                 Log::error($e);
                 return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);

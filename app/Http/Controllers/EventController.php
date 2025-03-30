@@ -13,6 +13,8 @@ use App\Models\Song;
 use EnumTypeDiscriminator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -29,9 +31,136 @@ class EventController extends Controller
         return $this->dashboardCtrl->default('dashboard-sections.wydarzenia', $events);
     }
 
+    public function searchEvents(Request $request) {
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+
+        $searchQuery = $request->input('search', '');
+
+        $events = Event::where('name', 'LIKE', '%' . $searchQuery . '%')
+            ->orderBy('date', 'desc') 
+            ->take(10) 
+            ->get(['id', 'name', 'date'])
+            ->transform(function ($event) {
+                $event->name = $event->name . ' - ' . date('d.m.Y', strtotime($event->date));
+                return $event;
+            });
+
+        return response()->json($events);
+    }
+
     public function getAllEvents() {
         $events = Event::orderBy('date', 'desc')->get();
+        $events->transform(function ($event) {
+            $event->saldo = Transaction::where('ev_id',$event->id)->sum('amount');
+            $event->contracts_amount = Contract::where('event_id',$event->id)->count();
+            $event->type = $event->type->value;
+            return $event;
+        });
         return response()->json($events);
+    }
+
+    public function getEventTypes() {
+        $eventTypes = EnumType::where('discriminator', EnumTypeDiscriminator::EVENT_TYPE)->get();
+        return response()->json($eventTypes);
+    }
+
+    public function getEvent($id) {
+        $event = Event::find($id);
+        $event->saldo = Transaction::where('ev_id',$event->id)->sum('amount');
+        $transactions = Transaction::where('ev_id',$id)->get();
+        $transactions->transform(function ($transaction) {
+            $transaction->id = $transaction->tr_id;
+            unset($transaction->tr_id);
+
+            $transaction->category = $transaction->category->name;
+            return $transaction;
+        });
+        $event->transactions = $transactions;
+
+        $contracts = Contract::where('event_id',$id)->get();
+        $contracts->transform(function ($contract) {
+            $contract->member = $contract->member->value;
+            $contract->type = $contract->type->value;
+            return $contract;
+        });
+        $event->contracts = $contracts;
+
+        $event->type = $event->type->value;
+        return response()->json($event);
+    }
+
+    public function createEvent(Request $request) {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'type' => 'required|numeric',
+            'date' => 'required|date|unique:events,date',
+        ]);
+
+        $event = new Event();
+
+        $event->name = $validatedData['name'];
+        $event->date = $validatedData['date'];
+        $event->type()->associate(EnumType::find($validatedData['type']));
+
+        $event->save();
+        return response()->json($event);
+
+    }
+
+    public function editEvent(Request $request, $id) {
+        $event = Event::find($id);
+        $event->name = $request->input('name');
+        $event->date = $request->input('date');
+        $event->type()->associate(EnumType::find($request->input('type')));
+        $event->save();
+        return response()->json($event);
+    }
+
+    public function deleteEvent($id) {
+        $event = Event::find($id);
+        $event->delete();
+        return response()->json(['message' => "Event with id: $id deleted"]);
+    }
+
+    public function getAllContracts() {
+        $contracts = Contract::all();
+        $contracts->transform(function ($contract) {
+            return [
+                'id' => $contract->id,
+                'contract_amount' => $contract->contract_amount,
+                'member' => [
+                    'name' => $contract->member->first_name . ' ' . $contract->member->last_name,
+                    'id' => $contract->member->id
+                ],
+                'type' => [
+                    'id' => $contract->type->id,
+                    'value' => $contract->type->value
+                ],
+                'event' => [
+                    'name' => $contract->event->name,
+                    'id' => $contract->event->id,
+                    'date' => $contract->event->date,
+                ]
+            ];
+        });
+        return response()->json($contracts);
+    }
+
+    public function getContractsSummaryPerYear() {
+        $contracts = Contract::all();
+        
+        $contractsSummary = DB::table('contracts')->select(DB::raw('year(events.date) as year'), 
+            'members.first_name', 'members.last_name', 
+            DB::raw('count(*) as count'),
+            DB::raw('SUM(contracts.contract_amount) as sum'))->
+            join('events', 'events.id','=','contracts.event_id')->
+            join('members', 'members.id','=','contracts.member_id')->
+            groupBy('contracts.member_id', DB::raw('year(events.date)'))->
+            orderBy('year','desc')->get()->groupBy('year');
+
+        return response()->json($contractsSummary);
     }
 
     /**
