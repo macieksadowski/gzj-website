@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('/members', [MemberController::class, 'getAllMembers']);
     Route::get('/members/names', [MemberController::class, 'getAllMembersNames']);
+    Route::post('/members/new', [MemberController::class, 'createMember']);
+    Route::post('/members/{id}/edit', [MemberController::class, 'editMember']);
 
     Route::get('/transactions', [FinancesController::class, 'getAllTransactions']);
     Route::get('/transactions/{id}', [FinancesController::class, 'getTransaction']);
@@ -57,4 +59,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/songs/{id}', [SongsController::class, 'deleteSong']);
 
     Route::post('/zaiks/generate', [GeneratorController::class, 'zaiks'] )->name('generateZAiKS');
+    Route::post('/contracts/generate', [GeneratorController::class, 'contract'] )->name('generateContract');
 });
