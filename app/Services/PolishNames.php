@@ -18,7 +18,9 @@ class PolishNames
 
     }
 
-    /** Makes a request to the website and returns the declined form of the given surname. If the surname is not found, it returns the surname itself.
+    /**
+     * @deprecated This method is deprecated and may be removed in future versions. Use getFullNameDeclined() instead. 
+     * Makes a request to the website and returns the declined form of the given surname. If the surname is not found, it returns the surname itself.
      * @param $surname The surname to decline
      * @param $gender Determines which gender skould be used for the declined form. Allowed values are 'm' and 'f'
      * @return string The declined form of the surname if found, the surname itself otherwise
@@ -27,7 +29,9 @@ class PolishNames
         return PolishNames::getFromWebsite($surname,'http://nlp.actaforte.pl:8080/Nomina/Nazwiska?nazwisko='.$surname.'&typ='.$gender,'/Miejscownik.*?<b>(.*?)<\/b>/m');
     }
 
-    /** Makes a request to the website and returns the declined form of the given name. If the name is not found, it returns the name itself.
+    /**
+     * @deprecated This method is deprecated and may be removed in future versions. Use getFullNameDeclined() instead.
+     * Makes a request to the website and returns the declined form of the given name. If the name is not found, it returns the name itself.
      * @param $name The name to decline
      * @return string The declined form of the name if found, the name itself otherwise
      */
@@ -35,6 +39,27 @@ class PolishNames
 
         return PolishNames::getFromWebsite($name,'http://nlp.actaforte.pl:8080/Nomina/ImionaNazwiska','/<form .*<table.*<table.*<p>(.*)?<\/p>/m',true);
 
+    }
+
+    public static function getFullNameDeclined($name) {
+        $cURLConnection = curl_init();
+
+
+        curl_setopt($cURLConnection, CURLOPT_URL,'http://nlp.actaforte.pl:8080/Nomina/ImionaNazwiska');
+        curl_setopt($cURLConnection, CURLOPT_POST, true);
+        //x-www-form-urlencoded: ncase=loc&ndata=$name
+        curl_setopt($cURLConnection, CURLOPT_POSTFIELDS,'ncase=inst&ndata='.urlencode($name) ) ;
+        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+
+        $server_output = curl_exec($cURLConnection);
+
+        curl_close ($cURLConnection);
+
+        if (!empty($server_output)) {
+            preg_match('/<p>(.*?)<\/p>/m', $server_output, $matches);
+        }
+    
+        return empty($matches) ? $name : $matches[1];
     }
 
     /**
