@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Edycja umów</h2>
+<mat-dialog-content>
+    <table id="edit-contracts-form-table">
+        <thead>
+            <th>Kto</th>
+            <th>Kwota</th>
+            <th>Rodzaj</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let contract of contracts; let i = index">
+                <td>{{ contract.member.display_name }}</td>
+                <td>{{ contract.contract_amount | currency:'PLN' }}</td>
+                <td>{{ contract.type.value }}</td>
+                <td>
+                    <button mat-mini-fab (click)="removeContract(i)"><mat-icon>delete</mat-icon></button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+
+                    <mat-select placeholder="Na kogo" required [(ngModel)]="newContract.member">
+                        <mat-option *ngFor="let member of members" [value]="member">{{ member.name }}</mat-option>
+                    </mat-select>
+                </td>
+                <td>
+
+                    <input #amountInput type="text" placeholder="Kwota" currencyFormat required [(ngModel)]="newContract.contract_amount"/>
+
+                </td>
+                <td>
+
+                    <mat-select placeholder="Rodzaj" required [(ngModel)]="newContract.type">
+                        <mat-option *ngFor="let contractType of contractTypes" [value]="contractType">
+                            {{ contractType.value }}
+                        </mat-option>
+                    </mat-select>
+
+                </td>
+                <td>
+                    <button mat-mini-fab (click)="addContract()"><mat-icon>add</mat-icon></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Anuluj</button>
+    <button mat-button (click)="undo()">Cofnij</button>
+    <button mat-button (click)="save()">Zapisz</button>
+</mat-dialog-actions>

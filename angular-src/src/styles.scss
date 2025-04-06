@@ -1,0 +1,117 @@
+@use "@angular/material" as mat;
+@use 'styles/tokens' as tokens;
+@use 'variables' as *;
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 400 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cinzel';
+    src: url('fonts/Cinzel/Cinzel-VariableFont_wght.ttf') format('truetype');
+    font-weight: 400 700;
+    font-style: normal;
+}
+
+
+html {
+    @include mat.theme(
+      (
+        color: (
+          theme-type: light,
+        ),
+        typography: (
+          plain-family: Raleway,
+          brand-family: Cinzel,
+        ),
+        density: 0,
+      )
+    );
+  }
+
+.negative {
+    color: red;
+}
+
+// Shared styles for dropdowns
+@mixin dropdown-styles($background-color, $box-shadow) {
+    background: $background-color;
+    box-shadow: $box-shadow;
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+    padding: 30px 10px;
+    overflow: auto;
+
+    @media (min-width: $medium-device) {
+        padding: 60px 0;
+    }
+}
+
+.section-title {
+    padding-bottom: 10px;
+
+    @media (min-width: $medium-device) {
+        padding-bottom: 40px;
+    }
+
+    & h2 {
+        //font-size: 1.4rem;
+        font-weight: 500;
+        padding: 0;
+        line-height: 1px;
+        margin: 0 0 5px 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: $color-gray;
+        font-family: $raleway;
+
+        &::after {
+            content: "";
+            width: 120px;
+            height: 1px;
+            display: inline-block;
+            background: $color-accent;
+            margin: 4px 10px;
+        }
+    }
+
+    & p {
+        margin: 0;
+        //font-size: 2.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-family: $cinzel;
+        color: $color-black-todo;
+
+        @media (min-width: $medium-device) {
+            //font-size: 3.6rem;
+        }
+    }
+}
+
+.dashboard {
+    padding-top: 100px;
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+
+.listbox-button-custom {
+    margin-bottom: 10px;
+
+    &:hover {
+        background-color: var(--mdc-protected-button-container-color, var(--mat-sys-surface));
+    }
+}

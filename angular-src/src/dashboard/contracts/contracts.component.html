@@ -1,0 +1,97 @@
+<h2>Podsumowanie umów na daną osobę</h2>
+<p>Dodać, edytować i usunąć umowę można z poziomu widoku szczegółów wydarzenia</p>
+<div class="row">
+    <div class="col-2">
+        <mat-form-field>
+            <mat-label>Wybierz rok</mat-label>
+            <mat-select  [(value)]="selectedYear"  (selectionChange)="applyYearFilter($event)">
+                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+<table mat-table [dataSource]="dataSourceSummaryTable" class="mat-elevation-z8">
+    <ng-container matColumnDef="member">
+        <th mat-header-cell *matHeaderCellDef> Osoba </th>
+        <td mat-cell *matCellDef="let entry" class="align-center">
+            {{ entry.first_name }} {{ entry.last_name }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="contracts_amount">
+        <th mat-header-cell *matHeaderCellDef> Liczba umów </th>
+        <td mat-cell *matCellDef="let entry" class="align-center">
+            {{ entry.count }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="total_amount">
+        <th mat-header-cell *matHeaderCellDef> Łączna kwota </th>
+        <td mat-cell *matCellDef="let entry" class="align-right">
+            {{ entry.sum | currency:'PLN' }}
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsSummaryTable"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsSummaryTable;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="3">Brak danych</td>
+    </tr>
+</table>
+<div class="spacer"></div>
+<h2>Lista wszystkich umów</h2>
+<div class="row">
+    <div class="col-2">
+        <mat-form-field>
+            <mat-label>Szukaj</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Wpisz">
+        </mat-form-field>
+    </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let contract" class="align-center">
+            {{ contract.id }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+        <td mat-cell *matCellDef="let contract" class="align-center">
+            {{ contract.event.date }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Wydarzenie </th>
+        <td mat-cell *matCellDef="let contract" class="align-center">
+            <button mat-button (click)="goToEventSummary(contract.event.id)" >{{ contract.event.name }} - {{ contract.event.date | date:'yyyy' }}</button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="member">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Osoba </th>
+        <td mat-cell *matCellDef="let contract" class="align-center">
+            {{ contract.member.name }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kwota </th>
+        <td mat-cell *matCellDef="let contract" class="align-right">
+             {{ contract.contract_amount | currency:'PLN' }} 
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="5">Brak danych</td>
+    </tr>
+</table>
+<mat-paginator [pageSizeOptions]="[20, 50, 100]"
+    showFirstLastButtons
+    aria-label="Select page">
+</mat-paginator>
+
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Edycja transakcji</h2>
+<mat-dialog-content>
+    <form [formGroup]="transactionForm">
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Data" required formControlName="date"/>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput currencyFormat placeholder="Kwota" required formControlName="amount" (blur)="filterCategories()"/>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Opis" required formControlName="description"/>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Kategoria" required formControlName="category">
+            <mat-option *ngFor="let category of transactionCategories" [value]="category.id">
+                {{ category.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Wydarzenie</mat-label>
+        <input matInput type="text" [matAutocomplete]="auto" formControlName="event" placeholder="Wpisz nazwę wydarzenia"/>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)" [displayWith]="displayEvent">
+            <mat-option *ngFor="let suggestion of suggestions" [value]="suggestion">
+                {{ suggestion.name }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+<button mat-button (click)="cancel()">Anuluj</button>
+<button mat-button (click)="save()">Zapisz</button>
+</mat-dialog-actions>
