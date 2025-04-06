@@ -46,44 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/dashboard'], function () {
 
-        Route::get('/', [DashboardController::class,'dashboard'])->name('dashboard');
-        
-        Route::get('/zaiks', [DashboardController::class, 'zaiks'])->name('zaiks');
-        Route::post('zaiks/generate', [GeneratorController::class, 'zaiks'] )->name('generateZAiKS');
-        
-        Route::get('/contract-generator', [DashboardController::class, 'contractGenerator'])->name('contract-generator');
-        Route::post('/contract-generator', [FormController::class, 'updateMember'] );
-        Route::post('/contract-generator/generate', [GeneratorController::class, 'contract'] )->name('generateContract');
-
-        Route::get('/events', [DashboardController::class, 'events'])->name('eventy');
-        Route::get('/events/{id}', [DashboardController::class, 'event'])->name('events.show');
-        Route::post('/events/{id}', [EventController::class, 'postEditEvent'] );
-
-        Route::get('/contracts', [DashboardController::class, 'contracts'])->name('contracts');
-        Route::get('/contracts/{id}', [DashboardController::class, 'contract'])->name('contracts.show');
-        Route::post('/contracts', [FormController::class, 'newContract'] )->name('newContract');
-
-        //songs
-        Route::get('/songs', [SongsController::class, 'index'])->name('songs');
-
-        Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
-        Route::post('/finances', [FinancesController::class, 'newTransaction'] )->name('newTransaction');
-        Route::post('/finances/{id}', [FinancesController::class, 'editTransaction'] );
-        Route::get('/finances/{id}', [FinancesController::class, 'displayTransaction'] )->name('editTransaction')->where('id', '[0-9]+');
-        Route::get('/finances/delete/{id}', [FinancesController::class, 'deleteTransaction'])->name('deleteTransaction');
-
-        Route::get('/finances/source', function () {
-            $file = Storage::disk('public')->get('transactions.json');
-            return response($file, 200)
-                ->header('Content-Type', 'application/json')
-                ->header('Access-Control-Allow-Origin', '*');
-        });
-
-        Route::get('finances/categories', [FinancesController::class, 'categories'] )->name('categories');
-        Route::post('finances/categories', [FinancesController::class, 'newCategory'] )->name('newCategory');
-        Route::post('finances/categories/{id}', [FinancesController::class, 'editCategory'] );
-    
-
+        Route::get('{any}', function () {
+            return view('angular');
+        })->where('any', '.*');
 
     });
 

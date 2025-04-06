@@ -4,12 +4,6 @@
 <meta name="google-site-verification" content="MiQKEZcz4YKn7I5v_HHhbPyBwIhTkUQ3A0maBFTjZN0" />
 <meta name="google-site-verification" content="C0IRoVkYt0yqUZta7TPVZWL95zO-aYn-CD9XhvhikEI" />
 
-@hasSection('title')
-    <title>{{ config('app.name') }} - @yield('title')</title>
-@else
-    <title>{{ config('app.name') }}</title>
-@endif
-
 @yield('description')
 @yield('keywords')
 
@@ -40,37 +34,3 @@
 <link rel="mask-icon" href={{ asset('img/safari-pinned-tab.svg') }} color="#292929">
 <meta name="msapplication-TileColor" content="#292929">
 <meta name="theme-color" content="#292929">
-
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<link
-    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;700&family=Petit+Formal+Script&family=Raleway:wght@300;400;600&display=swap"
-    rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
-
-
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/b-2.2.2/kt-2.6.4/r-2.2.9/datatables.min.js"></script>
-<link href={{ asset('/css/dual-listbox.css') }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/main.css') }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/header.css') }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/modal.css') }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/fontello.css') }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/pageCSS/'.$css) }} rel="stylesheet" type="text/css">
-<link href={{ asset('/css/table.css') }} rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css"> --}}
-
-<!-- Template Main CSS File -->
-<link href="{{ asset('/css/main.css') }}" rel="stylesheet">
-
-
-<!-- =======================================================
-  * Template Name: Gp
-  * Updated: Aug 30 2023 with Bootstrap v5.3.1
-  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
