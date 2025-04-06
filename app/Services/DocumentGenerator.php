@@ -30,14 +30,14 @@ class DocumentGenerator
         if ('a' == substr($member->first_name, -1)) {
             $keywords['GODNOSC'] = 'Panią';
             $keywords['SUFIX'] = 'ą';
-            $keywords['NAZWISKO_ODMIENIONE'] = PolishNames::getSurnameDeclined($member->last_name,'f');
         } else {
             $keywords['GODNOSC'] = 'Panem';
             $keywords['SUFIX'] = 'ym';
-            $keywords['NAZWISKO_ODMIENIONE'] = PolishNames::getSurnameDeclined($member->last_name,'m');
         }
 
-        $keywords['IMIE_ODMIENIONE'] = PolishNames::getNameDeclined($member->first_name);
+        $declinedFullName = PolishNames::getFullNameDeclined($member->first_name . ' ' . $member->last_name);
+        $keywords['NAZWISKO_ODMIENIONE'] = substr($declinedFullName, strpos($declinedFullName, ' ') + 1);
+        $keywords['IMIE_ODMIENIONE'] = substr($declinedFullName, 0, strpos($declinedFullName, ' '));
         $keywords['IMIE'] = $member->first_name;
         $keywords['NAZWISKO'] = $member->last_name;
         $keywords['MIASTO_ODMIENIONE'] = PolishNames::GetTownNameDeclined($member->town);
