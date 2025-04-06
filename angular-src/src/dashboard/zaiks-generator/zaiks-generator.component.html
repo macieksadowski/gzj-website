@@ -1,0 +1,19 @@
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <p>Wybierz utwory, które mają zostać wpisane do tabelki ZAiKS:</p>
+
+        <select *ngIf="songs.length > 0" #songSelect multiple name="songs[]">
+            <option *ngFor="let song of songs" [value]="song.id">{{ song.title }}</option>
+        </select>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-6">
+        <input name="eventName" type="text" placeholder="Nazwa wydarzenia" class="form-control" [formControl]="eventNameControl" style="visibility: hidden;">   
+    </div>
+    <div class="col-2">
+        <button mat-raised-button (click)="submitForm()">Generuj dokument</button>
+    </div>
+</div>
+
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

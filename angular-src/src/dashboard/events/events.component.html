@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-2">
+    <mat-form-field>
+        <mat-label>Nazwa</mat-label>
+        <input matInput (keyup)="applyNameFilter($event)" placeholder="Wpisz">
+    </mat-form-field>
+    </div>
+    <div class="col-2">
+    <mat-form-field>
+        <mat-label>Typ</mat-label>
+        <mat-select placeholder="Wybierz" multiple (selectionChange)="applyTypeFilter($event)">
+            <mat-option *ngFor="let type of eventTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    <div class="col-2 offset-6">
+    <button mat-raised-button (click)="newEvent()">Nowe wydarzenie</button>
+    </div>
+</div>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let event" class="align-center">
+            <button mat-button (click)="goToEventSummary(event.id)">{{ event.id }}</button>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
+        <td mat-cell *matCellDef="let event">
+            <button mat-button (click)="goToEventSummary(event.id)">{{ event.name }}</button>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>        
+        <td mat-cell *matCellDef="let event"> {{ event.date | date:'dd.MM.yyyy' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="saldo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Saldo </th>
+        <td mat-cell *matCellDef="let event" class="align-right" [ngClass]="{'negative': event.saldo < 0}"> {{ event.saldo | currency:'PLN' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="contracts_amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Liczba umów </th>
+        <td mat-cell *matCellDef="let event" class="align-center"> {{ event.contracts_amount }} </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Typ </th>
+        <td mat-cell *matCellDef="let event"> {{ event.type.value }} </td>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">Nie znaleziono wydarzeń spełniających zadane kryteria filtrowania</td>
+</tr>
+</table>
+<mat-paginator [pageSizeOptions]="[20, 50, 100]"
+    showFirstLastButtons
+    aria-label="Select page">
+</mat-paginator>
+
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

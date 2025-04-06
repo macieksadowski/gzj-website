@@ -1,0 +1,17 @@
+#edit-contracts-form-table {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+}
+
+#edit-contracts-form-table th,
+#edit-contracts-form-table td {
+    width: 25%;
+    height: 40px;
+    padding: 6px 10px;
+}
+
+input {
+    width: 100%;
+    /* Ensures inputs determine column width */
+}

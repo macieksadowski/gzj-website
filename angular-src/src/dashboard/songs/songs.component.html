@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-2">
+        <mat-form-field>
+            <mat-label>Tytuł</mat-label>
+            <input matInput (keyup)="applyTitleFilter($event)" placeholder="Wpisz">
+        </mat-form-field>
+    </div>
+    <div class="col-2 offset-6">
+        <button mat-raised-button (click)="newSong()">Nowy utwór</button>
+    </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let song" class="align-center">
+            {{ song.id }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tytuł </th>
+        <td mat-cell *matCellDef="let song">
+            {{ song.title }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="performer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Wykonawca </th>
+        <td mat-cell *matCellDef="let song">
+            {{ song.performer }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="composer">
+        <th mat-header-cell *matHeaderCellDef> Kompozytor </th>
+        <td mat-cell *matCellDef="let song">
+            {{ song.composer }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="text_author">
+        <th mat-header-cell *matHeaderCellDef> Autor tekstu </th>
+        <td mat-cell *matCellDef="let song">
+            {{ song.text_author }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="actions" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef> Akcje </th>
+        <td mat-cell *matCellDef="let song">
+            <div class="d-flex align-items-center">
+            <button mat-icon-button (click)="editSong(song.id)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteSong(song.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            </div>
+        </td>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">Nie znaleziono utworów spełniających zadane kryteria filtrowania</td>
+</tr>
+</table>
+<mat-paginator [pageSizeOptions]="[20, 50, 100]"
+    showFirstLastButtons
+    aria-label="Select page">
+</mat-paginator>
+
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

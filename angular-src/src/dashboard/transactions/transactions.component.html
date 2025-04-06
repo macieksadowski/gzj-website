@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="col-2">
+<mat-form-field>
+    <mat-label>Saldo łączne</mat-label>
+    <input matInput placeholder="Saldo" readonly [ngModel]="saldo | currency:'PLN'"/>
+</mat-form-field>   
+</div>
+<div class="col-2">
+<mat-form-field>
+    <mat-label>Kategorie</mat-label>
+    <mat-select multiple (selectionChange)="applyCategoryFilter($event)">
+        <mat-option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</mat-option>
+    </mat-select>
+</mat-form-field>
+</div>
+<div class="col-2">
+<mat-form-field>
+    <mat-label>Zakres dat</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate [(ngModel)]="dateFrom" (dateChange)="applyDateFilter($event)">
+        <input matEndDate [(ngModel)]="dateTo" (dateChange)="applyDateFilter($event)">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>  
+</mat-form-field>
+</div>
+<div class="col-2 offset-4">
+<button mat-raised-button (click)="newTransaction()">Nowa transakcja</button>
+</div>
+</div>
+
+
+  <div *ngIf="numberOfTransactionsLoaded === 0">
+    Nie znaleziono transakcji.
+  </div>
+  <div *ngIf="numberOfTransactionsLoaded > 0">
+    Załadowano: {{ numberOfTransactionsLoaded }} transakcji.
+  </div>
+
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>        
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.date | date:'dd.MM.yyyy' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="amount" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kwota </th>
+        <td mat-cell *matCellDef="let transaction" class="align-right" [ngClass]="{'negative': transaction.amount < 0}"> {{ transaction.amount | currency:'PLN' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Opis </th>
+        <td mat-cell *matCellDef="let transaction">
+            {{ transaction.description }}
+        </td>
+    </ng-container>
+    'category', 'event', 'cash', 'actions'
+    <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kategoria </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.category.name }} </td>
+    </ng-container>
+    <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Wydarzenie </th>
+        <td mat-cell *matCellDef="let transaction"> <button mat-button *ngIf="transaction.event" (click)="goToEventSummary(transaction.event.id)">{{ transaction.event.name }}</button> </td>
+    </ng-container>
+    <ng-container matColumnDef="cash">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Gotówka </th>
+        <td mat-cell *matCellDef="let transaction"> 
+            {{ transaction.cash_transaction === 1 ? 'Tak' : '' }} 
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let transaction" class="align-center">
+            {{ transaction.tr_id }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="actions" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef> Akcje </th>
+        <td mat-cell *matCellDef="let transaction">
+            <button mat-icon-button (click)="editTransaction(transaction)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteTransaction(transaction)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">Nie znaleziono transakcji spełniających zadane kryteria filtrowania</td>
+</tr>
+</table>
+<mat-paginator [pageSizeOptions]="[20, 50, 100]"
+    showFirstLastButtons
+    aria-label="Select page">
+</mat-paginator>
+
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

@@ -1,0 +1,91 @@
+<div *ngIf="event" class="container">
+    <div>
+        <p>{{ event.name  }} - {{ event.date | date:'yyyy' }}</p>
+        <h2>#{{ event.id }}</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h2>Szczegóły</h2>
+            <table class="table eventSummary__detailstable">
+                <tr>
+                    <td>Data</td>
+                    <td>{{ event.date | date:'dd.MM.yyyy' }}</td>
+                </tr>
+                <tr>
+                    <td>Typ</td>
+                    <td>{{ event.type.value }}</td>
+                </tr>
+                <tr>
+                    <td>Saldo</td>
+                    <td [ngClass]="{'negative': event.saldo < 0}"> {{ event.saldo | currency:'PLN' }}</td>
+                </tr>
+                <tr>
+                    <td>Setlista</td>
+                    <td><i class="bi bi-box-arrow-up-right"></i></td>
+                </tr>
+                <tr>
+                    <td>Lista ZAiKS</td>
+                    <td><i class="bi bi-box-arrow-up-right"></i></td>
+                </tr>
+            </table>
+            <table class="table">
+                <thead>
+                    <th colspan="3">Umowy</th>
+                </thead>
+                <thead>
+                    <th>Kto</th>
+                    <th>Kwota</th>
+                    <th>Rodzaj</th>
+                </thead>
+
+                @for (contract of event.contracts; track $index) {
+                    <tr>
+                        <td>{{ contract.member.display_name }}</td>
+                        <td>{{ contract.contract_amount | currency:'PLN' }}</td>
+                        <td>{{ contract.type.value }}</td>
+                    </tr>
+                }
+
+
+            </table>
+        </div>
+
+        <div class="col-4">
+            <h2>Lista wydatków</h2>
+            <table class="table" id="eventTransactions">
+                <thead>
+                    <th>Kwota</th>
+                    <th>Nazwa</th>
+                    <th>Kategoria</th>
+                </thead>
+
+                @for (transaction of event.transactions; track $index) {
+                    <tr>
+                        <td [ngClass]="{'negative': transaction.amount < 0}">{{ transaction.amount | currency: 'PLN'}}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td>{{ transaction.category.name }}</td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div class="col-4">
+            <h2>Setlista</h2>
+            <table class="table" id="eventSetlist">
+                <thead>
+                    <th>Kolejność</th>
+                    <th>Utwór</th>
+                </thead>
+
+            </table>
+
+        </div>
+    </div>
+    <div class="row justify-content-center eventSummary__actionBar">
+        <div class="col-2"><button mat-raised-button (click)="openDetailsEditor()">Edytuj szczegóły</button></div>
+        <div class="col-2"><button mat-raised-button (click)="openContractsEditor()">Edytuj umowy</button></div>
+        <div class="col-2"><button disabled>Edytuj setlistę</button></div>
+        <div class="col-2"><button disabled>Generuj tabelkę ZAiKS</button></div>
+        <div class="col-2"><button mat-raised-button extended (click)="deleteThisEvent()"><mat-icon>delete</mat-icon>Usuń</button></div>
+    </div>
+</div>
