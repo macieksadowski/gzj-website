@@ -62,7 +62,10 @@ class GeneratorController extends Controller
             $member = Member::where('id', $request->validated()['member_id'])->first();
             $documentPath = self::$CONTRACTS_TEMPLATE;
             $documentPath = DocumentGenerator::generateContract($member,$fileName,self::$CONTRACTS_OUTPUT_LOCATION,$inputTemplate);
-            return response()->download(($documentPath));
+            return response()->download($documentPath, $fileName, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+            ]);
         } catch (\Throwable $e) {
             Log::error($e);
             return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);
