@@ -1,3 +1,5 @@
+import { Event } from './event';
+
 export interface Transaction {
     tr_id: number;
     date: Date;
@@ -7,6 +9,16 @@ export interface Transaction {
     event?: Event;
     cash_transaction: boolean;
 
+}
+
+export interface TransactionDTO {
+    tr_id: number;
+    date: string;
+    amount: number;
+    description: string;
+    category?: number;
+    event?: number;
+    cash_transaction: boolean;
 }
 
 export interface TransactionCategory {

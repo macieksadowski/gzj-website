@@ -1,0 +1,9 @@
+.mdc-button__label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cell-buttons-container {
+    display: flex;
+}

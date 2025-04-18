@@ -15,10 +15,13 @@ export class CurrencyFormatDirective {
 
     @HostListener('input', ['$event'])
     onInput(event: any) {
+        console.log('onInput', event.target.value);
         let value = event.target.value.replace(/[^\d,.-]/g, '');
+        console.log('onInput after replace', value);
         value = value.replace(',', '.');
 
         if (value !== '-') {
+          console.log('condition', value);
           const numberValue = parseFloat(value) || '';
           this.renderer.setProperty(this.el.nativeElement, 'value', numberValue);
         }

@@ -49,8 +49,8 @@ class FinancesController extends Controller
             //event can be null but if it's not null it has to exist
             'event' => 'nullable|exists:App\Models\Event,id'
         ]);
-        if($request->has('cash')){
-            $validatedData['cash'] = true;
+        if($request->has('cash_transaction')){
+            $validatedData['cash_transaction'] = true;
         }
         $transaction = Transaction::find($id);
         $this->fillTransaction($transaction, $validatedData);
@@ -67,8 +67,8 @@ class FinancesController extends Controller
             //event can be null but if it's not null it has to exist
             'event' => 'nullable|exists:App\Models\Event,id'
         ]);
-        if($request->has('cash')){
-            $validatedData['cash'] = true;
+        if($request->has('cash_transaction')){
+            $validatedData['cash_transaction'] = true;
         }
         $transaction = new Transaction();
         $this->fillTransaction($transaction, $validatedData);
@@ -260,8 +260,8 @@ class FinancesController extends Controller
             //event can be null but if it's not null it has to exist
             'event' => 'nullable|exists:App\Models\Event,id'
         ]);
-        if($request->has('cash')){
-            $validated['cash'] = true;
+        if($request->has('cash_transaction')){
+            $validated['cash_transaction'] = true;
         }
         return $validated;
     }
@@ -275,7 +275,7 @@ class FinancesController extends Controller
         if(isset($validatedData['event'])) {
             $transaction->event()->associate($validatedData['event']);
         }
-        if(isset($validatedData['cash'])) {
+        if(isset($validatedData['cash_transaction'])) {
             $transaction->cash_transaction = true;
         }
     }

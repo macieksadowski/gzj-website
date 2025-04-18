@@ -75,6 +75,7 @@ export class TransactionsComponent {
   }
 
   loadMainTable() {
+    this.loading = true;
     this.financesService.getTransactions().subscribe((transactions) => {
       this.dataSource = new MatTableDataSource<any>(transactions);
       this.numberOfTransactionsLoaded = this.dataSource.data.length;
@@ -138,7 +139,7 @@ export class TransactionsComponent {
   }
 
   goToEventSummary(eventId: Number) {
-    this.router.navigate(['/events', eventId]);
+    this.router.navigate(['/dashboard/events', eventId]);
   }
 
   async editTransaction(transaction: any) {
@@ -155,7 +156,7 @@ export class TransactionsComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadMainTable();
-        this.snackbar.open(`Zedytowano transakcję o id: ${result.transaction.id}`, 'Zamknij', {
+        this.snackbar.open(`Zedytowano transakcję o id: ${result.tr_id}`, 'Zamknij', {
           duration: 3000,
         });
       } else {

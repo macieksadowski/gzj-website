@@ -115,3 +115,21 @@ section {
         background-color: var(--mdc-protected-button-container-color, var(--mat-sys-surface));
     }
 }
+
+.transactions-table-controls {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    &__filters {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__button {
+        display: flex;
+        flex: auto;
+        justify-content: end;
+        margin-top: 5px;
+    }
+}

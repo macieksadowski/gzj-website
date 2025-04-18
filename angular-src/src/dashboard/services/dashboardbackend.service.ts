@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Event } from '../model/event';
+import { Event, EventDTO } from '../model/event';
 import { environment } from '../../environments/environment';
+import { TransactionDTO } from '../model/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -48,27 +49,19 @@ export class DashboardBackendService {
     return this.http.delete(`${this.apiUrl}/events/${eventId}`, this.getHeaders());
   }
 
-  createEvent(event: Event): Observable<Event> {
+  createEvent(event: EventDTO): Observable<EventDTO> {
     console.log(`Creating event with name ${event.name}`);
-    return this.http.post<Event>(`${this.apiUrl}/events/new`, this.convertEventForBackend(event), this.getHeaders());
+    return this.http.post<EventDTO>(`${this.apiUrl}/events/new`, event, this.getHeaders());
   }
 
-  updateEvent(event: Event): Observable<Event> {
+  updateEvent(event: EventDTO): Observable<EventDTO> {
     console.log(`Updating event with id ${event.id}`);
-    return this.http.post<Event>(`${this.apiUrl}/events/${event.id}/edit`, this.convertEventForBackend(event), this.getHeaders());
+    return this.http.post<EventDTO>(`${this.apiUrl}/events/${event.id}/edit`, event, this.getHeaders());
   }
 
   getEventTypes(): Observable<any[]> {
     console.log(`Fetching event types from API`);
     return this.http.get<any[]>(`${this.apiUrl}/event-types`, this.getHeaders());
-  }
-
-  convertEventForBackend(event: Event) {
-    return { ...event, type: event.type.id };
-  }
-
-  convertTransactionForBackend(transaction: any) {
-    return transaction;
   }
 
   /** CONTRACTS */
@@ -122,14 +115,14 @@ export class DashboardBackendService {
     return this.http.delete<string>(`${this.apiUrl}/transactions/${transactionId}`, this.getHeaders());
   }
 
-  createTransaction(transaction: any): Observable<any> {
+  createTransaction(transaction: TransactionDTO): Observable<any> {
     console.log(`Creating transaction with description ${transaction.description}`);
     return this.http.post<any>(`${this.apiUrl}/transactions/new`, transaction, this.getHeaders());
   }
 
-  updateTransaction(transaction: any): Observable<any> {
+  updateTransaction(transaction: TransactionDTO): Observable<any> {
     console.log(`Updating transaction with id ${transaction.tr_id}`);
-    return this.http.post<Event>(`${this.apiUrl}/transactions/${transaction.tr_id}/edit`, this.convertTransactionForBackend(transaction), this.getHeaders());
+    return this.http.post<Event>(`${this.apiUrl}/transactions/${transaction.tr_id}/edit`, transaction, this.getHeaders());
   }
 
   getTransactionCategories(): Observable<any[]> {

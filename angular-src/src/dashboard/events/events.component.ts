@@ -93,7 +93,7 @@ export class EventsComponent implements OnInit {
   }
 
   goToEventSummary(eventId: Number) {
-    this.router.navigate(['/events', eventId]);
+    this.router.navigate(['/dashboard/events', eventId]);
   }
 
 

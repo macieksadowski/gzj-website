@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, inject, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { Event, EventTypes } from '../model/event';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardBackendService } from '../services/dashboardbackend.service';
@@ -14,7 +15,8 @@ import { Router } from '@angular/router';
 import { CurrencyFormatDirective } from '../shared/currencyFormat';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
-import { CategoryType, CategoryTypeEnum, Transaction, TransactionCategory } from '../model/transaction';
+import { CategoryType, CategoryTypeEnum, Transaction, TransactionCategory, TransactionDTO } from '../model/transaction';
+
 
 @Component({
   selector: 'dashboard-transaction-editor',
@@ -34,7 +36,8 @@ import { CategoryType, CategoryTypeEnum, Transaction, TransactionCategory } from
     FormsModule,
     ReactiveFormsModule,
     CurrencyFormatDirective,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatCheckboxModule
   ]
 })
 export class TransactionEditorComponent {
@@ -62,7 +65,8 @@ export class TransactionEditorComponent {
       category: this.categoryControl,
       amount: this.amountControl,
       date: new FormControl(),
-      description: new FormControl()
+      description: new FormControl(),
+      cash_transaction: new FormControl()
     });
     this.transaction = Object.assign({}, this.data.transaction);
     this.transactionCategories = this.data.transactionCategories;
@@ -72,7 +76,8 @@ export class TransactionEditorComponent {
       category: this.transaction.category?.id || null,
       amount: this.transaction.amount,
       date: this.transaction.date,
-      description: this.transaction.description
+      description: this.transaction.description,
+      cash_transaction: this.transaction.cash_transaction || false
     });
     
     
@@ -125,26 +130,29 @@ export class TransactionEditorComponent {
   
   save() {
     const formValues = this.transactionForm.value;
-    this.transaction.event = formValues.event;
-    this.transaction.category = this.data.transactionCategories.find((category) => category.id === formValues.category);
-    this.transaction.amount = formValues.amount;
-    this.transaction.date = formValues.date;
-    this.transaction.description = formValues.description;
-
+    console.log('Form values:', formValues);
+    const transactionDTO: TransactionDTO = {
+      tr_id: this.transaction.tr_id,
+      date: formatDate(formValues.date, 'yyyy-MM-dd', 'pl-PL'),
+      amount: formValues.amount,
+      description: formValues.description,
+      category: formValues.category,
+      event: formValues.event? formValues.event.id : null,
+      cash_transaction: formValues.cash_transaction,
+    };
     if (this.transaction.tr_id) {
       console.log('Updating transaction');
-      this.transactionService.updateTransaction(this.transaction).subscribe((updatedTransaction) => {
+      this.transactionService.updateTransaction(transactionDTO).subscribe((updatedTransaction) => {
         console.log('Updated transaction:', updatedTransaction);
         this.dialogRef.close(updatedTransaction);
       });
     } else {
-      this.transactionService.createTransaction(this.transaction).subscribe((createdTransaction) => {
+      this.transactionService.createTransaction(transactionDTO).subscribe((createdTransaction) => {
         console.log('Created transaction:', createdTransaction);
         this.transaction.tr_id = createdTransaction.id;
         this.dialogRef.close(createdTransaction);
       });
     }
-    this.dialogRef.close(this.data.transaction);
   }
 
   displayEvent(event?: any): string {

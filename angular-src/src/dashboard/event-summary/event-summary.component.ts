@@ -53,20 +53,22 @@ export class EventSummaryComponent implements OnInit {
 
   openDetailsEditor() {
     console.log('Opening details editor');
-    const dialogRef = this.dialog.open(EventDetailsEditorComponent, {
-      data: { event: this.event },
-      width: '50vw',
-    });
+    this.eventService.getEventTypes().subscribe((eventTypes) => {
+      const dialogRef = this.dialog.open(EventDetailsEditorComponent, {
+        data: { event: this.event, eventTypes: eventTypes },
+        width: '50vw',
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.eventService.getEventById(this.event.id).subscribe((event) => {
-          this.event = event;
-          this.snackbar.open('Zaktualizowano wydarzenie', 'Zamknij', {
-            duration: 3000,
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.eventService.getEventById(this.event.id).subscribe((event) => {
+            this.event = event;
+            this.snackbar.open('Zaktualizowano wydarzenie', 'Zamknij', {
+              duration: 3000,
+            });
           });
-        });
-      }
+        }
+      });
     });
   }
 
