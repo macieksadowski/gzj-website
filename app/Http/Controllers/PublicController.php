@@ -39,7 +39,8 @@ class PublicController extends Controller
         "SC"=> "https://soundcloud.com/glownyzaworjazzu",
         "SP"=> "https://open.spotify.com/artist/5mjGrW9DVffOeQPxSlnNoZ?autoplay=true&v=A",
         "IG"=> "https://www.instagram.com/glownyzaworjazzu/",
-        "TK"=> "https://www.tiktok.com/@glownyzaworjazzu"
+        "TK"=> "https://www.tiktok.com/@glownyzaworjazzu",
+        "WZK"=> "https://www.weselezklasa.pl/ogloszenia-weselne/glowny-zawor-jazzu-retrojazzpop,53559/"
     ];
 
     public function index()
@@ -137,14 +138,6 @@ class PublicController extends Controller
      * @return \Illuminate\View\View
      */
     public function withErrors($view, $errors, $additionalArgs = []) {
-        setlocale(LC_ALL, 'pl_PL.UTF-8');
-        $args = [
-            "phone"=> "+48602538140",
-            "mail"=> "glownyzaworjazzu@gmail.com",
-            "menuItems" => $this->menuItems,
-            "socialLinks" => $this->socialLinks
-        ];
-
-        return view($view, array_merge($args,$additionalArgs))->withErrors($errors);
+        return redirect()->back()->withErrors($errors);
     }
 }

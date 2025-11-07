@@ -29,9 +29,9 @@
           </a>
         </div>
         <div class="col icon-box">
-          <a href={{ $socialLinks['TK'] }} target=" _blank">
-              <i class="bi-tiktok" id="sp"></i>
-              <h3>TikTok</h3>
+          <a href={{ $socialLinks['WZK'] }} target=" _blank">
+              <img src="{{ asset('img/logo_wzk_dark_104x128.png') }}" alt="Wesele z klasą" id="wzk-logo">
+              <h3>Wesele z klasą</h3>
           </a>
         </div>
   
