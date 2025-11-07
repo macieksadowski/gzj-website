@@ -53,6 +53,7 @@
                                       </div>
                                   <div class="col-9 col-sm-6 order-3 order-sm-4">
                                     <p>
+                                      @isset($event['place'])
                                         <strong>{{ $event['place']['name'] }}</strong><br />
                                         @isset($event['place']['location']['city'])
                                             {{ $event['place']['location']['city'] }}
@@ -61,6 +62,7 @@
                                             -
                                             {{ $event['place']['location']['street'] }}
                                         @endisset
+                                      @endisset
                                     </p>
                                   </div>
                                   </div>
