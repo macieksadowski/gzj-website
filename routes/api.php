@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/contracts', [EventController::class, 'getAllContracts']);
     Route::get('/contracts/summaryPerYear', [EventController::class, 'getContractsSummaryPerYear']);
+    Route::post('/events/{id}/contracts/edit', [EventController::class, 'updateEventContracts']);
     
     Route::get('/members', [MemberController::class, 'getAllMembers']);
     Route::get('/members/names', [MemberController::class, 'getAllMembersNames']);

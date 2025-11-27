@@ -1,91 +1,111 @@
-<div *ngIf="event" class="container">
-    <div>
-        <p>{{ event.name  }} - {{ event.date | date:'yyyy' }}</p>
+<div *ngIf="event" class="container eventSummary">
+    <div class="section-title">
+        <p>{{ event.name }} - {{ event.date | date:'yyyy' }}</p>
         <h2>#{{ event.id }}</h2>
     </div>
+    <mat-toolbar class="actions-toolbar">
+        <span>Akcje:</span>
+        <span class="spacer"></span>
+        <button mat-button (click)="openDetailsEditor()"><mat-icon>edit</mat-icon> Szczegóły</button>
+        <button mat-button (click)="openContractsEditor()"><mat-icon>assignment</mat-icon> Umowy</button>
+        <button mat-button disabled><mat-icon>queue_music</mat-icon> Setlista</button>
+        <button mat-button disabled><mat-icon>table_chart</mat-icon> ZAiKS</button>
+        <button mat-button color="warn" (click)="deleteThisEvent()"><mat-icon>delete</mat-icon> Usuń</button>
+    </mat-toolbar>
     <div class="row justify-content-center">
         <div class="col-4">
-            <h2>Szczegóły</h2>
-            <table class="table eventSummary__detailstable">
-                <tr>
-                    <td>Data</td>
-                    <td>{{ event.date | date:'dd.MM.yyyy' }}</td>
-                </tr>
-                <tr>
-                    <td>Typ</td>
-                    <td>{{ event.type.value }}</td>
-                </tr>
-                <tr>
-                    <td>Saldo</td>
-                    <td [ngClass]="{'negative': event.saldo < 0}"> {{ event.saldo | currency:'PLN' }}</td>
-                </tr>
-                <tr>
-                    <td>Setlista</td>
-                    <td><i class="bi bi-box-arrow-up-right"></i></td>
-                </tr>
-                <tr>
-                    <td>Lista ZAiKS</td>
-                    <td><i class="bi bi-box-arrow-up-right"></i></td>
-                </tr>
-            </table>
-            <table class="table">
-                <thead>
-                    <th colspan="3">Umowy</th>
-                </thead>
-                <thead>
-                    <th>Kto</th>
-                    <th>Kwota</th>
-                    <th>Rodzaj</th>
-                </thead>
-
-                @for (contract of event.contracts; track $index) {
-                    <tr>
-                        <td>{{ contract.member.display_name }}</td>
-                        <td>{{ contract.contract_amount | currency:'PLN' }}</td>
-                        <td>{{ contract.type.value }}</td>
-                    </tr>
-                }
-
-
-            </table>
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Szczegóły</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table eventSummary__detailstable">
+                        <tr>
+                            <td>Data</td>
+                            <td>{{ event.date | date:'dd.MM.yyyy' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Typ</td>
+                            <td>{{ event.type.value }}</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td [ngClass]="{'negative': event.saldo < 0}">{{ event.saldo | currency:'PLN' }}</td>
+                        </tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Umowy</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table mat-table [dataSource]="contractsDataSource" matSort class="table">
+                        <ng-container matColumnDef="member">
+                            <th mat-header-cell *matHeaderCellDef>Kto</th>
+                            <td mat-cell *matCellDef="let contract">{{ contract.member.display_name }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef>Kwota</th>
+                            <td mat-cell *matCellDef="let contract">{{ contract.contract_amount | currency:'PLN' }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Rodzaj</th>
+                            <td mat-cell *matCellDef="let contract">{{ contract.type.value }}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="contractsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: contractsColumns;"></tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
         </div>
 
         <div class="col-4">
-            <h2>Lista wydatków</h2>
-            <table class="table" id="eventTransactions">
-                <thead>
-                    <th>Kwota</th>
-                    <th>Nazwa</th>
-                    <th>Kategoria</th>
-                </thead>
-
-                @for (transaction of event.transactions; track $index) {
-                    <tr>
-                        <td [ngClass]="{'negative': transaction.amount < 0}">{{ transaction.amount | currency: 'PLN'}}</td>
-                        <td>{{ transaction.description }}</td>
-                        <td>{{ transaction.category.name }}</td>
-                    </tr>
-                }
-
-            </table>
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Lista wydatków</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table mat-table [dataSource]="transactionsDataSource" matSort class="table">
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef>Kwota</th>
+                            <td mat-cell *matCellDef="let transaction" [ngClass]="{'negative': transaction.amount < 0}">{{ transaction.amount | currency:'PLN' }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+                            <td mat-cell *matCellDef="let transaction">{{ transaction.description }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="category">
+                            <th mat-header-cell *matHeaderCellDef>Kategoria</th>
+                            <td mat-cell *matCellDef="let transaction">{{ transaction.category.name }}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="transactionsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: transactionsColumns;"></tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </mat-card-content>
+            </mat-card>
         </div>
         <div class="col-4">
-            <h2>Setlista</h2>
-            <table class="table" id="eventSetlist">
-                <thead>
-                    <th>Kolejność</th>
-                    <th>Utwór</th>
-                </thead>
-
-            </table>
-
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Setlista</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table mat-table [dataSource]="event.setlist" matSort class="table">
+                        <ng-container matColumnDef="order">
+                            <th mat-header-cell *matHeaderCellDef>Kolejność</th>
+                            <td mat-cell *matCellDef="let entry">{{ entry.order }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="song">
+                            <th mat-header-cell *matHeaderCellDef>Utwór</th>
+                            <td mat-cell *matCellDef="let entry">{{ entry.song }}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="setlistColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: setlistColumns;"></tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
         </div>
-    </div>
-    <div class="row justify-content-center eventSummary__actionBar">
-        <div class="col-2"><button mat-raised-button (click)="openDetailsEditor()">Edytuj szczegóły</button></div>
-        <div class="col-2"><button mat-raised-button (click)="openContractsEditor()">Edytuj umowy</button></div>
-        <div class="col-2"><button disabled>Edytuj setlistę</button></div>
-        <div class="col-2"><button disabled>Generuj tabelkę ZAiKS</button></div>
-        <div class="col-2"><button mat-raised-button extended (click)="deleteThisEvent()"><mat-icon>delete</mat-icon>Usuń</button></div>
     </div>
 </div>

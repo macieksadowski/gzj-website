@@ -370,4 +370,36 @@ class EventController extends Controller
 
         return back()->withSuccess('Pomyślnie zaktualizowano dane!');
     }
+
+    public function updateEventContracts(Request $request, $id) {
+        // Accept same payload as the Blade form handler: event, new-contract.*, deletedContracts
+        $validatedData = $request->validate([
+            'new-contract.*.contract-person' => 'nullable|exists:App\Models\Member,id',
+            'new-contract.*.contract-amount' => 'nullable|decimal:2',
+            'new-contract.*.contract-type' => 'nullable|exists:App\Models\EnumType,id',
+            'deletedContracts' => 'sometimes|required_without:new-contract|array'
+        ]);
+
+        try {
+            if(isset($validatedData['deletedContracts'])) {
+                Contract::destroy($validatedData['deletedContracts']);
+            }
+
+            if(isset($validatedData['new-contract'])) {
+                $event = Event::find($id);
+               
+                foreach ($validatedData['new-contract'] as $newContract) {
+                    $contract = new Contract;
+                    $contract->contract_amount = $newContract['contract-amount'];
+                    $contract->member()->associate(Member::find($newContract['contract-person']));    
+                    $contract->type()->associate(EnumType::find($newContract['contract-type']));
+                    $event->contracts()->save($contract);
+                }
+            }
+
+            return response()->json(['message' => 'Pomyślnie zaktualizowano dane!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update contracts', 'details' => $e->getMessage()], 500);
+        }
+    }
 }

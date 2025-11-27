@@ -1,52 +1,56 @@
-<h2 mat-dialog-title>Edycja umów</h2>
+<h2 mat-dialog-title>{{ contracts && contracts.length ? 'Edycja umów' : 'Dodaj umowy' }}</h2>
+
 <mat-dialog-content>
-    <table id="edit-contracts-form-table">
-        <thead>
-            <th>Kto</th>
-            <th>Kwota</th>
-            <th>Rodzaj</th>
-            <th></th>
-        </thead>
-        <tbody>
-            <tr *ngFor="let contract of contracts; let i = index">
-                <td>{{ contract.member.display_name }}</td>
-                <td>{{ contract.contract_amount | currency:'PLN' }}</td>
-                <td>{{ contract.type.value }}</td>
-                <td>
-                    <button mat-mini-fab (click)="removeContract(i)"><mat-icon>delete</mat-icon></button>
-                </td>
-            </tr>
+    <div class="contracts-list">
+        <div class="contract-row" *ngFor="let contract of contracts; let i = index">
+            <div class="contract-info">
+                <div class="contract-member">{{ contract.member?.display_name || contract.member?.name }}</div>
+                <div class="contract-amount">{{ contract.contract_amount | currency:'PLN' }}</div>
+                <div class="contract-type">{{ contract.type?.value }}</div>
+            </div>
+            <div class="contract-actions">
+                <button mat-icon-button color="warn" aria-label="Usuń umowę" (click)="removeContract(i)">
+                    <mat-icon>{{ confirmDeleteIndex === i ? 'check' : 'delete' }}</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
 
-            <tr>
-                <td>
+    <div class="add-row">
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Na kogo</mat-label>
+            <mat-select [(ngModel)]="newContract.member" [disabled]="!members || members.length === 0" aria-label="Wybierz osobę">
+                <mat-option *ngFor="let member of members" [value]="member">{{ member.name }}</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="!members || members.length === 0">Brak dostępnych osób</mat-hint>
+            <mat-error *ngIf="!newContract.member">Wybierz osobę</mat-error>
+        </mat-form-field>
 
-                    <mat-select placeholder="Na kogo" required [(ngModel)]="newContract.member">
-                        <mat-option *ngFor="let member of members" [value]="member">{{ member.name }}</mat-option>
-                    </mat-select>
-                </td>
-                <td>
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Kwota</mat-label>
+            <input matInput type="text" placeholder="Kwota" currencyFormat required [(ngModel)]="newContract.contract_amount" aria-label="Kwota" />
+            <mat-error *ngIf="newContract.contract_amount <= 0">Podaj kwotę większą niż 0</mat-error>
+        </mat-form-field>
 
-                    <input #amountInput type="text" placeholder="Kwota" currencyFormat required [(ngModel)]="newContract.contract_amount"/>
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Rodzaj</mat-label>
+            <mat-select [(ngModel)]="newContract.type" aria-label="Rodzaj umowy">
+                <mat-option *ngFor="let contractType of contractTypes" [value]="contractType">{{ contractType.value }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="!newContract.type">Wybierz rodzaj umowy</mat-error>
+        </mat-form-field>
 
-                </td>
-                <td>
+        <div class="add-action">
+            <button mat-mini-fab color="primary" (click)="addContract()" [attr.aria-disabled]="!canAdd()" [disabled]="!canAdd()" matTooltip="Dodaj umowę">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
 
-                    <mat-select placeholder="Rodzaj" required [(ngModel)]="newContract.type">
-                        <mat-option *ngFor="let contractType of contractTypes" [value]="contractType">
-                            {{ contractType.value }}
-                        </mat-option>
-                    </mat-select>
-
-                </td>
-                <td>
-                    <button mat-mini-fab (click)="addContract()"><mat-icon>add</mat-icon></button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </mat-dialog-content>
+
 <mat-dialog-actions>
     <button mat-button (click)="cancel()">Anuluj</button>
-    <button mat-button (click)="undo()">Cofnij</button>
-    <button mat-button (click)="save()">Zapisz</button>
+    <button mat-button (click)="undo()" [disabled]="!hasChanges()">Cofnij</button>
+    <button mat-button color="primary" (click)="save()" [disabled]="!hasChanges()">Zapisz</button>
 </mat-dialog-actions>

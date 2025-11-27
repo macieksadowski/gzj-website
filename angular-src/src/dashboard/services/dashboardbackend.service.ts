@@ -59,6 +59,12 @@ export class DashboardBackendService {
     return this.http.post<EventDTO>(`${this.apiUrl}/events/${event.id}/edit`, event, this.getHeaders());
   }
 
+  /** EVENT CONTRACTS */
+  updateEventContracts(eventId: number, payload: any): Observable<any> {
+    console.log(`Updating contracts for event ${eventId}`);
+    return this.http.post<any>(`${this.apiUrl}/events/${eventId}/contracts/edit`, payload, this.getHeaders());
+  }
+
   getEventTypes(): Observable<any[]> {
     console.log(`Fetching event types from API`);
     return this.http.get<any[]>(`${this.apiUrl}/event-types`, this.getHeaders());
