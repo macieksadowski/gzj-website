@@ -20,11 +20,7 @@ export class CurrencyFormatDirective {
         console.log('onInput after replace', value);
         value = value.replace(',', '.');
 
-        if (value !== '-') {
-          console.log('condition', value);
-          const numberValue = parseFloat(value) || '';
-          this.renderer.setProperty(this.el.nativeElement, 'value', numberValue);
-        }
+        this.renderer.setProperty(this.el.nativeElement, 'value', value);
     }
     
       @HostListener('blur')
