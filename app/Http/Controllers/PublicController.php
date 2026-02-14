@@ -7,6 +7,7 @@ use App\Models\RecordLink;
 use App\Models\RecordSet;
 use App\Models\Style;
 use App\Services\FbRequestService;
+use Illuminate\Support\Facades\Log;
 
 class PublicController extends Controller
 {
@@ -51,7 +52,8 @@ class PublicController extends Controller
         try {
             $actualEvents = $fbService->getActualEvents();
         } catch (\Throwable $th) {
-            return $this->withErrors('layouts.public', "", ['fbProxyError'=> __('fb-proxy.default')]);
+            Log::error("Error while fetching events from Facebook: " . $th->getMessage());
+            $actualEvents = [];
         }
         //* STYLES */
         $styles = Style::all();
