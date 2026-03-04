@@ -10,6 +10,7 @@ export class ConfirmDialogService {
   openConfirmDialog(title: string, message: string): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { title, message },
+      autoFocus: false,
     });
 
     return firstValueFrom(dialogRef.afterClosed());

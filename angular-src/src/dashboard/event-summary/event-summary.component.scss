@@ -2,6 +2,51 @@
 
     & .section-title p {
         font-size: 3rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    & .section-title h2 {
+        font-size: 1.6rem;
+        line-height: 1.1;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface-variant);
+        opacity: 0.9;
+        margin: 0;
+        display: flex;
+        align-items: center;
+
+        &::after {
+            width: 108px;
+            margin: 0 0 0 12px;
+            background: var(--mat-sys-outline-variant);
+            vertical-align: middle;
+        }
+    }
+
+    .title-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .actions-inline {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px;
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding-inline: 8px;
+            min-width: auto;
+        }
     }
 
     &__detailstable {
@@ -17,50 +62,20 @@
         }
     }
 
-}
-
-.event-card {
-    margin-bottom: 20px;
-    box-shadow: none !important;
-    border: 1px solid #ddd;
-}
-
-.mat-mdc-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.mat-mdc-header-cell, .mat-mdc-cell {
-    border-bottom: 1px solid #ddd;
-    padding: 4px 12px;
-}
-
-.mat-mdc-row {
-    height: 36px;
-}
-
-.mat-mdc-header-cell {
-    font-weight: bold;
-    background-color: #f8f9fa;
-}
-
-.mat-mdc-row:hover {
-    background-color: #f5f5f5;
-}
-
-.negative {
-    color: red;
-}
-
-.actions-toolbar {
-    margin-bottom: 20px;
-    .spacer {
-        flex: 1 1 auto;
+    .row {
+        row-gap: 20px;
     }
-    button {
-        margin-left: 10px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
+
+    @media (max-width: 992px) {
+        .title-meta-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .actions-inline {
+            justify-content: flex-start;
+        }
     }
+
 }

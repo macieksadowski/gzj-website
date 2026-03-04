@@ -1,17 +1,17 @@
 <div *ngIf="event" class="container eventSummary">
     <div class="section-title">
-        <p>{{ event.name }} - {{ event.date | date:'yyyy' }}</p>
-        <h2>#{{ event.id }}</h2>
+        <p #eventTitle>{{ event.name }} - {{ event.date | date:'yyyy' }}</p>
+        <div class="title-meta-row">
+            <h2>#{{ event.id }}</h2>
+            <div class="actions-inline" aria-label="Akcje wydarzenia">
+                <button mat-button (click)="openDetailsEditor()"><mat-icon>edit</mat-icon> Szczegóły</button>
+                <button mat-button (click)="openContractsEditor()"><mat-icon>assignment</mat-icon> Umowy</button>
+                <button mat-button disabled><mat-icon>queue_music</mat-icon> Setlista</button>
+                <button mat-button disabled><mat-icon>table_chart</mat-icon> ZAiKS</button>
+                <button mat-button color="warn" (click)="deleteThisEvent()"><mat-icon>delete</mat-icon> Usuń</button>
+            </div>
+        </div>
     </div>
-    <mat-toolbar class="actions-toolbar">
-        <span>Akcje:</span>
-        <span class="spacer"></span>
-        <button mat-button (click)="openDetailsEditor()"><mat-icon>edit</mat-icon> Szczegóły</button>
-        <button mat-button (click)="openContractsEditor()"><mat-icon>assignment</mat-icon> Umowy</button>
-        <button mat-button disabled><mat-icon>queue_music</mat-icon> Setlista</button>
-        <button mat-button disabled><mat-icon>table_chart</mat-icon> ZAiKS</button>
-        <button mat-button color="warn" (click)="deleteThisEvent()"><mat-icon>delete</mat-icon> Usuń</button>
-    </mat-toolbar>
     <div class="row justify-content-center">
         <div class="col-4">
             <mat-card class="event-card">
@@ -119,4 +119,15 @@
             </mat-card>
         </div>
     </div>
+
+    <ng-container
+        *ngComponentOutlet="fabNavigationComponent;
+            inputs: {
+                previousRoute: previousEventRoute,
+                nextRoute: nextEventRoute,
+                isBusy: loadingEvent,
+                previousTooltip: 'Poprzednie wydarzenie',
+                nextTooltip: 'Następne wydarzenie'
+            }"
+    ></ng-container>
 </div>

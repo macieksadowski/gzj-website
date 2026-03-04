@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,19 +14,32 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { parseCurrencyAmount } from '../shared/currencyFormat';
+import { FabNavigationComponent } from '../shared/fab-navigation.component';
+import { EMPTY, Subscription, catchError, distinctUntilChanged, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'dashboard-event-summary',
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule, MatSortModule, MatPaginatorModule, MatToolbarModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule, MatSortModule, MatPaginatorModule],
   templateUrl: './event-summary.component.html',
   styleUrl: './event-summary.component.scss'
 })
-export class EventSummaryComponent implements OnInit {
+export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   event!: any;
   eventService: DashboardBackendService;
   dialog: MatDialog;
+  private routeSub?: Subscription;
+  private eventsIdsSub?: Subscription;
+  private titleResizeObserver?: ResizeObserver;
+  private eventTitleElement?: HTMLElement;
+  private isFittingTitle = false;
+  private readonly titleMaxFontSizePx = 48;
+  private readonly titleMinFontSizePx = 14;
+  private allEventIds: number[] = [];
+  currentEventId: number | null = null;
+  previousEventId: number | null = null;
+  nextEventId: number | null = null;
+  loadingEvent = false;
 
   transactionsDataSource = new MatTableDataSource<any>();
 
@@ -35,6 +48,7 @@ export class EventSummaryComponent implements OnInit {
   contractsColumns: string[] = ['member', 'amount', 'type'];
   transactionsColumns: string[] = ['amount', 'description', 'category'];
   setlistColumns: string[] = ['order', 'song'];
+  readonly fabNavigationComponent = FabNavigationComponent;
 
   private getContractsSaveErrorMessage(err: any): string {
     const apiDetails = err?.error?.details;
@@ -81,6 +95,15 @@ export class EventSummaryComponent implements OnInit {
     }
   }
 
+  @ViewChild('eventTitle')
+  set eventTitle(elementRef: ElementRef<HTMLElement> | undefined) {
+    this.eventTitleElement = elementRef?.nativeElement;
+    if (this.eventTitleElement) {
+      this.initTitleResizeObserver();
+      this.scheduleTitleFit();
+    }
+  }
+
   constructor(
     private route: ActivatedRoute,
     private titleService: Title,
@@ -93,15 +116,142 @@ export class EventSummaryComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    const eventId = this.route.snapshot.paramMap.get('id');
-    this.eventService.getEventById(eventId).subscribe(event => {
+    this.eventsIdsSub = this.eventService.getAllEvents().subscribe((events) => {
+      this.allEventIds = events
+        .map((entry: any) => Number(entry.id))
+        .filter((id: number) => Number.isFinite(id))
+        .sort((a: number, b: number) => a - b);
+      this.updateNeighbourEventIds();
+    });
+
+    this.routeSub = this.route.paramMap.pipe(
+      tap(() => {
+        this.loadingEvent = true;
+      }),
+      switchMap((params) => {
+        const eventId = params.get('id');
+        this.currentEventId = eventId ? Number(eventId) : null;
+        this.updateNeighbourEventIds();
+
+        if (!eventId) {
+          this.loadingEvent = false;
+          return EMPTY;
+        }
+
+        return this.eventService.getEventById(eventId).pipe(
+          catchError(() => {
+            this.loadingEvent = false;
+            return EMPTY;
+          })
+        );
+      }),
+      distinctUntilChanged((prev, curr) => prev?.id === curr?.id)
+    ).subscribe((event) => {
       this.event = event;
       this.transactionsDataSource.data = event.transactions || [];
       this.contractsDataSource.data = event.contracts || [];
 
       const eventYear = new Date(event.date).getFullYear();
       this.titleService.setTitle(`${ event.name } - ${ eventYear } - Podgląd wydarzenia`);
+      this.scheduleTitleFit();
+      this.loadingEvent = false;
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.scheduleTitleFit();
+  }
+
+  ngOnDestroy(): void {
+    this.routeSub?.unsubscribe();
+    this.eventsIdsSub?.unsubscribe();
+    this.titleResizeObserver?.disconnect();
+  }
+
+  get previousEventRoute(): any[] | null {
+    return this.previousEventId ? ['/dashboard/events', this.previousEventId] : null;
+  }
+
+  get nextEventRoute(): any[] | null {
+    return this.nextEventId ? ['/dashboard/events', this.nextEventId] : null;
+  }
+
+  private updateNeighbourEventIds(): void {
+    if (!this.currentEventId) {
+      this.previousEventId = null;
+      this.nextEventId = null;
+      return;
+    }
+
+    this.previousEventId = null;
+    this.nextEventId = null;
+
+    for (const id of this.allEventIds) {
+      if (id < this.currentEventId) {
+        this.previousEventId = id;
+      }
+
+      if (id > this.currentEventId) {
+        this.nextEventId = id;
+        break;
+      }
+    }
+  }
+
+  private scheduleTitleFit(): void {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.fitTitleToSingleLine());
+    });
+  }
+
+  private initTitleResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined' || !this.eventTitleElement) {
+      return;
+    }
+
+    this.titleResizeObserver?.disconnect();
+    const resizeTarget = this.eventTitleElement.parentElement || this.eventTitleElement;
+
+    this.titleResizeObserver = new ResizeObserver(() => {
+      if (!this.isFittingTitle) {
+        this.fitTitleToSingleLine();
+      }
+    });
+
+    this.titleResizeObserver.observe(resizeTarget);
+  }
+
+  private fitTitleToSingleLine(): void {
+    const titleElement = this.eventTitleElement;
+    if (!titleElement) {
+      return;
+    }
+
+    this.isFittingTitle = true;
+    try {
+      const computedSize = parseFloat(getComputedStyle(titleElement).fontSize);
+      let currentSize = Number.isFinite(computedSize) ? computedSize : this.titleMaxFontSizePx;
+      currentSize = Math.min(this.titleMaxFontSizePx, Math.max(this.titleMinFontSizePx, currentSize));
+
+      titleElement.style.fontSize = `${currentSize}px`;
+
+      while (titleElement.scrollWidth > titleElement.clientWidth && currentSize > this.titleMinFontSizePx) {
+        currentSize -= 1;
+        titleElement.style.fontSize = `${currentSize}px`;
+      }
+
+      while (titleElement.scrollWidth <= titleElement.clientWidth && currentSize < this.titleMaxFontSizePx) {
+        currentSize += 1;
+        titleElement.style.fontSize = `${currentSize}px`;
+        if (titleElement.scrollWidth > titleElement.clientWidth) {
+          currentSize -= 1;
+          titleElement.style.fontSize = `${currentSize}px`;
+          break;
+        }
+      }
+    } finally {
+      this.isFittingTitle = false;
+    }
   }
 
   openContractsEditor() {
@@ -193,6 +343,7 @@ export class EventSummaryComponent implements OnInit {
             this.snackbar.open('Zaktualizowano wydarzenie', 'Zamknij', {
               duration: 3000,
             });
+            this.scheduleTitleFit();
           });
         }
       });
