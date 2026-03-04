@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { parseCurrencyAmount } from '../shared/currencyFormat';
 
 @Component({
   selector: 'dashboard-event-summary',
@@ -22,7 +23,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   templateUrl: './event-summary.component.html',
   styleUrl: './event-summary.component.scss'
 })
-export class EventSummaryComponent implements OnInit, AfterViewInit {
+export class EventSummaryComponent implements OnInit {
   event!: any;
   eventService: DashboardBackendService;
   dialog: MatDialog;
@@ -31,13 +32,54 @@ export class EventSummaryComponent implements OnInit, AfterViewInit {
 
   contractsDataSource = new MatTableDataSource<any>();
 
-  // Table columns
   contractsColumns: string[] = ['member', 'amount', 'type'];
   transactionsColumns: string[] = ['amount', 'description', 'category'];
   setlistColumns: string[] = ['order', 'song'];
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private getContractsSaveErrorMessage(err: any): string {
+    const apiDetails = err?.error?.details;
+    const apiError = err?.error?.error;
+    const apiMessage = err?.error?.message;
+
+    if (typeof apiDetails === 'string' && apiDetails.length > 0) {
+      return `Błąd zapisu umów: ${apiDetails}`;
+    }
+
+    if (typeof apiError === 'string' && apiError.length > 0) {
+      return `Błąd zapisu umów: ${apiError}`;
+    }
+
+    if (typeof apiMessage === 'string' && apiMessage.length > 0) {
+      return `Błąd zapisu umów: ${apiMessage}`;
+    }
+
+    const validationErrors = err?.error?.errors;
+    if (validationErrors && typeof validationErrors === 'object') {
+      const firstEntry = Object.values(validationErrors)[0] as unknown;
+      if (Array.isArray(firstEntry) && firstEntry.length > 0) {
+        return `Błąd zapisu umów: ${firstEntry[0]}`;
+      }
+      if (typeof firstEntry === 'string' && firstEntry.length > 0) {
+        return `Błąd zapisu umów: ${firstEntry}`;
+      }
+    }
+
+    return 'Błąd zapisu umów. Sprawdź poprawność danych (osoba, kwota, typ umowy).';
+  }
+
+  @ViewChild('transactionsSort')
+  set transactionsSort(sort: MatSort | undefined) {
+    if (sort) {
+      this.transactionsDataSource.sort = sort;
+    }
+  }
+
+  @ViewChild('transactionsPaginator')
+  set transactionsPaginator(paginator: MatPaginator | undefined) {
+    if (paginator) {
+      this.transactionsDataSource.paginator = paginator;
+    }
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -56,77 +98,82 @@ export class EventSummaryComponent implements OnInit, AfterViewInit {
       this.event = event;
       this.transactionsDataSource.data = event.transactions || [];
       this.contractsDataSource.data = event.contracts || [];
-    
-      // Ensure paginator is assigned after data is set
-      setTimeout(() => {
-        if (this.paginator) {
-          this.transactionsDataSource.paginator = this.paginator;
-        }
-        if (this.sort) {
-          this.transactionsDataSource.sort = this.sort;
-        }
-      });
+
       const eventYear = new Date(event.date).getFullYear();
       this.titleService.setTitle(`${ event.name } - ${ eventYear } - Podgląd wydarzenia`);
     });
   }
 
-  ngAfterViewInit() {
-  }
-
   openContractsEditor() {
-    console.log('Opening contracts editor');
-
-    // Keep a snapshot of original contracts to compute deletions
     const originalContracts = JSON.parse(JSON.stringify(this.event.contracts || []));
 
-    const dialogRef = this.dialog.open(EventContractsEditorComponent, {
-      data: { contracts: originalContracts },
-    });
+    this.eventService.getContractTypes().subscribe((contractTypes) => {
+      const dialogRef = this.dialog.open(EventContractsEditorComponent, {
+        data: { contracts: originalContracts, contractTypes },
+      });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        // result is the modified contracts array
-        try {
-          // compute deleted contract IDs (present in original, missing in result)
-          const origIds = (originalContracts || []).map((c: any) => c.id).filter((id: any) => id !== undefined && id !== null);
-          const resultIds = (result || []).map((c: any) => c.id).filter((id: any) => id !== undefined && id !== null);
-          const deletedContracts = origIds.filter((id: any) => !resultIds.includes(id));
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          try {
+            const resultContracts = Array.isArray(result) ? result : (result.contracts || []);
+            const explicitlyAddedContracts = Array.isArray(result?.addedContracts) ? result.addedContracts : [];
 
-          // compute new-contract array expected by backend
-          const newContracts: any[] = (result || []).filter((c: any) => !origIds.includes(c.id)).map((c: any) => ({
-            'contract-person': c.member && (c.member.id || c.member),
-            'contract-amount': Number(c.contract_amount).toFixed(2),
-            'contract-type': c.type && c.type.value
-          }));
+            const origIds = (originalContracts || [])
+              .map((c: any) => Number(c.id))
+              .filter((id: any) => Number.isFinite(id));
+            const resultIds = (resultContracts || [])
+              .map((c: any) => Number(c.id))
+              .filter((id: any) => Number.isFinite(id));
+            const deletedContracts = origIds.filter((id: any) => !resultIds.includes(id));
 
-          const payload: any = {
-            event: this.event.id,
-          } as any;
+            const combinedCandidates = [...(resultContracts || []), ...(explicitlyAddedContracts || [])];
+            const uniqueNewCandidates = combinedCandidates.filter((candidate: any, index: number, array: any[]) => {
+              if (!candidate) {
+                return false;
+              }
 
-          if (newContracts.length) {
-            payload['new-contract'] = newContracts;
-          }
-          if (deletedContracts.length) {
-            payload['deletedContracts'] = deletedContracts;
-          }
-
-          this.eventService.updateEventContracts(this.event.id, payload).subscribe(() => {
-            // Refresh event data after saving
-            this.eventService.getEventById(this.event.id).subscribe((event) => {
-              this.event = event;
-              this.contractsDataSource.data = this.event.contracts || [];
-              this.snackbar.open('Zaktualizowano umowy', 'Zamknij', { duration: 3000 });
+              const candidateId = Number(candidate.id);
+              return array.findIndex((entry: any) => Number(entry?.id) === candidateId) === index;
             });
-          }, (err) => {
-            console.error('Failed to update contracts', err);
-            this.snackbar.open('Błąd podczas zapisywania umów', 'Zamknij', { duration: 5000 });
-          });
-        } catch (err) {
-          console.error('Error preparing contracts payload', err);
-          this.snackbar.open('Błąd przygotowania danych umów', 'Zamknij', { duration: 5000 });
+
+            const newContracts: any[] = uniqueNewCandidates
+              .filter((c: any) => c && (c.__isNew === true || !origIds.includes(Number(c.id))))
+              .map((c: any) => ({
+              'contract-person': c.member ? Number(c.member.id || c.member) : null,
+              'contract-amount': parseCurrencyAmount(c.contract_amount).toFixed(2),
+              'contract-type': c.type ? Number(c.type.id || c.type) : null
+              }));
+
+            const payload: any = {
+              event: this.event.id,
+            } as any;
+
+            if (newContracts.length) {
+              payload['new-contract'] = newContracts;
+            }
+            if (deletedContracts.length) {
+              payload['deletedContracts'] = deletedContracts;
+            }
+
+            this.eventService.updateEventContracts(this.event.id, payload).subscribe(() => {
+              this.eventService.getEventById(this.event.id).subscribe((event) => {
+                this.event = event;
+                this.contractsDataSource.data = this.event.contracts || [];
+                this.snackbar.open('Zaktualizowano umowy', 'Zamknij', { duration: 3000 });
+              });
+            }, (err) => {
+              console.error('Failed to update contracts', err);
+              this.snackbar.open(this.getContractsSaveErrorMessage(err), 'Zamknij', { duration: 8000 });
+            });
+          } catch (err) {
+            console.error('Error preparing contracts payload', err);
+            this.snackbar.open('Błąd przygotowania danych umów: sprawdź kwoty i wybrane pola.', 'Zamknij', { duration: 6000 });
+          }
         }
-      }
+      });
+    }, (err) => {
+      console.error('Failed to fetch contract types', err);
+      this.snackbar.open('Nie udało się pobrać typów umów.', 'Zamknij', { duration: 6000 });
     });
   }
 

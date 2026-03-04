@@ -1,5 +1,31 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
+export function parseCurrencyAmount(value: unknown): number {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value
+      .replace(/\s/g, '')
+      .replace('zł', '')
+      .replace('PLN', '')
+      .replace(',', '.')
+      .replace(/[^0-9.-]/g, '');
+    const parsed = parseFloat(normalized);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  return 0;
+}
+
+export function formatCurrencyAmount(value: unknown, locale: string = 'pl-PL', currency: string = 'PLN'): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency
+  }).format(parseCurrencyAmount(value));
+}
+
 @Directive({
     selector: '[currencyFormat]'
 })
@@ -15,9 +41,7 @@ export class CurrencyFormatDirective {
 
     @HostListener('input', ['$event'])
     onInput(event: any) {
-        console.log('onInput', event.target.value);
         let value = event.target.value.replace(/[^\d,.-]/g, '');
-        console.log('onInput after replace', value);
         value = value.replace(',', '.');
 
         this.renderer.setProperty(this.el.nativeElement, 'value', value);
@@ -29,11 +53,7 @@ export class CurrencyFormatDirective {
       }
 
       private formatValue() {
-        const value = parseFloat(this.el.nativeElement.value) || 0;
-        const formatted = new Intl.NumberFormat(this.locale, {
-          style: 'currency',
-          currency: this.currency
-        }).format(value);
+        const formatted = formatCurrencyAmount(this.el.nativeElement.value, this.locale, this.currency);
         
         this.renderer.setProperty(this.el.nativeElement, 'value', formatted);
       }

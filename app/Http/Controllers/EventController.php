@@ -66,6 +66,11 @@ class EventController extends Controller
         return response()->json($eventTypes);
     }
 
+    public function getContractTypes() {
+        $contractTypes = EnumType::where('discriminator', EnumTypeDiscriminator::CONTRACT_TYPE)->get();
+        return response()->json($contractTypes);
+    }
+
     public function getEvent($id) {
         $event = Event::find($id);
         $event->saldo = Transaction::where('ev_id',$event->id)->sum('amount');
@@ -81,9 +86,24 @@ class EventController extends Controller
 
         $contracts = Contract::where('event_id',$id)->get();
         $contracts->transform(function ($contract) {
-            $contract->member = $contract->member->value;
-            $contract->type = $contract->type->value;
-            return $contract;
+            return [
+                'id' => $contract->id,
+                'contract_amount' => $contract->contract_amount,
+                'member' => [
+                    'name' => $contract->member->first_name . ' ' . $contract->member->last_name,
+                    'display_name' => $contract->member->display_name,
+                    'id' => $contract->member->id
+                ],
+                'type' => [
+                    'id' => $contract->type->id,
+                    'value' => $contract->type->value
+                ],
+                'event' => [
+                    'name' => $contract->event->name,
+                    'id' => $contract->event->id,
+                    'date' => $contract->event->date,
+                ]
+            ];
         });
         $event->contracts = $contracts;
 
@@ -374,10 +394,13 @@ class EventController extends Controller
     public function updateEventContracts(Request $request, $id) {
         // Accept same payload as the Blade form handler: event, new-contract.*, deletedContracts
         $validatedData = $request->validate([
+            'event' => 'required|exists:App\Models\Event,id',
+            'new-contract' => 'sometimes|array',
             'new-contract.*.contract-person' => 'nullable|exists:App\Models\Member,id',
             'new-contract.*.contract-amount' => 'nullable|decimal:2',
             'new-contract.*.contract-type' => 'nullable|exists:App\Models\EnumType,id',
-            'deletedContracts' => 'sometimes|required_without:new-contract|array'
+            'deletedContracts' => 'sometimes|required_without:new-contract|array',
+            'deletedContracts.*' => 'integer|exists:App\Models\Contract,id'
         ]);
 
         try {

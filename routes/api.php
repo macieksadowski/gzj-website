@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'deleteEvent']);
 
     Route::get('/contracts', [EventController::class, 'getAllContracts']);
+    Route::get('/contract-types', [EventController::class, 'getContractTypes']);
     Route::get('/contracts/summaryPerYear', [EventController::class, 'getContractsSummaryPerYear']);
     Route::post('/events/{id}/contracts/edit', [EventController::class, 'updateEventContracts']);
     

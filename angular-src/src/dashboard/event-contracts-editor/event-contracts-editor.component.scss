@@ -24,6 +24,11 @@ mat-dialog-content {
   min-height: 40px; /* visual target height for rows */
 }
 
+.contract-row.pending-delete {
+  border-color: rgba(198, 40, 40, 0.4);
+  background: rgba(198, 40, 40, 0.08);
+}
+
 .contract-info {
   /* use a 3-column grid so values align with the add-row inputs;
      middle column (amount) has fixed width, sides are flexible but not smaller than 140px */
@@ -60,6 +65,11 @@ mat-dialog-content {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.contract-actions {
+  display: flex;
+  align-items: center;
 }
 
 /* Small responsive tweak */

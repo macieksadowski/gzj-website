@@ -47,11 +47,10 @@ class FinancesController extends Controller
             'amount' => 'required|numeric',
             'description' => 'required',
             //event can be null but if it's not null it has to exist
-            'event' => 'nullable|exists:App\Models\Event,id'
+            'event' => 'nullable|exists:App\Models\Event,id',
+            'cash_transaction' => 'nullable|boolean'
         ]);
-        if($request->has('cash_transaction')){
-            $validatedData['cash_transaction'] = true;
-        }
+        $validatedData['cash_transaction'] = $request->boolean('cash_transaction');
         $transaction = Transaction::find($id);
         $this->fillTransaction($transaction, $validatedData);
         $transaction->save();
@@ -65,11 +64,10 @@ class FinancesController extends Controller
             'amount' => 'required|numeric',
             'description' => 'required',
             //event can be null but if it's not null it has to exist
-            'event' => 'nullable|exists:App\Models\Event,id'
+            'event' => 'nullable|exists:App\Models\Event,id',
+            'cash_transaction' => 'nullable|boolean'
         ]);
-        if($request->has('cash_transaction')){
-            $validatedData['cash_transaction'] = true;
-        }
+        $validatedData['cash_transaction'] = $request->boolean('cash_transaction');
         $transaction = new Transaction();
         $this->fillTransaction($transaction, $validatedData);
         $transaction->save();
@@ -258,11 +256,10 @@ class FinancesController extends Controller
             'amount' => 'required|numeric',
             'description' => 'required',
             //event can be null but if it's not null it has to exist
-            'event' => 'nullable|exists:App\Models\Event,id'
+            'event' => 'nullable|exists:App\Models\Event,id',
+            'cash_transaction' => 'nullable|boolean'
         ]);
-        if($request->has('cash_transaction')){
-            $validated['cash_transaction'] = true;
-        }
+        $validated['cash_transaction'] = $request->boolean('cash_transaction');
         return $validated;
     }
 
@@ -275,9 +272,7 @@ class FinancesController extends Controller
         if(isset($validatedData['event'])) {
             $transaction->event()->associate($validatedData['event']);
         }
-        if(isset($validatedData['cash_transaction'])) {
-            $transaction->cash_transaction = true;
-        }
+        $transaction->cash_transaction = (bool)$validatedData['cash_transaction'];
     }
 
     public function deleteTransaction(Request $request)

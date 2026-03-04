@@ -2,15 +2,18 @@
 
 <mat-dialog-content>
     <div class="contracts-list">
-        <div class="contract-row" *ngFor="let contract of contracts; let i = index">
+        <div class="contract-row" [class.pending-delete]="confirmDeleteIndex === i" *ngFor="let contract of contracts; let i = index">
             <div class="contract-info">
                 <div class="contract-member">{{ contract.member?.display_name || contract.member?.name }}</div>
                 <div class="contract-amount">{{ contract.contract_amount | currency:'PLN' }}</div>
                 <div class="contract-type">{{ contract.type?.value }}</div>
             </div>
             <div class="contract-actions">
-                <button mat-icon-button color="warn" aria-label="Usuń umowę" (click)="removeContract(i)">
-                    <mat-icon>{{ confirmDeleteIndex === i ? 'check' : 'delete' }}</mat-icon>
+                <button mat-icon-button [color]="confirmDeleteIndex === i ? 'accent' : 'warn'"
+                    [attr.aria-label]="confirmDeleteIndex === i ? 'Potwierdź usunięcie umowy' : 'Usuń umowę'"
+                    [matTooltip]="confirmDeleteIndex === i ? 'Kliknij ponownie, aby potwierdzić usunięcie' : 'Usuń umowę'"
+                    (click)="removeContract(i)">
+                    <mat-icon>{{ confirmDeleteIndex === i ? 'delete_forever' : 'delete' }}</mat-icon>
                 </button>
             </div>
         </div>
@@ -34,9 +37,10 @@
 
         <mat-form-field appearance="outline" class="add-field">
             <mat-label>Rodzaj</mat-label>
-            <mat-select [(ngModel)]="newContract.type" aria-label="Rodzaj umowy">
+            <mat-select [(ngModel)]="newContract.type" [disabled]="!contractTypes || contractTypes.length === 0" aria-label="Rodzaj umowy">
                 <mat-option *ngFor="let contractType of contractTypes" [value]="contractType">{{ contractType.value }}</mat-option>
             </mat-select>
+            <mat-hint *ngIf="!contractTypes || contractTypes.length === 0">Brak dostępnych typów umów</mat-hint>
             <mat-error *ngIf="!newContract.type">Wybierz rodzaj umowy</mat-error>
         </mat-form-field>
 

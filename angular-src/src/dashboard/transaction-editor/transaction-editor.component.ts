@@ -12,7 +12,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { DashboardBackendService } from '../services/dashboardbackend.service';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { Router } from '@angular/router';
-import { CurrencyFormatDirective } from '../shared/currencyFormat';
+import { CurrencyFormatDirective, parseCurrencyAmount } from '../shared/currencyFormat';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CategoryType, CategoryTypeEnum, Transaction, TransactionCategory, TransactionDTO } from '../model/transaction';
@@ -102,7 +102,7 @@ export class TransactionEditorComponent {
   }
 
   filterCategories() {
-    const amount = this.transactionForm.value.amount;
+    const amount = parseCurrencyAmount(this.transactionForm.value.amount);
     this.transactionCategories = [...this.data.transactionCategories.filter((category) => {
       if (amount < 0) {
         return category.type.value === CategoryTypeEnum.OUTCOME;
@@ -134,7 +134,7 @@ export class TransactionEditorComponent {
     const transactionDTO: TransactionDTO = {
       tr_id: this.transaction.tr_id,
       date: formatDate(formValues.date, 'yyyy-MM-dd', 'pl-PL'),
-      amount: formValues.amount,
+      amount: parseCurrencyAmount(formValues.amount),
       description: formValues.description,
       category: formValues.category,
       event: formValues.event? formValues.event.id : null,

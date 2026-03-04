@@ -65,6 +65,11 @@ export class DashboardBackendService {
     return this.http.post<any>(`${this.apiUrl}/events/${eventId}/contracts/edit`, payload, this.getHeaders());
   }
 
+  getContractTypes(): Observable<any[]> {
+    console.log(`Fetching contract types from API`);
+    return this.http.get<any[]>(`${this.apiUrl}/contract-types`, this.getHeaders());
+  }
+
   getEventTypes(): Observable<any[]> {
     console.log(`Fetching event types from API`);
     return this.http.get<any[]>(`${this.apiUrl}/event-types`, this.getHeaders());
