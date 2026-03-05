@@ -2,6 +2,8 @@
 
 Dashboard is a comprehensive web application designed to help music bands manage their finances, events, contracts, and setlists. The app is built with Angular and offers a suite of tools to streamline the daily operations of a band.
 
+Production deployment guide is available in [../DEPLOYMENT.md](../DEPLOYMENT.md).
+
 ## Features
 
 ### Finances Module

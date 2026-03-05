@@ -7,13 +7,6 @@ ANGULAR_DIR="$ROOT_DIR/angular-src"
 OUTPUT_DIR="$ROOT_DIR/public_html/angular-assets"
 PROD_ENV_FILE="$ANGULAR_DIR/src/environments/environment.prod.ts"
 
-API_URL="/api"
-API_TOKEN=""
-
-escape_ts_string() {
-  printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e "s/'/\\\\'/g"
-}
-
 if [[ ! -d "$ANGULAR_DIR" ]]; then
   echo "[ERROR] Angular directory not found: $ANGULAR_DIR"
   exit 1
@@ -28,24 +21,13 @@ echo "[INFO] Root: $ROOT_DIR"
 echo "[INFO] Angular: $ANGULAR_DIR"
 echo "[INFO] Output: $OUTPUT_DIR"
 
-if [[ -n "${DASHBOARD_API_URL:-}" ]]; then
-  echo "[WARN] DASHBOARD_API_URL is ignored (same-host policy enforced: /api)."
+if [[ ! -f "$PROD_ENV_FILE" ]]; then
+  echo "[ERROR] Missing Angular prod env file: $PROD_ENV_FILE"
+  echo "[HINT] Create it first and set apiUrl/apiToken for production deployment."
+  exit 1
 fi
 
-if [[ -n "${DASHBOARD_API_TOKEN:-}" ]]; then
-  echo "[WARN] DASHBOARD_API_TOKEN is ignored (auth uses same-host session/cookie only)."
-fi
-
-echo "[STEP] Generating environment.prod.ts..."
-API_URL_ESCAPED="$(escape_ts_string "$API_URL")"
-API_TOKEN_ESCAPED="$(escape_ts_string "$API_TOKEN")"
-
-cat > "$PROD_ENV_FILE" <<EOF
-export const environment = {
-    apiToken: '$API_TOKEN_ESCAPED',
-    apiUrl: '$API_URL_ESCAPED'
-};
-EOF
+echo "[STEP] Using existing environment.prod.ts from repository..."
 
 echo "[STEP] Cleaning previous build output..."
 mkdir -p "$OUTPUT_DIR"
