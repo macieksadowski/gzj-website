@@ -59,6 +59,11 @@ h6 {
     color: var(--mat-sys-error);
 }
 
+.table > :not(caption) > * > .negative,
+.table > :not(caption) > * > *.negative {
+    color: var(--mat-sys-error);
+}
+
 // Shared styles for dropdowns
 @mixin dropdown-styles($background-color, $box-shadow) {
     background: $background-color;

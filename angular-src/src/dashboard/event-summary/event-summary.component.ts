@@ -45,11 +45,12 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   generatingZaiksReport = false;
 
   transactionsDataSource = new MatTableDataSource<any>();
+  expensesByCategoryDataSource = new MatTableDataSource<any>();
 
   contractsDataSource = new MatTableDataSource<any>();
 
   contractsColumns: string[] = ['member', 'amount', 'type'];
-  transactionsColumns: string[] = ['amount', 'description', 'category'];
+  transactionsColumns: string[] = ['category', 'amount'];
   setlistColumns: string[] = ['order', 'song'];
   readonly fabNavigationComponent = FabNavigationComponent;
 
@@ -161,6 +162,7 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((event) => {
       this.event = event;
       this.transactionsDataSource.data = event.transactions || [];
+      this.expensesByCategoryDataSource.data = this.buildExpensesByCategory(event.transactions || []);
       this.contractsDataSource.data = event.contracts || [];
 
       const eventYear = new Date(event.date).getFullYear();
@@ -168,6 +170,35 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
       this.scheduleTitleFit();
       this.loadingEvent = false;
     });
+  }
+
+  private buildExpensesByCategory(transactions: any[]): any[] {
+    const grouped = new Map<string, number>();
+
+    transactions
+      .forEach((transaction: any) => {
+        const categoryName = transaction?.category?.name || 'Bez kategorii';
+        const amount = Number(transaction?.amount) || 0;
+        grouped.set(categoryName, (grouped.get(categoryName) || 0) + amount);
+      });
+
+    return Array.from(grouped.entries())
+      .map(([category, amount]) => ({ category, amount }))
+      .sort((a, b) => b.amount - a.amount);
+  }
+
+  isNegativeAmount(value: unknown): boolean {
+    if (typeof value === 'number') {
+      return value < 0;
+    }
+
+    if (typeof value === 'string') {
+      const normalized = value.replace(/\s/g, '').replace(',', '.');
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) && parsed < 0;
+    }
+
+    return false;
   }
 
   ngAfterViewInit(): void {
