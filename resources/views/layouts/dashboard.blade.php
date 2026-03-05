@@ -46,8 +46,6 @@
 
 @section('scripts')
     @parent
-    <script src="{{ asset('/js/dual-listbox.js') }}"></script>
-
     <script src="{{ asset('/js/dataTables.min.js') }}"></script>
     <script src="{{ asset('/js/dataTables.bootstrap5.min.js') }}"></script>
     

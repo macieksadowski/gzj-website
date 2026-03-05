@@ -17,7 +17,7 @@ export class DashboardComponent {
     { name: 'Umowy',
       path: [
         { name: 'Lista umów', path: '/dashboard/contracts' },
-        { name: 'Generator', path: '/dashboard/contracts-generator' }
+        { name: 'Dane członków', path: '/dashboard/members' }
       ]
     },
     { 

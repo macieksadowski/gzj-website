@@ -1,16 +1,21 @@
-<div class="row">
-    <div class="col-2">
-        <mat-form-field>
-            <mat-label>Tytuł</mat-label>
-            <input matInput (keyup)="applyTitleFilter($event)" placeholder="Wpisz">
-        </mat-form-field>
+<div class="container dashboard-page songsView">
+    <div class="section-title">
+        <p>Utwory</p>
+        <div class="title-meta-row title-meta-row--actions-only">
+            <div class="actions-inline" aria-label="Akcje utworów">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Tytuł</mat-label>
+                    <input matInput (keyup)="applyTitleFilter($event)" placeholder="Wpisz">
+                </mat-form-field>
+                <button mat-flat-button color="primary" (click)="newSong()">Nowy utwór</button>
+            </div>
+        </div>
     </div>
-    <div class="col-2 offset-6">
-        <button mat-raised-button (click)="newSong()">Nowy utwór</button>
-    </div>
-</div>
 
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <mat-card class="event-card page-card">
+        <mat-card-content>
+            <div class="data-loading-shell" [class.is-loading]="loading">
+            <table mat-table [dataSource]="dataSource" matSort class="table">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
         <td mat-cell *matCellDef="let song" class="align-center">
@@ -57,13 +62,18 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  <tr class="mat-row" *matNoDataRow>
+  <tr class="mat-row" *matNoDataRow [style.display]="loading ? 'none' : ''">
     <td class="mat-cell" colspan="4">Nie znaleziono utworów spełniających zadane kryteria filtrowania</td>
 </tr>
-</table>
-<mat-paginator [pageSizeOptions]="[20, 50, 100]"
-    showFirstLastButtons
-    aria-label="Select page">
-</mat-paginator>
-
-<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
+            </table>
+            <mat-paginator [pageSizeOptions]="[20, 50, 100]"
+                showFirstLastButtons
+                aria-label="Select page">
+            </mat-paginator>
+            <div class="data-loading-shell__overlay" *ngIf="loading">
+                <mat-spinner diameter="34"></mat-spinner>
+            </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,19 @@
+@use '../../styles/song-picker' as songPicker;
+
+.zaiksView {
+	.filename-field {
+		width: min(360px, 100%);
+	}
+
+	p {
+		margin: 0 0 10px;
+	}
+
+	@include songPicker.layout(1.35rem);
+
+	.dialog-spinner-wrap {
+		display: flex;
+		justify-content: center;
+		margin-top: 16px;
+	}
+}

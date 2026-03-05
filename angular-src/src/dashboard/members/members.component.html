@@ -1,7 +1,8 @@
-<div class="container">
-    <div class="row">
-        <div class="col-2">
-            <mat-form-field appearance="fill" class="selector">
+<div class="container membersView">
+    <div class="section-title">
+        <p>Dane członków zespołu</p>
+        <div class="title-meta-row">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="membersView__selector">
                 <mat-label>Wybierz członka</mat-label>
                 <mat-select [(value)]="selectedMember" (selectionChange)="onMemberChange($event)">
                     <mat-option *ngFor="let member of members" [value]="member.id">
@@ -9,18 +10,21 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </div>
-        <div class="col-2 offset-8">
-            <button mat-raised-button color="accent" (click)="createNewMember()">Nowy członek</button>
+            <div class="actions-inline" aria-label="Akcje członków">
+                <button mat-flat-button color="primary" (click)="createNewMember()">Nowy członek</button>
+            </div>
         </div>
     </div>
-    <mat-card>
+
+    <div class="row membersView__cardsRow">
+        <div class="col-12">
+            <mat-card class="event-card">
         <mat-card-header>
             <mat-card-title>Dane osobowe</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="memberForm">
-                <div class="row">
+                <div class="row g-3 membersView__formRow">
                     <div class="col-6 ">
                         <mat-form-field>
                             <mat-label>Imię</mat-label>
@@ -34,7 +38,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-3 membersView__formRow">
                     <div class="col-9">
                         <mat-form-field>
                             <mat-label>Ulica</mat-label>
@@ -48,7 +52,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-3 membersView__formRow">
                     <div class="col-3">
                         <mat-form-field>
                             <mat-label>Kod pocztowy</mat-label>
@@ -67,7 +71,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-3 membersView__formRow">
                     <div class="col-4">
                         <mat-form-field>
                             <mat-label>PESEL</mat-label>
@@ -85,7 +89,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-3 membersView__formRow">
                     <div class="col-6">
                         <mat-form-field>
                             <mat-label>Numer konta</mat-label>
@@ -107,43 +111,46 @@
             </form>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="toggleEditMode()">
+            <button mat-flat-button color="primary" (click)="toggleEditMode()">
                 {{ isEditing ? 'Zapisz' : 'Edytuj' }}
             </button>
-            <button mat-raised-button color="primary" (click)="copyToClipboard()">
+            <button mat-stroked-button (click)="copyToClipboard()">
                 Kopiuj do schowka
             </button>
         </mat-card-actions>
-    </mat-card>
-    <mat-card>
+            </mat-card>
+        </div>
+
+        <div class="col-12">
+            <mat-card class="event-card">
         <mat-card-header>
             <mat-card-title>Generator umów</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="contractForm">
-                <div class="row">
-                    <div class="col-6">
-                        <mat-form-field>
+                <div class="row g-3 membersView__formRow membersView__contractRow">
+                    <div class="col-6 membersView__contractTitleCol">
+                        <mat-form-field subscriptSizing="dynamic">
                             <mat-label>Tytuł umowy</mat-label>
                             <input matInput formControlName="contract_title" />
                         </mat-form-field>
                     </div>
-                    <div class="col-6">
-                        <fieldset>
-                            <legend class="col-form-label pt-0">Typ umowy</legend>
-                            <mat-radio-group formControlName="contract_type">
-                                <mat-radio-button value="zlecenie">Zlecenie</mat-radio-button>
-                                <mat-radio-button value="dzielo">O dzieło</mat-radio-button>
-                            </mat-radio-group>
-                        </fieldset>
+                    <div class="col-6 membersView__contractTypeCol">
+                        <span class="membersView__contractTypeLabel">Typ umowy</span>
+                        <mat-radio-group class="membersView__contractTypeGroup" formControlName="contract_type">
+                            <mat-radio-button value="zlecenie">Zlecenie</mat-radio-button>
+                            <mat-radio-button value="dzielo">O dzieło</mat-radio-button>
+                        </mat-radio-group>
                     </div>
                 </div>
             </form>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="generateContract()">Generuj umowę</button>
+            <button mat-flat-button color="primary" (click)="generateContract()">Generuj umowę</button>
         </mat-card-actions>
-    </mat-card>
+            </mat-card>
+        </div>
+    </div>
 </div>
 
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

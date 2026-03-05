@@ -1,17 +1,27 @@
-<h2>Podsumowanie umów na daną osobę</h2>
-<p>Dodać, edytować i usunąć umowę można z poziomu widoku szczegółów wydarzenia</p>
-<div class="row">
-    <div class="col-2">
-        <mat-form-field>
-            <mat-label>Wybierz rok</mat-label>
-            <mat-select  [(value)]="selectedYear"  (selectionChange)="applyYearFilter($event)">
-                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+<div class="container dashboard-page contractsView">
+    <div class="section-title">
+        <p>Umowy</p>
+        <div class="title-meta-row title-meta-row--actions-only">
+            <div class="actions-inline" aria-label="Filtry umów">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Wybierz rok</mat-label>
+                    <mat-select  [(value)]="selectedYear"  (selectionChange)="applyYearFilter($event)">
+                        <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
-</div>
 
-<table mat-table [dataSource]="dataSourceSummaryTable" class="mat-elevation-z8">
+    <p class="contractsView__hint">Dodać, edytować i usunąć umowę można z poziomu widoku szczegółów wydarzenia.</p>
+
+    <mat-card class="event-card page-card">
+        <mat-card-header>
+            <mat-card-title>Podsumowanie umów na osobę</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="data-loading-shell" [class.is-loading]="loading">
+            <table mat-table [dataSource]="dataSourceSummaryTable" class="table">
     <ng-container matColumnDef="member">
         <th mat-header-cell *matHeaderCellDef> Osoba </th>
         <td mat-cell *matCellDef="let entry" class="align-center">
@@ -33,22 +43,31 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsSummaryTable"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsSummaryTable;"></tr>
-    <tr class="mat-row" *matNoDataRow>
+    <tr class="mat-row" *matNoDataRow [style.display]="loading ? 'none' : ''">
         <td class="mat-cell" colspan="3">Brak danych</td>
     </tr>
-</table>
-<div class="spacer"></div>
-<h2>Lista wszystkich umów</h2>
-<div class="row">
-    <div class="col-2">
-        <mat-form-field>
-            <mat-label>Szukaj</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Wpisz">
-        </mat-form-field>
-    </div>
-</div>
+            </table>
+            <div class="data-loading-shell__overlay" *ngIf="loading">
+                <mat-spinner diameter="34"></mat-spinner>
+            </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <mat-card class="event-card page-card">
+        <mat-card-header>
+            <mat-card-title>Lista wszystkich umów</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="contractsView__searchRow">
+                <mat-form-field>
+                    <mat-label>Szukaj</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Wpisz">
+                </mat-form-field>
+            </div>
+
+            <div class="data-loading-shell" [class.is-loading]="loading">
+            <table mat-table [dataSource]="dataSource" matSort class="table">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
         <td mat-cell *matCellDef="let contract" class="align-center">
@@ -85,13 +104,18 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr class="mat-row" *matNoDataRow>
+    <tr class="mat-row" *matNoDataRow [style.display]="loading ? 'none' : ''">
         <td class="mat-cell" colspan="5">Brak danych</td>
     </tr>
-</table>
-<mat-paginator [pageSizeOptions]="[20, 50, 100]"
-    showFirstLastButtons
-    aria-label="Select page">
-</mat-paginator>
-
-<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
+            </table>
+            <mat-paginator [pageSizeOptions]="[20, 50, 100]"
+                showFirstLastButtons
+                aria-label="Select page">
+            </mat-paginator>
+            <div class="data-loading-shell__overlay" *ngIf="loading">
+                <mat-spinner diameter="34"></mat-spinner>
+            </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -79,55 +79,6 @@ button a {
     }
 }
 
-.dual-listbox {
-
-    &__button {
-        background-color: $color-accent !important;
-        color: $color-text-white !important;
-        border: 1px solid $color-accent-border !important;
-        margin: 5px 10px;
-
-    }
-
-    @media (max-width: $large-device) {
-
-        & .listboxSelectedList,
-        & .listboxAvailableList {
-            width: 44%;
-            padding: 0 10px;
-        }
-
-        &__available,
-        &__selected {
-            width: unset !important;
-        }
-
-        
-        & .listboxFirstButtons {
-            
-                order: 4;
-                flex-direction: row;
-        }
-    }
-
-    @media (max-width: $medium-device) {
-        & .listboxAvailableList {
-            width: 100%;
-            padding: 0 10px;
-        }
-
-        & .listboxSelectedList {
-            width: 90%;
-            padding: 0 10px;
-        }
-
-        &__buttons:not(.listboxFirstButtons) {
-            width: 8%;
-        }
-        
-    }
-}
-
 // .dtsp {
 
 //     &-searchIcon {

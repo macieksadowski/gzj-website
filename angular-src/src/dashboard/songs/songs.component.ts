@@ -17,6 +17,7 @@ import { SongEditorComponent } from '../song-editor/song-editor.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogService } from '../services/confirmdialog.service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'dashboard-songs',
@@ -31,7 +32,8 @@ import { ConfirmDialogService } from '../services/confirmdialog.service';
     MatSelectModule,
     MatOptionModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
   ],
   templateUrl: './songs.component.html',
   styleUrl: './songs.component.scss'

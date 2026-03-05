@@ -22,6 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'dashboard-transactions',
@@ -40,7 +41,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatOptionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
 ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'

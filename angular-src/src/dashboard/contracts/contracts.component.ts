@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'dashboard-contracts',
@@ -26,7 +27,8 @@ import { MatDividerModule } from '@angular/material/divider';
     CommonModule,
     MatButtonModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCardModule
   ],
   templateUrl: './contracts.component.html',
   styleUrl: './contracts.component.scss'
@@ -102,6 +104,6 @@ export class ContractsComponent {
   }
 
   goToEventSummary(eventId: Number) {
-    this.router.navigate(['/events', eventId]);
+    this.router.navigate(['/dashboard/events', eventId]);
   }
 }

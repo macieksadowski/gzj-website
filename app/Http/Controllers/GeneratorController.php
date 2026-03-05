@@ -26,9 +26,9 @@ class GeneratorController extends Controller
 
     public function zaiks(ZaiksGeneratorRequest $request)
     {
-
-        $name = $request->validated()['eventName'];
-        $songs = Song::whereIn('id', $request->validated()['songs'])->get();
+        $validated = $request->validated();
+        $name = (string) ($validated['eventName'] ?? '');
+        $songs = Song::whereIn('id', $validated['songs'])->get();
 
         if ($songs->isEmpty()) {
             return response()->json(['error' => 'Brak utworów do wygenerowania raportu ZAiKS.'], 422);

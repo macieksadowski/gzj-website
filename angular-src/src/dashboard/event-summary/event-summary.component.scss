@@ -39,13 +39,21 @@
         flex-wrap: wrap;
         justify-content: flex-end;
         gap: 6px;
+        width: fit-content;
+        margin-left: auto;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        background: var(--mat-sys-surface-container-low);
 
         button {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding-inline: 8px;
+            padding-inline: 10px;
             min-width: auto;
+            min-height: 34px;
+            border-radius: 999px;
         }
     }
 
@@ -93,6 +101,9 @@
 
         .actions-inline {
             justify-content: flex-start;
+            width: 100%;
+            margin-left: 0;
+            border-radius: 16px;
         }
     }
 

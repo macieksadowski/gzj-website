@@ -15,6 +15,7 @@ import { EventDetailsEditorComponent } from '../event-details-editor/event-detai
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Normalisator } from '../shared/normalisator';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
@@ -29,7 +30,8 @@ import { Normalisator } from '../shared/normalisator';
     MatButtonModule,
     MatSelectModule,
     MatOptionModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatCardModule
   ],
   templateUrl: './events.component.html',
   styleUrl: './events.component.scss'

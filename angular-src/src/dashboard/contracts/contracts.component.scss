@@ -1,3 +1,31 @@
-.spacer {
-    height: 40px;
+.contractsView {
+    &__hint {
+        margin: 0 0 12px;
+        color: var(--mat-sys-on-surface-variant);
+    }
+
+    &__searchRow {
+        margin-bottom: 6px;
+
+        .mat-mdc-form-field {
+            width: 260px;
+            margin-bottom: -1.25em;
+        }
+    }
+
+    .align-right {
+        text-align: right;
+        padding-right: 1rem;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    @media (max-width: 992px) {
+        &__searchRow .mat-mdc-form-field {
+            width: 100%;
+            margin-bottom: 0;
+        }
+    }
 }
