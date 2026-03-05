@@ -1,9 +1,15 @@
-<div *ngIf="event" class="container eventSummary">
+<div class="container eventSummary">
     <div class="section-title">
-        <p #eventTitle>{{ event.name }} - {{ event.date | date:'yyyy' }}</p>
+        <p #eventTitle>
+            <ng-container *ngIf="event; else titleSkeleton">
+                {{ event.name }} - {{ event.date | date:'yyyy' }}
+            </ng-container>
+        </p>
         <div class="title-meta-row">
-            <h2>#{{ event.id }}</h2>
-            <div class="actions-inline" aria-label="Akcje wydarzenia">
+            <h2>
+                <ng-container *ngIf="event; else idSkeleton">#{{ event.id }}</ng-container>
+            </h2>
+            <div *ngIf="event" class="actions-inline" aria-label="Akcje wydarzenia">
                 <button mat-button (click)="openDetailsEditor()"><mat-icon>edit</mat-icon> Szczegóły</button>
                 <button mat-button (click)="openContractsEditor()"><mat-icon>assignment</mat-icon> Umowy</button>
                 <button mat-button (click)="openSetlistEditor()"><mat-icon>queue_music</mat-icon> Setlista</button>
@@ -12,7 +18,21 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
+
+    <ng-template #titleSkeleton>
+        <span class="skeleton skeleton--title" aria-hidden="true"></span>
+    </ng-template>
+
+    <ng-template #idSkeleton>
+        <span class="skeleton skeleton--id" aria-hidden="true"></span>
+    </ng-template>
+
+    <div *ngIf="loadingEvent" class="dialog-spinner-wrap" aria-label="Ładowanie wydarzenia">
+        <mat-spinner diameter="42"></mat-spinner>
+    </div>
+
+    <div class="data-loading-shell" [class.is-loading]="loadingEvent">
+    <div class="row justify-content-center" *ngIf="event; else eventSummaryFallback">
         <div class="col-4">
             <mat-card class="event-card">
                 <mat-card-header>
@@ -118,6 +138,28 @@
                 </mat-card-content>
             </mat-card>
         </div>
+    </div>
+
+    <ng-template #eventSummaryFallback>
+        <ng-container *ngIf="loadingEvent; else noEventData">
+            <div class="row justify-content-center eventSummary__placeholderRow">
+                <div class="col-4" *ngFor="let column of [1,2,3]">
+                    <mat-card class="event-card eventSummary__placeholderCard">
+                        <mat-card-content></mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #noEventData>
+        <mat-card class="event-card eventSummary__emptyCard">
+            <mat-card-content>
+                <p class="empty-state">Nie udało się załadować danych wydarzenia.</p>
+            </mat-card-content>
+        </mat-card>
+    </ng-template>
+
     </div>
 
     <ng-container

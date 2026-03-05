@@ -15,13 +15,14 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseCurrencyAmount } from '../shared/currencyFormat';
 import { FabNavigationComponent } from '../shared/fab-navigation.component';
 import { EMPTY, Subscription, catchError, distinctUntilChanged, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'dashboard-event-summary',
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule, MatSortModule, MatPaginatorModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule, MatSortModule, MatPaginatorModule, MatProgressSpinnerModule],
   templateUrl: './event-summary.component.html',
   styleUrl: './event-summary.component.scss'
 })
@@ -40,7 +41,7 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   currentEventId: number | null = null;
   previousEventId: number | null = null;
   nextEventId: number | null = null;
-  loadingEvent = false;
+  loadingEvent = true;
   generatingZaiksReport = false;
 
   transactionsDataSource = new MatTableDataSource<any>();

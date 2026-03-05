@@ -1,5 +1,73 @@
 .eventSummary {
 
+    .skeleton {
+        display: inline-block;
+        border-radius: 8px;
+        background: linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--mat-sys-surface-container-high) 82%, #ffffff 18%) 25%,
+            color-mix(in srgb, var(--mat-sys-surface-container-highest) 72%, #ffffff 28%) 37%,
+            color-mix(in srgb, var(--mat-sys-surface-container-high) 82%, #ffffff 18%) 63%
+        );
+        background-size: 220% 100%;
+        animation: skeletonShimmer 1.2s ease-in-out infinite;
+    }
+
+    .skeleton--title {
+        width: min(580px, 88vw);
+        max-width: 100%;
+        height: 44px;
+    }
+
+    .skeleton--id {
+        width: 92px;
+        height: 24px;
+    }
+
+    .dialog-spinner-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0 14px;
+    }
+
+    .data-loading-shell {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+
+        &.is-loading {
+            table,
+            .mat-mdc-paginator,
+            .eventSummary__placeholderRow {
+                filter: blur(1.4px);
+                opacity: 0.5;
+                pointer-events: none;
+                user-select: none;
+            }
+        }
+    }
+
+    &__placeholderRow {
+        .col-4 {
+            display: flex;
+        }
+    }
+
+    &__placeholderCard {
+        width: 100%;
+        min-height: 260px;
+        opacity: 0.85;
+
+        .mat-mdc-card-content {
+            min-height: 220px;
+        }
+    }
+
+    &__emptyCard {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
     & .section-title p {
         font-size: 3rem;
         white-space: nowrap;
@@ -107,4 +175,13 @@
         }
     }
 
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
 }
