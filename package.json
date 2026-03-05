@@ -2,11 +2,11 @@
   "name": "dashboard",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve --configuration development",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "ng": "cd angular-src && npx ng",
+    "start": "cd angular-src && npx ng serve --configuration development",
+    "build": "cd angular-src && npx ng build",
+    "watch": "cd angular-src && npx ng build --watch --configuration development",
+    "test": "cd angular-src && npx ng test",
     "deploy:dashboard": "./scripts/deploy-dashboard.sh"
   },
   "private": true,
