@@ -38,13 +38,16 @@ export class MenuComponent {
 
 
   toggleDropdown(event: Event): void {
-    if (this.isNavbarMobile) {
-      event.preventDefault();
-      const target = event.target as HTMLElement;
-      const nextElement = target.nextElementSibling as HTMLElement;
-      if (nextElement) {
-        nextElement.classList.toggle('dropdown-active');
-      }
+    event.preventDefault();
+
+    if (!this.isNavbarMobile) {
+      return;
+    }
+
+    const trigger = event.currentTarget as HTMLElement | null;
+    const nextElement = trigger?.nextElementSibling as HTMLElement | null;
+    if (nextElement) {
+      nextElement.classList.toggle('dropdown-active');
     }
   }
 }

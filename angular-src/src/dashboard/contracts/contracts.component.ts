@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardBackendService } from '../services/dashboardbackend.service';
 import { Contract } from '../model/contracts';
@@ -33,7 +33,7 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './contracts.component.html',
   styleUrl: './contracts.component.scss'
 })
-export class ContractsComponent {
+export class ContractsComponent implements AfterViewInit {
 
   loading: boolean = false;
   displayedColumns: string[] = ['id', 'date', 'event', 'member', 'amount'];
@@ -53,14 +53,43 @@ export class ContractsComponent {
     private router: Router
   ) { }
 
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  private applyContractsTableConfig() {
+    this.dataSource.sortingDataAccessor = (item: Contract, property: string): string | number => {
+      switch (property) {
+        case 'date':
+          return new Date(item.event?.date).getTime();
+        case 'event':
+          return item.event?.name?.toLowerCase() ?? '';
+        case 'member':
+          return item.member?.name?.toLowerCase() ?? '';
+        case 'amount':
+          return item.contract_amount ?? 0;
+        default:
+          return (item as any)[property] ?? '';
+      }
+    };
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    if (this.sort) {
+      this.sort.active = 'date';
+      this.sort.direction = 'desc';
+      this.sort.sortChange.emit({ active: 'date', direction: 'desc' });
+    }
+  }
+
   fetchContracts() {
     this.loading = true;
     this.contractsService.getAllContracts().subscribe(data => {
       this.dataSource = new MatTableDataSource<Contract>(data);
 
-      this.dataSource.paginator = this.paginator;
-
-      this.dataSource.sort = this.sort;
+      this.applyContractsTableConfig();
 
       this.dataSource.filterPredicate = (data: Contract, filter: string) => {
         return data.event.name.toLowerCase().includes(filter) ||

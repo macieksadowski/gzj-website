@@ -33,7 +33,7 @@
 
     <div class="data-loading-shell" [class.is-loading]="loadingEvent">
     <div class="row justify-content-center" *ngIf="event; else eventSummaryFallback">
-        <div class="col-4">
+        <div class="col-12 col-lg-4 eventSummary__column">
             <mat-card class="event-card">
                 <mat-card-header>
                     <h2 mat-card-title>Szczegóły</h2>
@@ -83,7 +83,7 @@
             </mat-card>
         </div>
 
-        <div class="col-4">
+        <div class="col-12 col-lg-4 eventSummary__column">
             <mat-card class="event-card">
                 <mat-card-header>
                     <h2 mat-card-title>Lista wydatków</h2>
@@ -114,7 +114,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-lg-4 eventSummary__column">
             <mat-card class="event-card">
                 <mat-card-header>
                     <h2 mat-card-title>Setlista</h2>
@@ -143,7 +143,7 @@
     <ng-template #eventSummaryFallback>
         <ng-container *ngIf="loadingEvent; else noEventData">
             <div class="row justify-content-center eventSummary__placeholderRow">
-                <div class="col-4" *ngFor="let column of [1,2,3]">
+                <div class="col-12 col-lg-4 eventSummary__placeholderCol" *ngFor="let column of [1,2,3]">
                     <mat-card class="event-card eventSummary__placeholderCard">
                         <mat-card-content></mat-card-content>
                     </mat-card>

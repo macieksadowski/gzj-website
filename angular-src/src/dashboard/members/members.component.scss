@@ -120,6 +120,40 @@
         &__contractTypeCol {
             align-items: flex-start;
             min-height: auto;
+            justify-content: flex-start;
+            padding-right: 12px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .section-title p {
+            font-size: 2.2rem;
+            white-space: normal;
+            line-height: 1.15;
+        }
+
+        &__contractRow {
+            align-items: stretch;
+        }
+
+        &__contractTypeCol {
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 12px;
+        }
+
+        &__contractTypeGroup {
+            flex-wrap: wrap;
+            gap: 8px 14px;
+        }
+
+        mat-card-actions {
+            flex-direction: column;
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
         }
     }
 }

@@ -121,6 +121,22 @@ section {
 
 .dashboard {
     padding-top: 100px;
+
+    .dashboard-shell,
+    .container {
+        width: 100%;
+        max-width: 1320px;
+        margin-inline: auto;
+        padding-inline: clamp(12px, 2vw, 24px);
+    }
+
+    @media (max-width: 992px) {
+        .dashboard-shell,
+        .container {
+            max-width: 100% !important;
+            margin-inline: 0;
+        }
+    }
 }
 
 .spinner {
@@ -365,6 +381,54 @@ section {
                 width: 100%;
                 margin-bottom: 0;
             }
+
+            > button {
+                min-height: 40px;
+            }
+        }
+
+        .data-loading-shell {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .mat-mdc-table {
+            min-width: 720px;
+        }
+
+        .mat-mdc-header-cell,
+        .mat-mdc-cell {
+            padding: 8px 10px;
+            font-size: 0.95rem;
+        }
+
+        .mat-mdc-paginator-container {
+            padding-inline: 6px;
+            justify-content: flex-start;
+            row-gap: 6px;
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .section-title p {
+            font-size: 2.2rem;
+            white-space: normal;
+            line-height: 1.15;
+        }
+
+        .section-title h2 {
+            font-size: 1.2rem;
+
+            &::after {
+                width: 64px;
+            }
+        }
+
+        .actions-inline > button {
+            width: 100%;
+            justify-content: center;
         }
     }
 }

@@ -67,7 +67,7 @@
             </div>
 
             <div class="data-loading-shell" [class.is-loading]="loading">
-            <table mat-table [dataSource]="dataSource" matSort class="table">
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc" class="table">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
         <td mat-cell *matCellDef="let contract" class="align-center">

@@ -1,19 +1,19 @@
 <h2 mat-dialog-title>{{(transaction.tr_id != 0) ? "Edytuj transakcję" : "Dodaj transakcję"}}</h2>
 <mat-dialog-content>
     <form [formGroup]="transactionForm" class="row">
-        <mat-form-field class="col-6">
+        <mat-form-field class="col-12 col-md-6">
             <input matInput [matDatepicker]="picker" placeholder="Data" required formControlName="date" />
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-6">
+        <mat-form-field class="col-12 col-md-6">
             <input matInput currencyFormat placeholder="Kwota" required formControlName="amount"
                 (blur)="filterCategories()" />
         </mat-form-field>
-        <mat-form-field class="col-6">
+        <mat-form-field class="col-12 col-md-6">
             <input matInput placeholder="Opis" required formControlName="description" />
         </mat-form-field>
-        <mat-form-field class="col-6">
+        <mat-form-field class="col-12 col-md-6">
             <mat-select placeholder="Kategoria" required formControlName="category">
                 <mat-option *ngFor="let category of transactionCategories" [value]="category.id">
                     {{ category.name }}
@@ -31,7 +31,7 @@
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <mat-checkbox formControlName="cash_transaction">Gotówką?</mat-checkbox>
         </div>
     </form>
