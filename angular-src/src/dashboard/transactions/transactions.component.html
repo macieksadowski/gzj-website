@@ -5,7 +5,7 @@
             <div class="actions-inline" aria-label="Akcje i filtry transakcji">
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                     <mat-label>Saldo łączne</mat-label>
-                    <input matInput placeholder="Saldo" readonly [ngModel]="saldo | currency:'PLN'" />
+                    <input matInput placeholder="Saldo" readonly [ngModel]="saldo | currency:'PLN'" [class.negative]="saldo < 0" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                     <mat-label>Kategorie</mat-label>

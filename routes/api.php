@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/events', [EventController::class, 'getAllEvents']);
+    Route::get('/events-ids', [EventController::class, 'getAllEventIds']);
     Route::get('/events/{id}', [EventController::class, 'getEvent']);
     Route::get('/event-types', [EventController::class, 'getEventTypes']);
     Route::get('/events-search', [EventController::class, 'searchEvents']);

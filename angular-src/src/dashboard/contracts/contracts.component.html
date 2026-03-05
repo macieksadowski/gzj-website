@@ -36,7 +36,7 @@
     </ng-container>
     <ng-container matColumnDef="total_amount">
         <th mat-header-cell *matHeaderCellDef> Łączna kwota </th>
-        <td mat-cell *matCellDef="let entry" class="align-right">
+        <td mat-cell *matCellDef="let entry" class="align-right" [ngClass]="{'negative': entry.sum < 0}">
             {{ entry.sum | currency:'PLN' }}
         </td>
     </ng-container>
@@ -97,7 +97,7 @@
 
     <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Kwota </th>
-        <td mat-cell *matCellDef="let contract" class="align-right">
+        <td mat-cell *matCellDef="let contract" class="align-right" [ngClass]="{'negative': contract.contract_amount < 0}">
              {{ contract.contract_amount | currency:'PLN' }} 
         </td>
     </ng-container>

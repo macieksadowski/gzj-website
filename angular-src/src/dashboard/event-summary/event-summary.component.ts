@@ -128,9 +128,9 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
    }
 
   ngOnInit(): void {
-    this.eventsIdsSub = this.eventService.getAllEvents().subscribe((events) => {
-      this.allEventIds = events
-        .map((entry: any) => Number(entry.id))
+    this.eventsIdsSub = this.eventService.getAllEventIds().subscribe((eventIds) => {
+        this.allEventIds = eventIds
+          .map((entry: any) => Number(entry))
         .filter((id: number) => Number.isFinite(id))
         .sort((a: number, b: number) => a - b);
       this.updateNeighbourEventIds();

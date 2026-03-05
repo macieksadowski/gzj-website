@@ -37,14 +37,59 @@ class EventController extends Controller
     }
 
     public function getAllEvents() {
-        $events = Event::orderBy('date', 'desc')->get();
-        $events->transform(function ($event) {
-            $event->saldo = Transaction::where('ev_id',$event->id)->sum('amount');
-            $event->contracts_amount = Contract::where('event_id',$event->id)->count();
-            $event->type = $event->type->value;
-            return $event;
-        });
-        return response()->json($events);
+        $contractsAgg = Contract::query()
+            ->select('event_id', DB::raw('COUNT(*) as contracts_amount'))
+            ->groupBy('event_id');
+
+        $transactionsAgg = Transaction::query()
+            ->select('ev_id', DB::raw('SUM(amount) as saldo'))
+            ->groupBy('ev_id');
+
+        $events = DB::table('events as e')
+            ->leftJoinSub($contractsAgg, 'contracts_agg', function ($join) {
+                $join->on('contracts_agg.event_id', '=', 'e.id');
+            })
+            ->leftJoinSub($transactionsAgg, 'transactions_agg', function ($join) {
+                $join->on('transactions_agg.ev_id', '=', 'e.id');
+            })
+            ->leftJoin('enum_types as et', 'et.id', '=', 'e.type_id')
+            ->select([
+                'e.id',
+                'e.name',
+                'e.date',
+                'e.type_id',
+                'et.id as type_id',
+                'et.value as type_value',
+                DB::raw('COALESCE(contracts_agg.contracts_amount, 0) as contracts_amount'),
+                DB::raw('COALESCE(transactions_agg.saldo, 0) as saldo'),
+            ])
+            ->orderBy('e.date', 'desc')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => (int) $event->id,
+                    'name' => $event->name,
+                    'date' => $event->date,
+                    'type_id' => $event->type_id,
+                    'type' => [
+                        'id' => $event->type_id,
+                        'value' => $event->type_value,
+                    ],
+                    'contracts_amount' => (int) $event->contracts_amount,
+                    'saldo' => (float) $event->saldo,
+                ];
+            });
+
+        return response()->json($events->values());
+    }
+
+    public function getAllEventIds() {
+        $eventIds = Event::query()
+            ->select(['id'])
+            ->orderBy('date', 'desc')
+            ->pluck('id');
+
+        return response()->json($eventIds);
     }
 
     public function getEventTypes() {

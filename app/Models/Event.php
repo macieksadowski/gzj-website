@@ -16,11 +16,15 @@ class Event extends Model
         return $this->hasMany(Contract::class);
     }
     public function type() {
-        return $this->belongsTo(EnumType::class);
+        return $this->belongsTo(EnumType::class, 'type_id');
     }
     
     public function setlistEntries() {
         return $this->hasMany(SetlistEntry::class);
+    }
+
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'ev_id', 'id');
     }
 
     protected $fillable = ['date', 'name'];

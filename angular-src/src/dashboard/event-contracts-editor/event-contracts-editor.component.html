@@ -5,7 +5,7 @@
         <div class="contract-row" [class.pending-delete]="confirmDeleteIndex === i" *ngFor="let contract of contracts; let i = index">
             <div class="contract-info">
                 <div class="contract-member">{{ contract.member?.display_name || contract.member?.name }}</div>
-                <div class="contract-amount">{{ contract.contract_amount | currency:'PLN' }}</div>
+                <div class="contract-amount" [ngClass]="{'negative': contract.contract_amount < 0}">{{ contract.contract_amount | currency:'PLN' }}</div>
                 <div class="contract-type">{{ contract.type?.value }}</div>
             </div>
             <div class="contract-actions">

@@ -40,6 +40,11 @@ export class DashboardBackendService {
     return this.http.get<any[]>(`${this.apiUrl}/events`, this.getHeaders());
   }
 
+  getAllEventIds(): Observable<number[]> {
+    console.log('Fetching event IDs from API');
+    return this.http.get<number[]>(`${this.apiUrl}/events-ids`, this.getHeaders());
+  }
+
   getEventById(eventId: string | null) {
     console.log(`Fetching event with id ${eventId} from API`);
     return this.http.get<any>(`${this.apiUrl}/events/${eventId}`, this.getHeaders());

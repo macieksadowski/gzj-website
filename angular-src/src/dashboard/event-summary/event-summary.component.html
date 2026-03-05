@@ -67,7 +67,7 @@
                         </ng-container>
                         <ng-container matColumnDef="amount">
                             <th mat-header-cell *matHeaderCellDef>Kwota</th>
-                            <td mat-cell *matCellDef="let contract">{{ contract.contract_amount | currency:'PLN' }}</td>
+                            <td mat-cell *matCellDef="let contract" [ngClass]="{'negative': contract.contract_amount < 0}">{{ contract.contract_amount | currency:'PLN' }}</td>
                         </ng-container>
                         <ng-container matColumnDef="type">
                             <th mat-header-cell *matHeaderCellDef>Rodzaj</th>
