@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { NgxMaskService } from 'ngx-mask';
 import { BankAccountInputDirective } from '../shared/bank-account-input.directive';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MEMBERS_PROPERTIES } from './members.properties';
 
 @Component({
   selector: 'dashboard-members',
@@ -31,6 +32,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './members.component.scss'
 })
 export class MembersComponent implements OnInit {
+  readonly defaultClipboardExtraText = MEMBERS_PROPERTIES.defaultClipboardExtraText;
   memberForm: FormGroup;
   contractForm: FormGroup; // Dodano formularz dla generatora umów
   isEditing = true;
@@ -49,7 +51,8 @@ export class MembersComponent implements OnInit {
       pesel: ['', [Validators.pattern(/^\d{11}$/)]],
       birth_place: [''],
       account_no: ['', [this.bankAccountValidator]],
-      tax_office: ['']
+      tax_office: [''],
+      clipboard_extra_text: [this.defaultClipboardExtraText]
     });
 
     this.contractForm = this.fb.group({
@@ -123,7 +126,7 @@ export class MembersComponent implements OnInit {
 
   saveMember() {
     if (this.memberForm.valid) {
-      const memberData = this.memberForm.value;
+      const { clipboard_extra_text, ...memberData } = this.memberForm.value;
       console.log('Saving member:', memberData);
       if (this.selectedMember) {
         //Edit member
@@ -158,6 +161,7 @@ export class MembersComponent implements OnInit {
   createNewMember() {
     // Reset the form and set selectedMember to null
     this.memberForm.reset();
+    this.memberForm.patchValue({ clipboard_extra_text: this.defaultClipboardExtraText });
     this.selectedMember = null;
     this.isEditing = true;
 
@@ -166,7 +170,8 @@ export class MembersComponent implements OnInit {
   copyToClipboard() {
     const member = this.members.find(m => m.id === this.selectedMember);
     if (member) {
-      const textToCopy = 
+      const extraText = (this.memberForm.get('clipboard_extra_text')?.value || '').trim();
+      const baseTextToCopy =
         `Imię i nazwisko: ${member.first_name} ${member.last_name}\r\n` +
         `Ulica i nr domu: ${member.street} ${member.house_no}\r\n` +
         `Kod pocztowy: ${member.postal_code}\r\n` +
@@ -175,6 +180,8 @@ export class MembersComponent implements OnInit {
         `Miejsce urodzenia: ${member.birth_place}\r\n` +
         `Nr konta: ${member.account_no}\r\n` +
         `Urząd skarbowy: ${member.tax_office}`;
+
+      const textToCopy = extraText ? `${baseTextToCopy}\r\n\r\n${extraText}` : baseTextToCopy;
   
       navigator.clipboard.writeText(textToCopy).then(() => {
         this.snackbar.open('Skopiowano do schowka', 'Zamknij', {
