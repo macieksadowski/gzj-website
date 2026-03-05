@@ -13,12 +13,18 @@ export class DashboardBackendService {
   private apiToken = environment.apiToken;
 
   private getHeaders() {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    const token = (this.apiToken || '').trim();
+    if (token.length > 0) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
     return {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${this.apiToken}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }),
+      headers,
       withCredentials: true
     };
   }

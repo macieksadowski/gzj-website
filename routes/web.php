@@ -1,14 +1,8 @@
 <?php
 
-use App\Http\Controllers\FinancesController;
-use App\Http\Controllers\SongsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FormController;
-use App\Http\Controllers\GeneratorController;
-use App\Http\Controllers\EventController;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AngularDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,16 +36,10 @@ Route::get('/poczatek', function () {
 });
 
 
-Route::group(['middleware' => 'auth'], function () {
-
-    Route::group(['prefix' => '/dashboard'], function () {
-
-        Route::get('{any}', function () {
-            return view('angular');
-        })->where('any', '.*');
-
-    });
-
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard/{any?}', AngularDashboardController::class)
+        ->where('any', '.*')
+        ->name('dashboard.spa');
 });
 
 require __DIR__.'/auth.php';
