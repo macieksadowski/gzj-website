@@ -1,6 +1,6 @@
 {
   "name": "dashboard",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "cd angular-src && npx ng",
     "start": "cd angular-src && npx ng serve --configuration development",
