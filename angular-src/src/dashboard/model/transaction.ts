@@ -8,6 +8,7 @@ export interface Transaction {
     category?: TransactionCategory;
     event?: Event;
     cash_transaction: boolean;
+    checkpoint_id?: number | null;
 
 }
 
@@ -17,7 +18,7 @@ export interface TransactionDTO {
     amount: number;
     description: string;
     category?: number;
-    event?: number;
+    event?: number | null;
     cash_transaction: boolean;
 }
 

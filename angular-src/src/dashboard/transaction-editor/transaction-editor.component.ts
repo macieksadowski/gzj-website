@@ -50,6 +50,10 @@ export class TransactionEditorComponent {
   events: Event[] = [];
   suggestions: { id: number, name: string }[] = [];
 
+  get isCheckpointLocked(): boolean {
+    return this.transaction.tr_id !== 0 && this.transaction.checkpoint_id !== null && this.transaction.checkpoint_id !== undefined;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<TransactionEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { transaction: Transaction, transactionCategories: TransactionCategory[] },
@@ -79,6 +83,13 @@ export class TransactionEditorComponent {
       description: this.transaction.description,
       cash_transaction: this.transaction.cash_transaction || false
     });
+
+    if (this.isCheckpointLocked) {
+      this.transactionForm.get('date')?.disable();
+      this.transactionForm.get('amount')?.disable();
+      this.transactionForm.get('description')?.disable();
+      this.transactionForm.get('cash_transaction')?.disable();
+    }
     
     
   }
@@ -129,7 +140,7 @@ export class TransactionEditorComponent {
   }
   
   save() {
-    const formValues = this.transactionForm.value;
+    const formValues = this.transactionForm.getRawValue();
     console.log('Form values:', formValues);
     const transactionDTO: TransactionDTO = {
       tr_id: this.transaction.tr_id,
@@ -137,7 +148,7 @@ export class TransactionEditorComponent {
       amount: parseCurrencyAmount(formValues.amount),
       description: formValues.description,
       category: formValues.category,
-      event: formValues.event? formValues.event.id : null,
+      event: formValues.event && typeof formValues.event === 'object' ? formValues.event.id : (typeof formValues.event === 'number' ? formValues.event : null),
       cash_transaction: formValues.cash_transaction,
     };
     if (this.transaction.tr_id) {

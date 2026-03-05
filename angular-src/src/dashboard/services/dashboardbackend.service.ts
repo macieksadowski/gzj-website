@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Event, EventDTO } from '../model/event';
 import { environment } from '../../environments/environment';
 import { TransactionDTO } from '../model/transaction';
+import { CheckpointState, CreateCheckpointDTO } from '../model/checkpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -145,6 +146,16 @@ export class DashboardBackendService {
   getSaldo(): Observable<any> {
     console.log(`Fetching saldo from API`);
     return this.http.get<any>(`${this.apiUrl}/transactions-saldo`, this.getHeaders());
+  }
+
+  getCheckpointState(): Observable<CheckpointState> {
+    console.log('Fetching checkpoint state from API');
+    return this.http.get<CheckpointState>(`${this.apiUrl}/balance-checkpoints/state`, this.getHeaders());
+  }
+
+  createCheckpoint(payload: CreateCheckpointDTO): Observable<any> {
+    console.log('Creating new balance checkpoint');
+    return this.http.post<any>(`${this.apiUrl}/balance-checkpoints/new`, payload, this.getHeaders());
   }
 
   deleteTransaction(transactionId: Number) : Observable<any> {

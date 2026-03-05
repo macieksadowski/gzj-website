@@ -55,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions/{id}/edit', [FinancesController::class, 'editTransactionApi']);
     Route::post('/transactions/new', [FinancesController::class, 'createTransaction']);
     Route::get('/transactions-saldo', [FinancesController::class, 'getTotalSaldoJson']);
+    Route::get('/balance-checkpoints/state', [FinancesController::class, 'getCheckpointState']);
+    Route::post('/balance-checkpoints/new', [FinancesController::class, 'createCheckpoint']);
 
     Route::get('/transaction-categories', [FinancesController::class, 'getAllCategories']);
 

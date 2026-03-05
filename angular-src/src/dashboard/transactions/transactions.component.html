@@ -28,6 +28,62 @@
         </div>
     </div>
 
+    <mat-expansion-panel class="page-card transactionsView__checkpointPanel" [(expanded)]="checkpointPanelExpanded">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Kontrola salda i checkpoint</mat-panel-title>
+            <mat-panel-description>
+                {{ checkpointCalculatedBalance | currency:'PLN' }}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <p class="transactionsView__status transactionsView__checkpointInfo" *ngIf="lastCheckpoint">
+            Ostatni checkpoint: #{{ lastCheckpoint.id }} z dnia {{ lastCheckpoint.checkpoint_date | date:'dd.MM.yyyy' }}
+            ({{ lastCheckpoint.balance | currency:'PLN' }}).
+        </p>
+        <p class="transactionsView__status transactionsView__checkpointInfo" *ngIf="!lastCheckpoint">
+            Brak checkpointu — saldo liczone ze wszystkich transakcji.
+        </p>
+
+        <div class="transactionsView__checkpointControls" aria-label="Kontrola salda i checkpointy">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Saldo wg bazy (od checkpointu)</mat-label>
+                <input matInput readonly [ngModel]="checkpointCalculatedBalance | currency:'PLN'"
+                    [class.negative]="checkpointCalculatedBalance < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Suma nieprzypisanych transakcji</mat-label>
+                <input matInput readonly [ngModel]="checkpointPendingTransactionsSum | currency:'PLN'"
+                    [class.negative]="checkpointPendingTransactionsSum < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Data checkpointu</mat-label>
+                <input matInput [matDatepicker]="checkpointPicker" [(ngModel)]="checkpointDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="checkpointPicker"></mat-datepicker-toggle>
+                <mat-datepicker #checkpointPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Saldo faktyczne</mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="actualBalance" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Różnica</mat-label>
+                <input matInput readonly [ngModel]="checkpointDiff === null ? '' : (checkpointDiff | currency:'PLN')"
+                    [class.negative]="(checkpointDiff ?? 0) < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="transactionsView__notesField">
+                <mat-label>Notatki checkpointu</mat-label>
+                <input matInput [(ngModel)]="checkpointNotes" placeholder="np. after weekend tour" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" (click)="createCheckpoint()">Utwórz checkpoint</button>
+        </div>
+    </mat-expansion-panel>
+
     <mat-card class="event-card page-card">
         <mat-card-content>
             <p class="transactionsView__status" *ngIf="numberOfTransactionsLoaded === 0">Nie znaleziono transakcji.</p>
@@ -79,7 +135,8 @@
                 <button mat-icon-button (click)="editTransaction(transaction)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button (click)="deleteTransaction(transaction)">
+                <button mat-icon-button (click)="deleteTransaction(transaction)"
+                    [disabled]="transaction.checkpoint_id !== null && transaction.checkpoint_id !== undefined">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

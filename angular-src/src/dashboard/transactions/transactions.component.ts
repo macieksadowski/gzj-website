@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { DashboardBackendService } from '../services/dashboardbackend.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -23,6 +23,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { BalanceCheckpoint } from '../model/checkpoint';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'dashboard-transactions',
@@ -42,7 +44,8 @@ import { MatCardModule } from '@angular/material/card';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
 ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss'
@@ -58,6 +61,13 @@ export class TransactionsComponent {
   selectedCategories: number[] = [];
   dateFrom: Date | null = null;
   dateTo: Date | null = null;
+  checkpointDate: Date = new Date();
+  actualBalance: number | null = null;
+  checkpointNotes: string = '';
+  checkpointCalculatedBalance: number = 0;
+  checkpointPendingTransactionsSum: number = 0;
+  lastCheckpoint: BalanceCheckpoint | null = null;
+  checkpointPanelExpanded: boolean = false;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -127,6 +137,12 @@ export class TransactionsComponent {
     this.financesService.getSaldo().subscribe((saldo) => {
       this.saldo = saldo;
       console.log('Loaded saldo:', saldo); // Debug log
+    });
+
+    this.financesService.getCheckpointState().subscribe((state) => {
+      this.lastCheckpoint = state.last_checkpoint;
+      this.checkpointPendingTransactionsSum = state.pending_transactions_sum;
+      this.checkpointCalculatedBalance = state.calculated_balance;
     });
     
   }
@@ -228,6 +244,47 @@ export class TransactionsComponent {
       console.error('Error loading transaction categories:', error);
       throw error;
     }
+  }
+
+  createCheckpoint() {
+    if (this.actualBalance === null || Number.isNaN(this.actualBalance)) {
+      this.snackbar.open('Podaj faktyczne saldo do utworzenia checkpointu.', 'Zamknij', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    const payload = {
+      checkpoint_date: formatDate(this.checkpointDate, 'yyyy-MM-dd', 'pl-PL'),
+      balance: this.actualBalance,
+      notes: this.checkpointNotes?.trim() ? this.checkpointNotes.trim() : null,
+    };
+
+    this.loading = true;
+    this.financesService.createCheckpoint(payload).subscribe({
+      next: () => {
+        this.snackbar.open('Dodano checkpoint i przypisano bieżące transakcje.', 'Zamknij', {
+          duration: 3000,
+        });
+        this.actualBalance = null;
+        this.checkpointNotes = '';
+        this.loadMainTable();
+      },
+      error: () => {
+        this.loading = false;
+        this.snackbar.open('Nie udało się utworzyć checkpointu.', 'Zamknij', {
+          duration: 3000,
+        });
+      },
+    });
+  }
+
+  get checkpointDiff(): number | null {
+    if (this.actualBalance === null || Number.isNaN(this.actualBalance)) {
+      return null;
+    }
+
+    return this.actualBalance - this.checkpointCalculatedBalance;
   }
 
 }
