@@ -8,12 +8,6 @@
 @import "../css/aos.css";
 @import "../css/splide.min.css";
 @import "../css/splide-extension-video.min.css";
-@import "../css/select2.min.css";
-@import "../css/select2-bootstrap.min.css";
-@import "../css/table.css";
-//@import "../css/bootstrap.min.css";
-@import "../css/dataTables.bootstrap5.min.css";
-@import "../css/searchPanes.bootstrap5.min.css";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
 
@@ -32,7 +26,6 @@
 @import "./components/button";
 @import "./components/box";
 @import "./components/modal-image";
-@import "./components/new-contract-form";
 
 @import "./pages/about";
 @import "./pages/hero";
@@ -41,5 +34,3 @@
 @import "./pages/albums";
 @import "./pages/merch";
 @import "./pages/styles";
-@import "./pages/dashboard";
-@import "./pages/eventsummary"

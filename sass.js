@@ -15,8 +15,16 @@ var configs = {
 	sourceMap: false
 };
 
+var packageAuthor = (pkg.author && typeof pkg.author === 'object' && pkg.author.name)
+    ? pkg.author.name
+    : 'Unknown Author';
+
+var packageRepository = (pkg.repository && typeof pkg.repository === 'object' && pkg.repository.url)
+    ? pkg.repository.url
+    : '';
+
 // Banner
-var banner = `/*! ${configs.name ? configs.name : pkg.name} v${pkg.version} | (c) ${new Date().getFullYear()} ${pkg.author.name} | ${pkg.license} License | ${pkg.repository.url} */`;
+var banner = `/*! ${configs.name ? configs.name : pkg.name} v${pkg.version} | (c) ${new Date().getFullYear()} ${packageAuthor} | ${pkg.license} License${packageRepository ? ' | ' + packageRepository : ''} */`;
 
 var getOptions = function (file, filename, minify) {
 	return {
