@@ -59,6 +59,21 @@ export class DashboardBackendService {
     return this.http.post<EventDTO>(`${this.apiUrl}/events/${event.id}/edit`, event, this.getHeaders());
   }
 
+  updateEventSetlist(eventId: number, songIds: number[]): Observable<any> {
+    console.log(`Updating setlist for event ${eventId}`);
+    return this.http.post<any>(`${this.apiUrl}/events/${eventId}/setlist`, { song_ids: songIds }, this.getHeaders());
+  }
+
+  generateZaiksReportForEvent(eventId: number): Observable<any> {
+    console.log(`Generating ZAIKS report for event ${eventId}`);
+    return this.http.post(`${this.apiUrl}/events/${eventId}/zaiks-report`, {}, {
+      headers: this.getHeaders().headers,
+      withCredentials: this.getHeaders().withCredentials,
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
+
   /** EVENT CONTRACTS */
   updateEventContracts(eventId: number, payload: any): Observable<any> {
     console.log(`Updating contracts for event ${eventId}`);
@@ -183,8 +198,19 @@ export class DashboardBackendService {
   }
 
   getFileNameFromContentDisposition(contentDisposition: string | null): string {
-    const matches = /filename=(.+)/.exec(contentDisposition || '');
-    return matches && matches[1] ? matches[1] : 'ZAiKS_Report.docx';
+    const value = contentDisposition || '';
+
+    const utf8Match = /filename\*=UTF-8''([^;]+)/i.exec(value);
+    if (utf8Match?.[1]) {
+      return decodeURIComponent(utf8Match[1]).replace(/^"|"$/g, '');
+    }
+
+    const filenameMatch = /filename="?([^";]+)"?/i.exec(value);
+    if (filenameMatch?.[1]) {
+      return filenameMatch[1].trim();
+    }
+
+    return 'ZAiKS_Report.docx';
   }
 
   downloadFile(response: Blob, fileName: string): void {

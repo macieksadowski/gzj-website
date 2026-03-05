@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/events/new', [EventController::class, 'createEvent']);
     Route::post('/events/{id}/edit', [EventController::class, 'editEvent']);
+    Route::post('/events/{id}/setlist', [EventController::class, 'updateEventSetlist']);
+    Route::post('/events/{id}/zaiks-report', [GeneratorController::class, 'zaiksForEvent']);
     Route::delete('/events/{id}', [EventController::class, 'deleteEvent']);
 
     Route::get('/contracts', [EventController::class, 'getAllContracts']);

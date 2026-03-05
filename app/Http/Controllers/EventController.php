@@ -107,8 +107,51 @@ class EventController extends Controller
         });
         $event->contracts = $contracts;
 
+        $setlist = $event->setlistEntries()->with('song')->orderBy('order')->get();
+        $setlist->transform(function ($entry) {
+            return [
+                'id' => $entry->id,
+                'order' => $entry->order,
+                'song' => [
+                    'id' => $entry->song?->id,
+                    'title' => $entry->song?->title,
+                ],
+            ];
+        });
+        $event->setlist = $setlist;
+
         $event->type = $event->type->value;
         return response()->json($event);
+    }
+
+    public function updateEventSetlist(Request $request, $id) {
+        $validatedData = $request->validate([
+            'song_ids' => 'required|array',
+            'song_ids.*' => 'integer|exists:App\Models\Song,id',
+        ]);
+
+        try {
+            DB::transaction(function () use ($id, $validatedData) {
+                $event = Event::findOrFail($id);
+                $event->setlistEntries()->delete();
+
+                $entries = [];
+                foreach ($validatedData['song_ids'] as $index => $songId) {
+                    $entries[] = new SetlistEntry([
+                        'order' => $index,
+                    ]);
+                    $entries[$index]->song_id = $songId;
+                }
+
+                if (!empty($entries)) {
+                    $event->setlistEntries()->saveMany($entries);
+                }
+            });
+
+            return response()->json(['message' => 'Setlista zaktualizowana pomyślnie.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update setlist', 'details' => $e->getMessage()], 500);
+        }
     }
 
     public function createEvent(Request $request) {

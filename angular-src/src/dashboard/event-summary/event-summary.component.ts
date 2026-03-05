@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DashboardBackendService } from '../services/dashboardbackend.service';
 import { EventContractsEditorComponent } from "../event-contracts-editor/event-contracts-editor.component";
 import { EventDetailsEditorComponent } from '../event-details-editor/event-details-editor.component';
+import { EventSetlistEditorComponent } from '../event-setlist-editor/event-setlist-editor.component';
 import { ConfirmDialogService } from '../services/confirmdialog.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,6 +41,7 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   previousEventId: number | null = null;
   nextEventId: number | null = null;
   loadingEvent = false;
+  generatingZaiksReport = false;
 
   transactionsDataSource = new MatTableDataSource<any>();
 
@@ -49,6 +51,15 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   transactionsColumns: string[] = ['amount', 'description', 'category'];
   setlistColumns: string[] = ['order', 'song'];
   readonly fabNavigationComponent = FabNavigationComponent;
+
+  getSetlistDisplayOrder(entry: any, index: number): number {
+    const rawOrder = Number(entry?.order);
+    if (Number.isFinite(rawOrder) && rawOrder >= 0) {
+      return rawOrder + 1;
+    }
+
+    return index + 1;
+  }
 
   private getContractsSaveErrorMessage(err: any): string {
     const apiDetails = err?.error?.details;
@@ -328,7 +339,6 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openDetailsEditor() {
-    console.log('Opening details editor');
     this.eventService.getEventTypes().subscribe((eventTypes) => {
       const dialogRef = this.dialog.open(EventDetailsEditorComponent, {
         data: { event: this.event, eventTypes: eventTypes },
@@ -350,11 +360,71 @@ export class EventSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  openSetlistEditor() {
+    const selectedSongIds = (this.event?.setlist || [])
+      .map((entry: any) => Number(entry?.song?.id))
+      .filter((id: number) => Number.isFinite(id));
+
+    const dialogRef = this.dialog.open(EventSetlistEditorComponent, {
+      data: { selectedSongIds },
+      width: '900px',
+      maxWidth: '95vw',
+    });
+
+    dialogRef.afterClosed().subscribe((songIds: number[] | undefined) => {
+      if (!Array.isArray(songIds)) {
+        return;
+      }
+
+      this.eventService.updateEventSetlist(this.event.id, songIds).subscribe(() => {
+        this.eventService.getEventById(String(this.event.id)).subscribe((event) => {
+          this.event = event;
+          this.snackbar.open('Zaktualizowano setlistę', 'Zamknij', {
+            duration: 3000,
+          });
+          this.scheduleTitleFit();
+        });
+      }, () => {
+        this.snackbar.open('Błąd podczas zapisu setlisty', 'Zamknij', {
+          duration: 5000,
+        });
+      });
+    });
+  }
+
+  generateZaiksReportForEvent() {
+    const setlistLength = Array.isArray(this.event?.setlist) ? this.event.setlist.length : 0;
+    if (!this.event?.id || setlistLength === 0) {
+      this.snackbar.open('Brak utworów na setliście do raportu ZAiKS.', 'Zamknij', {
+        duration: 4000,
+      });
+      return;
+    }
+
+    this.generatingZaiksReport = true;
+    this.eventService.generateZaiksReportForEvent(Number(this.event.id)).subscribe({
+      next: (response) => {
+        const contentDisposition = response.headers.get('Content-Disposition');
+        const fileName = this.eventService.getFileNameFromContentDisposition(contentDisposition);
+        this.eventService.downloadFile(response.body, fileName);
+        this.snackbar.open('Wygenerowano raport ZAiKS', 'Zamknij', {
+          duration: 3000,
+        });
+        this.generatingZaiksReport = false;
+      },
+      error: (error) => {
+        this.snackbar.open('Błąd podczas generowania raportu ZAiKS.', 'Zamknij', {
+          duration: 5000,
+        });
+        this.generatingZaiksReport = false;
+      },
+    });
+  }
+
   deleteThisEvent() {
     this.confirmDialog.openConfirmDialog('Usuwanie wydarzenia', 'Czy na pewno chcesz usunąć to wydarzenie?').then((confirmed) => {
       if (confirmed) {
         this.eventService.deleteEvent(this.event.id).subscribe((message) => {
-          console.log(message);
           this.snackbar.open('Usunięto wydarzenie', 'Zamknij', {
             duration: 3000,
           });

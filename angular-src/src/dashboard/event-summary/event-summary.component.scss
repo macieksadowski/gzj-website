@@ -53,6 +53,24 @@
         width: 100%;
     }
 
+    &__setlistTable {
+        .mat-mdc-header-cell,
+        .mat-mdc-cell {
+            padding: 4px 8px;
+            font-size: 0.95rem;
+        }
+
+        .mat-mdc-row {
+            height: 30px;
+        }
+
+        .mat-column-order {
+            width: 44px;
+            max-width: 44px;
+            white-space: nowrap;
+        }
+    }
+
     &__actionBar {
 
         padding-top: 3rem;

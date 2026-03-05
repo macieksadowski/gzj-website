@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Song;
 use App\Models\Member;
 use App\Services\DocumentGenerator;
@@ -29,23 +30,47 @@ class GeneratorController extends Controller
         $name = $request->validated()['eventName'];
         $songs = Song::whereIn('id', $request->validated()['songs'])->get();
 
-        $fileName = self::setFileName('ZAiKS',$name);
-
-        if (!empty($songs)) {
-
-            try {
-                $documentPath = self::$ZAIKS_TEMPLATE;
-                $documentPath = DocumentGenerator::generateZaiks($songs,$fileName,self::$ZAIKS_OUTPUT_LOCATION,self::$ZAIKS_TEMPLATE);
-                return response()->download($documentPath, $fileName . '.docx', [
-                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
-                ]);
-            } catch (\Throwable $e) {
-                Log::error($e);
-                return back()->withErrors(['generatorError'=> __('generator.default') . ' : '. $documentPath]);
-            }
+        if ($songs->isEmpty()) {
+            return response()->json(['error' => 'Brak utworów do wygenerowania raportu ZAiKS.'], 422);
         }
 
+        return $this->downloadZaiksDocument($name, $songs);
+    }
+
+    public function zaiksForEvent($id)
+    {
+        $event = Event::findOrFail($id);
+
+        $songs = $event->setlistEntries()
+            ->with('song')
+            ->orderBy('order')
+            ->get()
+            ->pluck('song')
+            ->filter();
+
+        if ($songs->isEmpty()) {
+            return response()->json(['error' => 'Setlista wydarzenia jest pusta.'], 422);
+        }
+
+        return $this->downloadZaiksDocument($event->name, $songs);
+    }
+
+    private function downloadZaiksDocument(string $name, $songs)
+    {
+
+        $fileName = self::setFileName('ZAiKS',$name);
+
+        try {
+            $documentPath = self::$ZAIKS_TEMPLATE;
+            $documentPath = DocumentGenerator::generateZaiks($songs,$fileName,self::$ZAIKS_OUTPUT_LOCATION,self::$ZAIKS_TEMPLATE);
+            return response()->download($documentPath, $fileName, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+            ]);
+        } catch (\Throwable $e) {
+            Log::error($e);
+            return response()->json(['error' => __('generator.default')], 500);
+        }
     }
 
     public function contract(ContractGeneratorRequest $request)
