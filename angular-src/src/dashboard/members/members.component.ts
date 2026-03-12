@@ -34,7 +34,7 @@ import { MEMBERS_PROPERTIES } from './members.properties';
 export class MembersComponent implements OnInit {
   readonly defaultClipboardExtraText = MEMBERS_PROPERTIES.defaultClipboardExtraText;
   memberForm: FormGroup;
-  contractForm: FormGroup; // Dodano formularz dla generatora umów
+  contractForm: FormGroup;
   isEditing = true;
   members: any[] = [];
   selectedMember: number | null = null;
@@ -50,6 +50,8 @@ export class MembersComponent implements OnInit {
       town: [''],
       pesel: ['', [Validators.pattern(/^\d{11}$/)]],
       birth_place: [''],
+      father_name: [''],
+      mother_name: [''],
       account_no: ['', [this.bankAccountValidator]],
       tax_office: [''],
       clipboard_extra_text: [this.defaultClipboardExtraText]
@@ -178,6 +180,8 @@ export class MembersComponent implements OnInit {
         `Miasto: ${member.town}\r\n` +
         `PESEL: ${member.pesel}\r\n` +
         `Miejsce urodzenia: ${member.birth_place}\r\n` +
+        `Imię ojca: ${member.father_name}\r\n` +
+        `Imię matki: ${member.mother_name}\r\n` +
         `Nr konta: ${member.account_no}\r\n` +
         `Urząd skarbowy: ${member.tax_office}`;
 

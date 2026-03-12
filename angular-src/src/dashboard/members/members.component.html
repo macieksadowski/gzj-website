@@ -92,6 +92,20 @@
                 <div class="row g-3 membersView__formRow">
                     <div class="col-12 col-md-6">
                         <mat-form-field>
+                            <mat-label>Imię ojca</mat-label>
+                            <input matInput formControlName="father_name" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <mat-form-field>
+                            <mat-label>Imię matki</mat-label>
+                            <input matInput formControlName="mother_name" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row g-3 membersView__formRow">
+                    <div class="col-12 col-md-6">
+                        <mat-form-field>
                             <mat-label>Numer konta</mat-label>
                             <input matInput placeholder="00 0000 0000 0000 0000 0000 0000" formControlName="account_no"
                                 appBankAccountInput />

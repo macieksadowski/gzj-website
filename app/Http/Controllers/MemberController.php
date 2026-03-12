@@ -46,6 +46,8 @@ class MemberController extends Controller
             'postal_code' => 'nullable|string|max:10',
             'town' => 'nullable|string|max:255',
             'pesel' => 'nullable|digits:11',
+            'father_name' => 'nullable|string|max:255',
+            'mother_name' => 'nullable|string|max:255',
             'birth_place' => 'nullable|string|max:255',
             'account_no' => 'nullable|string|max:34',
             'tax_office' => 'nullable|string|max:255',

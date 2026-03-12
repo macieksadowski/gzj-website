@@ -17,6 +17,8 @@ class Member extends Model
         'postal_code',
         'town',
         'pesel',
+        'father_name',
+        'mother_name',
         'birth_place',
         'account_no',
         'tax_office'
