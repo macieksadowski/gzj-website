@@ -20,5 +20,10 @@ yarn-error.log
 public_html/generators/contracts/*.docx
 public_html/generators/zaiks/*.docx
 !public_html/generators/templates
+public_html/angular-assets/
 public_html/img/unused/
 package-lock.json
+
+# Angular runtime config files (may contain secrets)
+angular-src/src/environments/environment*.ts
+!angular-src/src/environments/environment.ts

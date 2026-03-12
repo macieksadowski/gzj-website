@@ -20,4 +20,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Event::class,'ev_id');
     }
+
+    public function checkpoint()
+    {
+        return $this->belongsTo(BalanceCheckpoint::class, 'checkpoint_id');
+    }
 }

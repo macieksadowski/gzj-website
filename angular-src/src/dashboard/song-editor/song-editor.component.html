@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ song.id ? 'Edycja utworu' : 'Nowy utwór' }}</h2>
+<mat-dialog-content>
+
+    <mat-form-field>
+        <mat-label>Tytuł</mat-label>
+        <input matInput required [(ngModel)]="song.title" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Tytuł oficjalny</mat-label>
+        <input matInput [(ngModel)]="song.title_official" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Wykonawca</mat-label>
+        <input matInput required [(ngModel)]="song.performer" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Kompozytor</mat-label>
+        <input matInput required [(ngModel)]="song.composer" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Autor tekstu</mat-label>
+        <input matInput required [(ngModel)]="song.text_author" />
+    </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Anuluj</button>
+    <button mat-button (click)="save()">Zapisz</button>
+</mat-dialog-actions>

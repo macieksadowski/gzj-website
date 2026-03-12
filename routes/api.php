@@ -22,21 +22,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login');
-    Route::post('/logout', 'logout');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::get('/events', [EventController::class, 'getAllEvents']);
+    Route::get('/events-ids', [EventController::class, 'getAllEventIds']);
     Route::get('/events/{id}', [EventController::class, 'getEvent']);
     Route::get('/event-types', [EventController::class, 'getEventTypes']);
     Route::get('/events-search', [EventController::class, 'searchEvents']);
 
     Route::post('/events/new', [EventController::class, 'createEvent']);
     Route::post('/events/{id}/edit', [EventController::class, 'editEvent']);
+    Route::post('/events/{id}/setlist', [EventController::class, 'updateEventSetlist']);
+    Route::post('/events/{id}/zaiks-report', [GeneratorController::class, 'zaiksForEvent']);
     Route::delete('/events/{id}', [EventController::class, 'deleteEvent']);
 
     Route::get('/contracts', [EventController::class, 'getAllContracts']);
+    Route::get('/contract-types', [EventController::class, 'getContractTypes']);
     Route::get('/contracts/summaryPerYear', [EventController::class, 'getContractsSummaryPerYear']);
+    Route::post('/events/{id}/contracts/edit', [EventController::class, 'updateEventContracts']);
     
     Route::get('/members', [MemberController::class, 'getAllMembers']);
     Route::get('/members/names', [MemberController::class, 'getAllMembersNames']);
@@ -49,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions/{id}/edit', [FinancesController::class, 'editTransactionApi']);
     Route::post('/transactions/new', [FinancesController::class, 'createTransaction']);
     Route::get('/transactions-saldo', [FinancesController::class, 'getTotalSaldoJson']);
+    Route::get('/balance-checkpoints/state', [FinancesController::class, 'getCheckpointState']);
+    Route::post('/balance-checkpoints/new', [FinancesController::class, 'createCheckpoint']);
 
     Route::get('/transaction-categories', [FinancesController::class, 'getAllCategories']);
 

@@ -1,0 +1,234 @@
+.eventSummary {
+
+    .skeleton {
+        display: inline-block;
+        border-radius: 8px;
+        background: linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--mat-sys-surface-container-high) 82%, #ffffff 18%) 25%,
+            color-mix(in srgb, var(--mat-sys-surface-container-highest) 72%, #ffffff 28%) 37%,
+            color-mix(in srgb, var(--mat-sys-surface-container-high) 82%, #ffffff 18%) 63%
+        );
+        background-size: 220% 100%;
+        animation: skeletonShimmer 1.2s ease-in-out infinite;
+    }
+
+    .skeleton--title {
+        width: min(580px, 88vw);
+        max-width: 100%;
+        height: 44px;
+    }
+
+    .skeleton--id {
+        width: 92px;
+        height: 24px;
+    }
+
+    .dialog-spinner-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0 14px;
+    }
+
+    .data-loading-shell {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+
+        &.is-loading {
+            table,
+            .mat-mdc-paginator,
+            .eventSummary__placeholderRow {
+                filter: blur(1.4px);
+                opacity: 0.5;
+                pointer-events: none;
+                user-select: none;
+            }
+        }
+    }
+
+    &__placeholderRow {
+        .eventSummary__placeholderCol {
+            display: flex;
+        }
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+
+        .event-card {
+            width: 100%;
+        }
+    }
+
+    &__placeholderCard {
+        width: 100%;
+        min-height: 260px;
+        opacity: 0.85;
+
+        .mat-mdc-card-content {
+            min-height: 220px;
+        }
+    }
+
+    &__emptyCard {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    & .section-title p {
+        font-size: 3rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    & .section-title h2 {
+        font-size: 1.6rem;
+        line-height: 1.1;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface-variant);
+        opacity: 0.9;
+        margin: 0;
+        display: flex;
+        align-items: center;
+
+        &::after {
+            width: 108px;
+            margin: 0 0 0 12px;
+            background: var(--mat-sys-outline-variant);
+            vertical-align: middle;
+        }
+    }
+
+    .title-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .actions-inline {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px;
+        width: fit-content;
+        margin-left: auto;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        background: var(--mat-sys-surface-container-low);
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding-inline: 10px;
+            min-width: auto;
+            min-height: 34px;
+            border-radius: 999px;
+        }
+    }
+
+    &__detailstable {
+        width: 100%;
+
+        td {
+            padding: 4px 6px;
+            vertical-align: top;
+        }
+
+        td:first-child {
+            white-space: nowrap;
+            width: 34%;
+        }
+    }
+
+    &__setlistTable {
+        .mat-mdc-header-cell,
+        .mat-mdc-cell {
+            padding: 4px 8px;
+            font-size: 0.95rem;
+        }
+
+        .mat-mdc-row {
+            height: 30px;
+        }
+
+        .mat-column-order {
+            width: 44px;
+            max-width: 44px;
+            white-space: nowrap;
+        }
+    }
+
+    &__actionBar {
+
+        padding-top: 3rem;
+
+        & button {
+            min-width: 180px;
+        }
+    }
+
+    .row {
+        row-gap: 20px;
+    }
+
+    @media (max-width: 992px) {
+        & .section-title p {
+            font-size: 2rem;
+            white-space: normal;
+            line-height: 1.15;
+        }
+
+        & .section-title h2 {
+            font-size: 1.2rem;
+
+            &::after {
+                width: 64px;
+            }
+        }
+
+        .title-meta-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .actions-inline {
+            justify-content: flex-start;
+            width: 100%;
+            margin-left: 0;
+            border-radius: 16px;
+
+            button {
+                flex: 0 0 auto;
+            }
+        }
+
+        .mat-mdc-card-content {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table.mat-mdc-table,
+        table.table {
+            min-width: 420px;
+        }
+    }
+
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
+}

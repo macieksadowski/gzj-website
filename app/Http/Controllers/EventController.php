@@ -12,25 +12,11 @@ use App\Models\SetlistEntry;
 use App\Models\Song;
 use EnumTypeDiscriminator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
-    private  $dashboardCtrl;
-
-    public function __construct() {
-        $this->dashboardCtrl = new DashboardController();
-    }
-
-    public function index() {
-        $events = Event::orderBy('date', 'desc')->get();
-        //$categories = FinanceCategory::all();
-        //$trsnsactions = Transaction::whereDate('date','>','2021-10-01')->get();
-        return $this->dashboardCtrl->default('dashboard-sections.wydarzenia', $events);
-    }
-
     public function searchEvents(Request $request) {
         $request->validate([
             'search' => 'nullable|string|max:255',
@@ -51,19 +37,69 @@ class EventController extends Controller
     }
 
     public function getAllEvents() {
-        $events = Event::orderBy('date', 'desc')->get();
-        $events->transform(function ($event) {
-            $event->saldo = Transaction::where('ev_id',$event->id)->sum('amount');
-            $event->contracts_amount = Contract::where('event_id',$event->id)->count();
-            $event->type = $event->type->value;
-            return $event;
-        });
-        return response()->json($events);
+        $contractsAgg = Contract::query()
+            ->select('event_id', DB::raw('COUNT(*) as contracts_amount'))
+            ->groupBy('event_id');
+
+        $transactionsAgg = Transaction::query()
+            ->select('ev_id', DB::raw('SUM(amount) as saldo'))
+            ->groupBy('ev_id');
+
+        $events = DB::table('events as e')
+            ->leftJoinSub($contractsAgg, 'contracts_agg', function ($join) {
+                $join->on('contracts_agg.event_id', '=', 'e.id');
+            })
+            ->leftJoinSub($transactionsAgg, 'transactions_agg', function ($join) {
+                $join->on('transactions_agg.ev_id', '=', 'e.id');
+            })
+            ->leftJoin('enum_types as et', 'et.id', '=', 'e.type_id')
+            ->select([
+                'e.id',
+                'e.name',
+                'e.date',
+                'e.type_id',
+                'et.id as type_id',
+                'et.value as type_value',
+                DB::raw('COALESCE(contracts_agg.contracts_amount, 0) as contracts_amount'),
+                DB::raw('COALESCE(transactions_agg.saldo, 0) as saldo'),
+            ])
+            ->orderBy('e.date', 'desc')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => (int) $event->id,
+                    'name' => $event->name,
+                    'date' => $event->date,
+                    'type_id' => $event->type_id,
+                    'type' => [
+                        'id' => $event->type_id,
+                        'value' => $event->type_value,
+                    ],
+                    'contracts_amount' => (int) $event->contracts_amount,
+                    'saldo' => (float) $event->saldo,
+                ];
+            });
+
+        return response()->json($events->values());
+    }
+
+    public function getAllEventIds() {
+        $eventIds = Event::query()
+            ->select(['id'])
+            ->orderBy('date', 'desc')
+            ->pluck('id');
+
+        return response()->json($eventIds);
     }
 
     public function getEventTypes() {
         $eventTypes = EnumType::where('discriminator', EnumTypeDiscriminator::EVENT_TYPE)->get();
         return response()->json($eventTypes);
+    }
+
+    public function getContractTypes() {
+        $contractTypes = EnumType::where('discriminator', EnumTypeDiscriminator::CONTRACT_TYPE)->get();
+        return response()->json($contractTypes);
     }
 
     public function getEvent($id) {
@@ -81,14 +117,72 @@ class EventController extends Controller
 
         $contracts = Contract::where('event_id',$id)->get();
         $contracts->transform(function ($contract) {
-            $contract->member = $contract->member->value;
-            $contract->type = $contract->type->value;
-            return $contract;
+            return [
+                'id' => $contract->id,
+                'contract_amount' => $contract->contract_amount,
+                'member' => [
+                    'name' => $contract->member->first_name . ' ' . $contract->member->last_name,
+                    'display_name' => $contract->member->display_name,
+                    'id' => $contract->member->id
+                ],
+                'type' => [
+                    'id' => $contract->type->id,
+                    'value' => $contract->type->value
+                ],
+                'event' => [
+                    'name' => $contract->event->name,
+                    'id' => $contract->event->id,
+                    'date' => $contract->event->date,
+                ]
+            ];
         });
         $event->contracts = $contracts;
 
+        $setlist = $event->setlistEntries()->with('song')->orderBy('order')->get();
+        $setlist->transform(function ($entry) {
+            return [
+                'id' => $entry->id,
+                'order' => $entry->order,
+                'song' => [
+                    'id' => $entry->song?->id,
+                    'title' => $entry->song?->title,
+                ],
+            ];
+        });
+        $event->setlist = $setlist;
+
         $event->type = $event->type->value;
         return response()->json($event);
+    }
+
+    public function updateEventSetlist(Request $request, $id) {
+        $validatedData = $request->validate([
+            'song_ids' => 'required|array',
+            'song_ids.*' => 'integer|exists:App\Models\Song,id',
+        ]);
+
+        try {
+            DB::transaction(function () use ($id, $validatedData) {
+                $event = Event::findOrFail($id);
+                $event->setlistEntries()->delete();
+
+                $entries = [];
+                foreach ($validatedData['song_ids'] as $index => $songId) {
+                    $entries[] = new SetlistEntry([
+                        'order' => $index,
+                    ]);
+                    $entries[$index]->song_id = $songId;
+                }
+
+                if (!empty($entries)) {
+                    $event->setlistEntries()->saveMany($entries);
+                }
+            });
+
+            return response()->json(['message' => 'Setlista zaktualizowana pomyślnie.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update setlist', 'details' => $e->getMessage()], 500);
+        }
     }
 
     public function createEvent(Request $request) {
@@ -163,211 +257,38 @@ class EventController extends Controller
         return response()->json($contractsSummary);
     }
 
-    /**
-     * Show the step One Form for creating a new event.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createStepOne(Request $request)
-    {
-        $event = $request->session()->get('event');
-        $eventTypes = EnumType::where('discriminator', EnumTypeDiscriminator::EVENT_TYPE)->get();
-  
-        return $this->dashboardCtrl->default('dashboard-sections.new-event.create-step-one', compact('event', 'eventTypes'));
-    }
-    /**  
-     * Post Request to store step1 info in session
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postCreateStepOne(Request $request)
-    {
+    public function updateEventContracts(Request $request, $id) {
+        // Accept same payload as the Blade form handler: event, new-contract.*, deletedContracts
         $validatedData = $request->validate([
-            'event-name' => 'required',
-            'event-type' => 'required|numeric',
-            'event-date' => 'required|date|unique:events,date',
-        ]);
-  
-        if(empty($request->session()->get('event'))){
-            $event = new Event();
-        }else{
-            $event = $request->session()->get('event');
-        }
-        $this->fillEvent($event, $validatedData);
-        $evType = EnumType::find($validatedData['event-type']);
-
-        $request->session()->put('event', $event);
-        $request->session()->put('event-type', $evType);
-  
-        return redirect()->route('events.new.step.two');
-    }
-
-    private function fillEvent($event, $validatedData) {
-            $event->name = $validatedData['event-name'];
-            $event->date = $validatedData['event-date'];
-    }
-  
-    /**
-     * Show the step Two Form for creating a new event.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createStepTwo(Request $request)
-    {
-        $event = $request->session()->get('event');
-        $members = Member::all();
-  
-        return $this->dashboardCtrl->default('dashboard-sections.new-event.create-step-two', compact('event', 'members'));
-    }
-  
-    /**
-     * Post Request to store step2 info in session
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function postCreateStepTwo(Request $request)
-    {
-        $validatedData = $request->validate([
-            'contract' => 'required',
-            'contract-amount' => 'nullable|decimal:2',
-            'contract-person' => 'nullable',
-        ]);
-  
-        if ($validatedData['contract'] != 'no') {
-            $event = $request->session()->get('event');
-            if (empty($event->contract)) {
-                $contract = new Contract;
-                $this->fillContract($contract, $validatedData);
-                $event->contract()->save($contract);
-            } else {
-            $this->fillContract($event->contract, $validatedData);
-            }
-            $request->session()->put('event', $event);
-        }        
-  
-        return redirect()->route('events.new.step.three');
-    }
-
-    private function fillContract($contract, $validatedData) {
-        $contract->amount = $validatedData['contract-amount'];
-        $contract->member()->save(Member::find($validatedData['contract-person']));
-    }
-  
-    /**
-     * Show the step One Form for creating a new product.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createStepThree(Request $request)
-    {
-        $event = $request->session()->get('event');
-        $songs = Song::all();
-  
-        return $this->dashboardCtrl->default('dashboard-sections.new-event.create-step-three', compact('event', 'songs'));
-    }
-  
-    /**
-     * Show the step One Form for creating a new product.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function postCreateStepThree(Request $request)
-    {
-        $event = $request->session()->get('event');
-
-        if($request->input('songs') != null) {
-            $songs = Song::whereIn('id', $request->input('songs'))->get()->all();
-
-            $this->createSetlist($songs, $event);
-        }
-        $event->save();
-        $event->evType()->save($request->session()->get('event-type'));
-  
-        $request->session()->forget('event');
-        $request->session()->forget('event-type');
-  
-        return redirect()->route('events.index');
-    }
-
-    private function createSetlist(array $songs, Event $event) {
-        $entries = array();
-        foreach ($songs as $key => $song) {
-            $entry = new SetlistEntry;
-            $entry->order = $key;
-            $entry->song_id = $song->id;
-            $entry->event_id = $event->id;
-            array_push($entries, $entry);
-        }
-        $event->setlistEntries()->saveMany($entries);
-    }
-
-
-    public function postEditEvent(Request $request) {
-        switch($request->input('action')) {
-            case 'editContracts':
-                return $this->postEditContracts($request);
-            case 'editSummary':
-                return $this->postEditSummary($request); 
-            case 'delete':
-                return $this->postDelete($request);       
-        }
-    }
-
-    private function postDelete(Request $request) {
-        $validatedData = $request->validate([
-            'id' => 'exists:App\Models\Event,id',
-        ]);
-        $name =Event::find($validatedData['id'])->name;
-
-        Event::destroy($validatedData['id']);
-
-        return redirect()->withSuccess('Wydarzenie '.$name.' zostało usunięte')->route('events.index'); 
-    }
-
-    private function postEditSummary(Request $request) {
-        $validatedData = $request->validate([
-            'event' => 'exists:App\Models\Event,id',
-            'event-name' => 'required',
-            'event-date' => Rule::unique('events','date')->ignore($request->get('event')),
-            'event-type' => 'exists:App\Models\EnumType,id',
-        ]);
-
-        $event = Event::find($validatedData['event']);
-
-        $event->name = $validatedData['event-name'];
-        $event->date = $validatedData['event-date'];
-        $event->type()->associate(EnumType::find($validatedData['event-type']));
-        $event->save();
-
-        return back()->withSuccess('Pomyślnie zaktualizowano dane!');
-    }
-
-    private function postEditContracts(Request $request) {
-        $validatedData = $request->validate([
-            'event' => 'exists:App\Models\Event,id',
+            'event' => 'required|exists:App\Models\Event,id',
+            'new-contract' => 'sometimes|array',
             'new-contract.*.contract-person' => 'nullable|exists:App\Models\Member,id',
             'new-contract.*.contract-amount' => 'nullable|decimal:2',
             'new-contract.*.contract-type' => 'nullable|exists:App\Models\EnumType,id',
-            'deletedContracts' => 'required_without:new-contract|exists:App\Models\Event,id'
+            'deletedContracts' => 'sometimes|required_without:new-contract|array',
+            'deletedContracts.*' => 'integer|exists:App\Models\Contract,id'
         ]);
 
-        if(isset($validatedData['deletedContracts'])) {
-            Contract::destroy($validatedData['deletedContracts']);
-        }
-
-        if(isset($validatedData['new-contract'])) {
-            $event = Event::find($validatedData['event']);
-           
-            foreach ($validatedData['new-contract'] as $newContract) {
-                $contract = new Contract;
-                $contract->contract_amount = $newContract['contract-amount'];
-                $contract->member()->associate(Member::find($newContract['contract-person']));    
-                $contract->type()->associate(EnumType::find($newContract['contract-type']));
-                $event->contracts()->save($contract);
+        try {
+            if(isset($validatedData['deletedContracts'])) {
+                Contract::destroy($validatedData['deletedContracts']);
             }
-        }
 
-        return back()->withSuccess('Pomyślnie zaktualizowano dane!');
+            if(isset($validatedData['new-contract'])) {
+                $event = Event::find($id);
+               
+                foreach ($validatedData['new-contract'] as $newContract) {
+                    $contract = new Contract;
+                    $contract->contract_amount = $newContract['contract-amount'];
+                    $contract->member()->associate(Member::find($newContract['contract-person']));    
+                    $contract->type()->associate(EnumType::find($newContract['contract-type']));
+                    $event->contracts()->save($contract);
+                }
+            }
+
+            return response()->json(['message' => 'Pomyślnie zaktualizowano dane!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update contracts', 'details' => $e->getMessage()], 500);
+        }
     }
 }

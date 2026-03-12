@@ -8,7 +8,7 @@ import pkg from './package.json';
 // Configs
 var configs = {
 	name: 'BuildToolsCookbook',
-	files: ['jquery-global.js', 'main.js', 'public.js', 'dashboard.js', 'contracts.js', 'edit-contracts-form.js', 'events.js', 'finances.js'],
+	files: ['jquery-global.js', 'main.js', 'public.js'],
 	formats: ['iife', 'es', 'amd', 'cjs'],
 	default: 'iife',
 	pathIn: 'resources/js',

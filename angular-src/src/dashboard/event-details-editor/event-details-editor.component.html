@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ event.id ? 'Edytuj szczegóły wydarzenia' : 'Nowe wydarzenie' }}</h2>
+<mat-dialog-content>
+        <mat-form-field>
+            <input matInput placeholder="Nazwa" required [(ngModel)]="event.name"/>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Data" required [(ngModel)]="event.date"/>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Typ" [(ngModel)]="event.type">
+                <mat-option *ngFor="let eventType of eventTypes" [value]="eventType">
+                    {{ eventType.value }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Anuluj</button>
+    <button mat-button (click)="save()">Zapisz</button>
+</mat-dialog-actions>

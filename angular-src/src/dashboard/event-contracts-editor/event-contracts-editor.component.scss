@@ -1,0 +1,88 @@
+/* Minimal, KISS stylesheet for event-contracts-editor
+   Only layout and small sizing tweaks to align add-row with list rows.
+*/
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contracts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contract-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 4px;
+  min-height: 40px; /* visual target height for rows */
+}
+
+.contract-row.pending-delete {
+  border-color: rgba(198, 40, 40, 0.4);
+  background: rgba(198, 40, 40, 0.08);
+}
+
+.contract-info {
+  /* use a 3-column grid so values align with the add-row inputs;
+     middle column (amount) has fixed width, sides are flexible but not smaller than 140px */
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 120px minmax(140px, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.add-row {
+  /* same columns as contract-info + an extra column for the add button */
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 120px minmax(140px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.add-field {
+  width: 100%;
+}
+
+.add-action {
+  height: 40px; /* match row height */
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+  padding-bottom: 25px; /* preserve user's manual adjustment */
+}
+
+.add-action button {
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contract-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Small responsive tweak */
+@media (max-width: 600px) {
+  .contract-info {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .add-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .add-action { align-self: flex-start; }
+}

@@ -1,0 +1,69 @@
+.mdc-button__label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cell-buttons-container {
+    display: flex;
+}
+
+.transactionsView__status {
+    margin: 0 0 10px;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.transactionsView__checkpointPanel {
+    margin-bottom: 14px;
+}
+
+.transactionsView__checkpointInfo {
+    margin-bottom: 12px;
+}
+
+.transactionsView__checkpointControls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+
+    .mat-mdc-form-field {
+        width: 220px;
+        max-width: 100%;
+        margin-bottom: 0;
+    }
+
+    > button {
+        display: inline-flex;
+        align-items: center;
+        min-width: auto;
+        min-height: 32px;
+        padding-inline: 11px;
+        border-radius: 999px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        background: var(--mat-sys-surface-container-low);
+        color: var(--mat-sys-on-surface-variant);
+
+        &:hover {
+            background: var(--mat-sys-surface-container);
+        }
+    }
+}
+
+.transactionsView__notesField {
+    width: 360px !important;
+    max-width: 100% !important;
+}
+
+@media (max-width: 992px) {
+    .transactionsView__checkpointControls {
+        .mat-mdc-form-field {
+            width: 100%;
+        }
+
+        > button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}

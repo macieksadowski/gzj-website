@@ -1,0 +1,170 @@
+<div class="container eventSummary">
+    <div class="section-title">
+        <p #eventTitle>
+            <ng-container *ngIf="event; else titleSkeleton">
+                {{ event.name }} - {{ event.date | date:'yyyy' }}
+            </ng-container>
+        </p>
+        <div class="title-meta-row">
+            <h2>
+                <ng-container *ngIf="event; else idSkeleton">#{{ event.id }}</ng-container>
+            </h2>
+            <div *ngIf="event" class="actions-inline" aria-label="Akcje wydarzenia">
+                <button mat-button (click)="openDetailsEditor()"><mat-icon>edit</mat-icon> Szczegóły</button>
+                <button mat-button (click)="openContractsEditor()"><mat-icon>assignment</mat-icon> Umowy</button>
+                <button mat-button (click)="openSetlistEditor()"><mat-icon>queue_music</mat-icon> Setlista</button>
+                <button mat-button [disabled]="generatingZaiksReport" (click)="generateZaiksReportForEvent()"><mat-icon>table_chart</mat-icon> ZAiKS</button>
+                <button mat-button color="warn" (click)="deleteThisEvent()"><mat-icon>delete</mat-icon> Usuń</button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #titleSkeleton>
+        <span class="skeleton skeleton--title" aria-hidden="true"></span>
+    </ng-template>
+
+    <ng-template #idSkeleton>
+        <span class="skeleton skeleton--id" aria-hidden="true"></span>
+    </ng-template>
+
+    <div *ngIf="loadingEvent" class="dialog-spinner-wrap" aria-label="Ładowanie wydarzenia">
+        <mat-spinner diameter="42"></mat-spinner>
+    </div>
+
+    <div class="data-loading-shell" [class.is-loading]="loadingEvent">
+    <div class="row justify-content-center" *ngIf="event; else eventSummaryFallback">
+        <div class="col-12 col-lg-4 eventSummary__column">
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Szczegóły</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table class="table eventSummary__detailstable">
+                        <tr>
+                            <td>Data</td>
+                            <td>{{ event.date | date:'dd.MM.yyyy' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Typ</td>
+                            <td>{{ event.type.value }}</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td [ngClass]="{'negative': isNegativeAmount(event.saldo)}">{{ event.saldo | currency:'PLN' }}</td>
+                        </tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Umowy</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table *ngIf="contractsDataSource.data.length > 0; else noContracts" mat-table [dataSource]="contractsDataSource" matSort class="table">
+                        <ng-container matColumnDef="member">
+                            <th mat-header-cell *matHeaderCellDef>Kto</th>
+                            <td mat-cell *matCellDef="let contract">{{ contract.member.display_name }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef>Kwota</th>
+                            <td mat-cell *matCellDef="let contract" [ngClass]="{'negative': isNegativeAmount(contract.contract_amount)}">{{ contract.contract_amount | currency:'PLN' }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Rodzaj</th>
+                            <td mat-cell *matCellDef="let contract">{{ contract.type.value }}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="contractsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: contractsColumns;"></tr>
+                    </table>
+                    <ng-template #noContracts>
+                        <p class="empty-state">Brak umów.</p>
+                    </ng-template>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="col-12 col-lg-4 eventSummary__column">
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Wpływy/wydatki</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <ng-container *ngIf="expensesByCategoryDataSource.data.length > 0; else noTransactions">
+                        <table mat-table [dataSource]="expensesByCategoryDataSource" class="table">
+                            <ng-container matColumnDef="category">
+                                <th mat-header-cell *matHeaderCellDef>Kategoria</th>
+                                <td mat-cell *matCellDef="let row">{{ row.category }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef>Suma</th>
+                                <td mat-cell *matCellDef="let row" [ngClass]="{'negative': isNegativeAmount(row.amount)}">{{ row.amount | currency:'PLN' }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="transactionsColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: transactionsColumns;"></tr>
+                        </table>
+                    </ng-container>
+                    <ng-template #noTransactions>
+                        <p class="empty-state">Brak transakcji.</p>
+                    </ng-template>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="col-12 col-lg-4 eventSummary__column">
+            <mat-card class="event-card">
+                <mat-card-header>
+                    <h2 mat-card-title>Setlista</h2>
+                </mat-card-header>
+                <mat-card-content>
+                    <table *ngIf="event.setlist?.length > 0; else noSetlist" mat-table [dataSource]="event.setlist" matSort class="table eventSummary__setlistTable">
+                        <ng-container matColumnDef="order">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let entry; let i = index">{{ getSetlistDisplayOrder(entry, i) }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="song">
+                            <th mat-header-cell *matHeaderCellDef>Utwór</th>
+                            <td mat-cell *matCellDef="let entry">{{ entry.song?.title }}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="setlistColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: setlistColumns;"></tr>
+                    </table>
+                    <ng-template #noSetlist>
+                        <p class="empty-state">Brak setlisty.</p>
+                    </ng-template>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+    <ng-template #eventSummaryFallback>
+        <ng-container *ngIf="loadingEvent; else noEventData">
+            <div class="row justify-content-center eventSummary__placeholderRow">
+                <div class="col-12 col-lg-4 eventSummary__placeholderCol" *ngFor="let column of [1,2,3]">
+                    <mat-card class="event-card eventSummary__placeholderCard">
+                        <mat-card-content></mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #noEventData>
+        <mat-card class="event-card eventSummary__emptyCard">
+            <mat-card-content>
+                <p class="empty-state">Nie udało się załadować danych wydarzenia.</p>
+            </mat-card-content>
+        </mat-card>
+    </ng-template>
+
+    </div>
+
+    <ng-container
+        *ngComponentOutlet="fabNavigationComponent;
+            inputs: {
+                previousRoute: previousEventRoute,
+                nextRoute: nextEventRoute,
+                isBusy: loadingEvent,
+                previousTooltip: 'Poprzednie wydarzenie',
+                nextTooltip: 'Następne wydarzenie'
+            }"
+    ></ng-container>
+</div>

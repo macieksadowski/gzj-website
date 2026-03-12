@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ contracts && contracts.length ? 'Edycja umów' : 'Dodaj umowy' }}</h2>
+
+<mat-dialog-content>
+    <div class="contracts-list">
+        <div class="contract-row" [class.pending-delete]="confirmDeleteIndex === i" *ngFor="let contract of contracts; let i = index">
+            <div class="contract-info">
+                <div class="contract-member">{{ contract.member?.display_name || contract.member?.name }}</div>
+                <div class="contract-amount" [ngClass]="{'negative': contract.contract_amount < 0}">{{ contract.contract_amount | currency:'PLN' }}</div>
+                <div class="contract-type">{{ contract.type?.value }}</div>
+            </div>
+            <div class="contract-actions">
+                <button mat-icon-button [color]="confirmDeleteIndex === i ? 'accent' : 'warn'"
+                    [attr.aria-label]="confirmDeleteIndex === i ? 'Potwierdź usunięcie umowy' : 'Usuń umowę'"
+                    [matTooltip]="confirmDeleteIndex === i ? 'Kliknij ponownie, aby potwierdzić usunięcie' : 'Usuń umowę'"
+                    (click)="removeContract(i)">
+                    <mat-icon>{{ confirmDeleteIndex === i ? 'delete_forever' : 'delete' }}</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-row">
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Na kogo</mat-label>
+            <mat-select [(ngModel)]="newContract.member" [disabled]="!members || members.length === 0" aria-label="Wybierz osobę">
+                <mat-option *ngFor="let member of members" [value]="member">{{ member.name }}</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="!members || members.length === 0">Brak dostępnych osób</mat-hint>
+            <mat-error *ngIf="!newContract.member">Wybierz osobę</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Kwota</mat-label>
+            <input matInput type="text" placeholder="Kwota" currencyFormat required [(ngModel)]="newContract.contract_amount" aria-label="Kwota" />
+            <mat-error *ngIf="newContract.contract_amount <= 0">Podaj kwotę większą niż 0</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="add-field">
+            <mat-label>Rodzaj</mat-label>
+            <mat-select [(ngModel)]="newContract.type" [disabled]="!contractTypes || contractTypes.length === 0" aria-label="Rodzaj umowy">
+                <mat-option *ngFor="let contractType of contractTypes" [value]="contractType">{{ contractType.value }}</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="!contractTypes || contractTypes.length === 0">Brak dostępnych typów umów</mat-hint>
+            <mat-error *ngIf="!newContract.type">Wybierz rodzaj umowy</mat-error>
+        </mat-form-field>
+
+        <div class="add-action">
+            <button mat-mini-fab color="primary" (click)="addContract()" [attr.aria-disabled]="!canAdd()" [disabled]="!canAdd()" matTooltip="Dodaj umowę">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Anuluj</button>
+    <button mat-button (click)="undo()" [disabled]="!hasChanges()">Cofnij</button>
+    <button mat-button color="primary" (click)="save()" [disabled]="!hasChanges()">Zapisz</button>
+</mat-dialog-actions>

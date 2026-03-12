@@ -1,7 +1,7 @@
-@extends('layouts.dashboard')
+@extends('layouts.master')
 @section('title', 'Logowanie')
 
-@section('inner-content')
+@section('content')
 
     <section>
         <div class="container-fluid login-container">

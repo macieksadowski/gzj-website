@@ -1,0 +1,11 @@
+@use '../../styles/song-picker' as songPicker;
+
+mat-dialog-content {
+  min-height: 280px;
+  max-height: calc(100vh - 220px);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@include songPicker.layout(1.5rem);

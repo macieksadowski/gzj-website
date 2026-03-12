@@ -1,0 +1,93 @@
+<div class="container dashboard-page zaiksView">
+    <div class="section-title">
+        <p>Generator ZAiKS</p>
+        <div class="title-meta-row title-meta-row--actions-only">
+            <div class="actions-inline" aria-label="Akcje generatora ZAiKS">
+                <mat-form-field appearance="outline" class="filename-field">
+                    <mat-label>Nazwa pliku (opcjonalnie)</mat-label>
+                    <input matInput [formControl]="eventNameControl" placeholder="np. koncert-gzj-2026" />
+                </mat-form-field>
+
+                <button mat-flat-button color="primary" type="button" (click)="submitForm()" [disabled]="loading || generating || selectedSongs.length === 0">
+                    {{ generating ? 'Generowanie...' : 'Generuj dokument' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <mat-card class="event-card page-card">
+        <mat-card-content>
+            <p>Wybierz utwory, które mają zostać wpisane do tabelki ZAiKS:</p>
+
+            <div *ngIf="!loading" class="setlist-layout">
+                <div class="setlist-column">
+                    <div class="setlist-column__header">Wszystkie utwory</div>
+                    <input
+                        #availableSearchInput
+                        type="text"
+                        class="setlist-search"
+                        placeholder="Wyszukaj"
+                        [(ngModel)]="searchQuery"
+                        (keydown)="onSearchKeydown($event)"
+                    />
+
+                    <ul
+                        #availableListElement
+                        class="setlist-list"
+                        tabindex="0"
+                        (keydown)="onAvailableListKeydown($event)"
+                    >
+                        <li
+                            *ngFor="let song of filteredAvailableSongs"
+                            class="setlist-list__item"
+                            [class.setlist-list__item--active]="selectedAvailableSongId === song.id"
+                            (click)="selectAvailable(song)"
+                            (dblclick)="selectAvailable(song); addSelectedSong()"
+                        >
+                            {{ song.title }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="setlist-controls">
+                    <div class="setlist-controls__group">
+                        <button mat-button (click)="addSelectedSong()" [disabled]="selectedAvailableSongId === null">Dodaj</button>
+                        <button mat-button (click)="removeSelectedSong()" [disabled]="selectedSetlistSongId === null">Usuń</button>
+                    </div>
+
+                    <div class="setlist-controls__group">
+                        <button mat-button (click)="moveSelectedUp()" [disabled]="!canMoveSelectedUp">Wyżej</button>
+                        <button mat-button (click)="moveSelectedDown()" [disabled]="!canMoveSelectedDown">Niżej</button>
+                    </div>
+                </div>
+
+                <div class="setlist-column">
+                    <div class="setlist-column__header">Wybrane utwory</div>
+                    <ul
+                        class="setlist-list"
+                        tabindex="0"
+                        (keydown)="onSelectedListKeydown($event)"
+                        cdkDropList
+                        [cdkDropListData]="selectedSongs"
+                        (cdkDropListDropped)="onSelectedSongsDrop($event)"
+                    >
+                        <li
+                            *ngFor="let song of selectedSongs; let i = index"
+                            cdkDrag
+                            class="setlist-list__item setlist-list__item--draggable"
+                            [class.setlist-list__item--active]="selectedSetlistSongId === song.id"
+                            (click)="selectSetlist(song)"
+                        >
+                            <span class="setlist-order">{{ i + 1 }}.</span>
+                            <span>{{ song.title }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div *ngIf="loading" class="dialog-spinner-wrap">
+                <mat-spinner diameter="36"></mat-spinner>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

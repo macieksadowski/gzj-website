@@ -1,0 +1,160 @@
+<div class="container dashboard-page transactionsView">
+    <div class="section-title">
+        <p>Finanse</p>
+        <div class="title-meta-row title-meta-row--actions-only">
+            <div class="actions-inline" aria-label="Akcje i filtry transakcji">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Saldo łączne</mat-label>
+                    <input matInput placeholder="Saldo" readonly [ngModel]="saldo | currency:'PLN'" [class.negative]="saldo < 0" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Kategorie</mat-label>
+                    <mat-select multiple (selectionChange)="applyCategoryFilter($event)">
+                        <mat-option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Zakres dat</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate [(ngModel)]="dateFrom" (dateChange)="applyDateFilter($event)">
+                        <input matEndDate [(ngModel)]="dateTo" (dateChange)="applyDateFilter($event)">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                <button mat-flat-button color="primary" (click)="newTransaction()">Nowa transakcja</button>
+            </div>
+        </div>
+    </div>
+
+    <mat-expansion-panel class="page-card transactionsView__checkpointPanel" [(expanded)]="checkpointPanelExpanded">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Kontrola salda i checkpoint</mat-panel-title>
+            <mat-panel-description>
+                {{ checkpointCalculatedBalance | currency:'PLN' }}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <p class="transactionsView__status transactionsView__checkpointInfo" *ngIf="lastCheckpoint">
+            Ostatni checkpoint: #{{ lastCheckpoint.id }} z dnia {{ lastCheckpoint.checkpoint_date | date:'dd.MM.yyyy' }}
+            ({{ lastCheckpoint.balance | currency:'PLN' }}).
+        </p>
+        <p class="transactionsView__status transactionsView__checkpointInfo" *ngIf="!lastCheckpoint">
+            Brak checkpointu — saldo liczone ze wszystkich transakcji.
+        </p>
+
+        <div class="transactionsView__checkpointControls" aria-label="Kontrola salda i checkpointy">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Saldo wg bazy (od checkpointu)</mat-label>
+                <input matInput readonly [ngModel]="checkpointCalculatedBalance | currency:'PLN'"
+                    [class.negative]="checkpointCalculatedBalance < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Suma nieprzypisanych transakcji</mat-label>
+                <input matInput readonly [ngModel]="checkpointPendingTransactionsSum | currency:'PLN'"
+                    [class.negative]="checkpointPendingTransactionsSum < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Data checkpointu</mat-label>
+                <input matInput [matDatepicker]="checkpointPicker" [(ngModel)]="checkpointDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="checkpointPicker"></mat-datepicker-toggle>
+                <mat-datepicker #checkpointPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Saldo faktyczne</mat-label>
+                <input matInput type="number" step="0.01" [(ngModel)]="actualBalance" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Różnica</mat-label>
+                <input matInput readonly [ngModel]="checkpointDiff === null ? '' : (checkpointDiff | currency:'PLN')"
+                    [class.negative]="(checkpointDiff ?? 0) < 0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="transactionsView__notesField">
+                <mat-label>Notatki checkpointu</mat-label>
+                <input matInput [(ngModel)]="checkpointNotes" placeholder="np. after weekend tour" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" (click)="createCheckpoint()">Utwórz checkpoint</button>
+        </div>
+    </mat-expansion-panel>
+
+    <mat-card class="event-card page-card">
+        <mat-card-content>
+            <p class="transactionsView__status" *ngIf="numberOfTransactionsLoaded === 0">Nie znaleziono transakcji.</p>
+            <p class="transactionsView__status" *ngIf="numberOfTransactionsLoaded > 0">Załadowano: {{ numberOfTransactionsLoaded }} transakcji.</p>
+
+            <div class="data-loading-shell" [class.is-loading]="loading">
+            <table mat-table [dataSource]="dataSource" matSort class="table">
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.date | date:'dd.MM.yyyy' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="amount" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kwota </th>
+        <td mat-cell *matCellDef="let transaction" class="align-right" [ngClass]="{'negative': transaction.amount < 0}">
+            {{ transaction.amount | currency:'PLN' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Opis </th>
+        <td mat-cell *matCellDef="let transaction">
+            {{ transaction.description }}
+        </td>
+    </ng-container>
+    'category', 'event', 'cash', 'actions'
+    <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kategoria </th>
+        <td mat-cell *matCellDef="let transaction"> {{ transaction.category.name }} </td>
+    </ng-container>
+    <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Wydarzenie </th>
+        <td mat-cell *matCellDef="let transaction"> <button mat-button *ngIf="transaction.event"
+                (click)="goToEventSummary(transaction.event.id)">{{ transaction.event.name }}</button> </td>
+    </ng-container>
+    <ng-container matColumnDef="cash">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Gotówka </th>
+        <td mat-cell *matCellDef="let transaction">
+            {{ transaction.cash_transaction === 1 ? 'Tak' : '' }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let transaction" class="align-center">
+            {{ transaction.tr_id }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="actions" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef> Akcje </th>
+        <td mat-cell *matCellDef="let transaction">
+            <div class="cell-buttons-container">
+                <button mat-icon-button (click)="editTransaction(transaction)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteTransaction(transaction)"
+                    [disabled]="transaction.checkpoint_id !== null && transaction.checkpoint_id !== undefined">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow [style.display]="loading ? 'none' : ''">
+        <td class="mat-cell" colspan="4">Nie znaleziono transakcji spełniających zadane kryteria filtrowania</td>
+    </tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+            <div class="data-loading-shell__overlay" *ngIf="loading">
+                <mat-spinner diameter="34"></mat-spinner>
+            </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
