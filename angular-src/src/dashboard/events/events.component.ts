@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { DashboardBackendService } from '../services/dashboardbackend.service';
 import { Event } from '../model/event';
 import { CommonModule } from '@angular/common';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,9 +21,9 @@ import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'dashboard-events',
   imports: [
-    CommonModule, 
-    MatTableModule, 
-    MatPaginatorModule, 
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
@@ -50,7 +50,7 @@ export class EventsComponent implements OnInit {
   dataSource: MatTableDataSource<Event> = new MatTableDataSource<Event>();
   eventTypes: string[] = [];
   selectedTypes: string[] = [];
-  
+
   constructor() {
     this.eventService = inject(DashboardBackendService);
     this.router = inject(Router);
@@ -64,7 +64,7 @@ export class EventsComponent implements OnInit {
       console.log('Loaded events:', data); // Debug log
 
       this.dataSource.paginator = this.paginator;
-  
+
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch(property) {
           case 'type': return item.type.value.toString();
@@ -74,7 +74,7 @@ export class EventsComponent implements OnInit {
           case 'contracts_amount': return item.contracts_amount as number;
           default: return item[property as keyof Event] as string | number;
         }
-        
+
       };
 
       this.dataSource.sort = this.sort;
@@ -115,9 +115,11 @@ export class EventsComponent implements OnInit {
   }
 
   newEvent() {
-        const dialogRef = this.dialog.open(EventDetailsEditorComponent, {
-          data: { event: { name: '', date: new Date(), type: '', saldo: 0, contracts_amount: 0 } },
-          width: '50vw',
-        });
+    this.eventService.getEventTypes().subscribe(eventTypes => {
+      const dialogRef = this.dialog.open(EventDetailsEditorComponent, {
+        data: { event: { name: '', date: new Date(), type: '', saldo: 0, contracts_amount: 0 }, eventTypes: eventTypes },
+        width: '50vw',
+      });
+    });
   }
 }
